@@ -1,0 +1,116 @@
+/*
+ * License: Free to use. It's just a small project.
+ * Feel free and use everything you want  * 
+ */
+package de.jreichl.jpa.entity;
+
+import java.io.Serializable;
+import java.util.List;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+
+/**
+ *
+ * @author Jürgen Reichl
+ */
+@Entity
+public class Account implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+
+    private String iban;
+        
+    private String accountNr;
+    
+    @ManyToOne
+    private Customer owner;
+    
+    @ManyToOne
+    private Employee accountManager;
+    
+    @OneToMany
+    private List<AccountTransaction> transactions;
+
+    public String getIban() {
+        return iban;
+    }
+
+    public void setIban(String iban) {
+        this.iban = iban;
+    }
+
+    public String getAccountNr() {
+        return accountNr;
+    }
+
+    public void setAccountNr(String accountNr) {
+        this.accountNr = accountNr;
+    }
+
+    public Customer getOwner() {
+        return owner;
+    }
+
+    public void setOwner(Customer owner) {
+        this.owner = owner;
+    }
+
+    public Employee getAccountManager() {
+        return accountManager;
+    }
+
+    public void setAccountManager(Employee accountManager) {
+        this.accountManager = accountManager;
+    }
+
+    public List<AccountTransaction> getTransactions() {
+        return transactions;
+    }
+
+    public void setTransactions(List<AccountTransaction> transactions) {
+        this.transactions = transactions;
+    }
+    
+    
+    
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (id != null ? id.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof Account)) {
+            return false;
+        }
+        Account other = (Account) object;
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "de.jreichl.jpa.entity.Account[ id=" + id + " ]";
+    }
+    
+}

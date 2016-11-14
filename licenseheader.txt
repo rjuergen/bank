@@ -1,0 +1,8 @@
+<#if licenseFirst??>
+${licenseFirst}
+</#if>
+${licensePrefix}License: Free to use. It's just a small project.
+${licensePrefix}Feel free and use everything you want ${licensePrefix}
+<#if licenseLast??>
+${licenseLast}
+</#if>
