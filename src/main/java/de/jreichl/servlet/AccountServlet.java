@@ -5,7 +5,7 @@
 package de.jreichl.servlet;
 
 import de.jreichl.jpa.entity.PrivateCustomer;
-import de.jreichl.jpa.service.AccountService;
+import de.jreichl.service.CustomerService;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.inject.Inject;
@@ -23,7 +23,7 @@ import javax.servlet.http.HttpServletResponse;
 public class AccountServlet extends HttpServlet {
 
     @Inject
-    private AccountService service;
+    private CustomerService service;
     
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -48,7 +48,7 @@ public class AccountServlet extends HttpServlet {
             out.println("<h1>Servlet AccountServlet at " + request.getContextPath() + "</h1>");
             
             PrivateCustomer c1 = service.createDummyPrivateCustomer();
-            out.println(String.format("<br>Dummy PrivateCustomer mit ID %s erstellt<br>",c1.getId()));
+            out.println(String.format("<br>Dummy PrivateCustomer mit ID %s erstellt.<br>",c1.getId()));
             
             out.println("</body>");
             out.println("</html>");

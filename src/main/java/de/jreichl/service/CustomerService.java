@@ -2,22 +2,22 @@
  * License: Free to use. It's just a small project.
  * Feel free and use everything you want  * 
  */
-package de.jreichl.jpa.service;
+package de.jreichl.service;
 
 import de.jreichl.jpa.entity.PrivateCustomer;
 import de.jreichl.jpa.entity.type.Gender;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import de.jreichl.jpa.repository.CustomerRepository;
+import javax.inject.Inject;
 import javax.transaction.Transactional;
 
 /**
  *
  * @author Jürgen Reichl
  */
-public class AccountService {
+public class CustomerService {
     
-    @PersistenceContext
-    private EntityManager entityManager;
+    @Inject
+    private CustomerRepository repo;
  
     @Transactional
     public PrivateCustomer createDummyPrivateCustomer() {
@@ -27,7 +27,7 @@ public class AccountService {
         c.setLastName("Meier");
         c.setGender(Gender.MALE);        
         
-        entityManager.persist(c);
+        repo.persist(c);
         
         return c;
     }
