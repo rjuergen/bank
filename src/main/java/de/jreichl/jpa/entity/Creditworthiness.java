@@ -22,6 +22,10 @@ public class Creditworthiness extends SingleEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    public Creditworthiness() {
+        
+    }
+    
     public Long getId() {
         return id;
     }

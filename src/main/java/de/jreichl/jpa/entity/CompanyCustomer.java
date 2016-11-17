@@ -18,6 +18,10 @@ public class CompanyCustomer extends Customer implements Serializable {
     
     private String name;
 
+    public CompanyCustomer() {
+        
+    }
+    
     public void setName(String name) {
         this.name = name;
     }

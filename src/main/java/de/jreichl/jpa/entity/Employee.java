@@ -37,6 +37,10 @@ public class Employee extends SingleEntity implements Serializable {
     
     private Date dateOfBirth;
 
+    public Employee() {
+        
+    }
+    
     public Date getDateOfBirth() {
         return dateOfBirth;
     }

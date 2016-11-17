@@ -4,8 +4,11 @@
  */
 package de.jreichl.servlet;
 
+import de.jreichl.jpa.entity.PrivateCustomer;
+import de.jreichl.jpa.service.AccountService;
 import java.io.IOException;
 import java.io.PrintWriter;
+import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -19,6 +22,9 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet(name = "AccountServlet", urlPatterns = {"/AccountServlet"})
 public class AccountServlet extends HttpServlet {
 
+    @Inject
+    private AccountService service;
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -40,6 +46,10 @@ public class AccountServlet extends HttpServlet {
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet AccountServlet at " + request.getContextPath() + "</h1>");
+            
+            PrivateCustomer c1 = service.createDummyPrivateCustomer();
+            out.println(String.format("<br>Dummy PrivateCustomer mit ID %s erstellt<br>",c1.getId()));
+            
             out.println("</body>");
             out.println("</html>");
         }

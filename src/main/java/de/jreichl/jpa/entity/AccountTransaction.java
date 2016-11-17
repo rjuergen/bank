@@ -10,6 +10,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 /**
  *
@@ -22,6 +23,10 @@ public class AccountTransaction extends SingleEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+        
+    @ManyToOne
+    private Account account;
+
         
     /**
      * Type of the transaction: CREDIT(+) or DEBIT(-)
@@ -36,12 +41,21 @@ public class AccountTransaction extends SingleEntity implements Serializable {
     protected AccountTransaction() {
         
     }
-   
+      
+    
     public AccountTransaction(TransactionType type, long amount) {
         this.type = type;
         this.amount = amount;
     }
 
+    public Account getAccount() {
+        return account;
+    }
+
+    public void setAccount(Account account) {
+        this.account = account;
+    }
+    
     public TransactionType getType() {
         return type;
     }

@@ -35,6 +35,10 @@ public abstract class Customer extends SingleEntity implements Serializable {
     @OneToMany
     private List<Account> accounts;
 
+    public Customer() {
+        
+    }
+    
     public List<Account> getAccounts() {
         return accounts;
     }

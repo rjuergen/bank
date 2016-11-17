@@ -26,6 +26,10 @@ public class PrivateCustomer extends Customer implements Serializable {
     
     private Date dateOfBirth;
 
+    public PrivateCustomer() {
+        
+    }
+    
     @Override
     public String getName() {
         return new StringBuilder(firstName).append(" ").append(lastName).toString();

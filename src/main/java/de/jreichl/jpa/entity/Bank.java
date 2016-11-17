@@ -33,6 +33,10 @@ public class Bank extends SingleEntity implements Serializable {
     
     private String bankNr;
 
+    public Bank() {
+        
+    }
+    
     public Address getAddress() {
         return address;
     }

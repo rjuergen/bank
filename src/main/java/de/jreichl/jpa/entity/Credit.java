@@ -21,6 +21,10 @@ public class Credit extends SingleEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    
+    public Credit() {
+        
+    }
 
     public Long getId() {
         return id;

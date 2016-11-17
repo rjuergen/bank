@@ -38,6 +38,10 @@ public class Account extends SingleEntity implements Serializable {
     @OneToMany
     private List<AccountTransaction> transactions;
 
+    public Account() {
+        
+    }
+    
     public String getIban() {
         return iban;
     }
