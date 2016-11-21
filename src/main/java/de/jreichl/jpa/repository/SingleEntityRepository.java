@@ -13,6 +13,7 @@ import javax.persistence.TypedQuery;
 /**
  *
  * @author Jürgen Reichl
+ * @param <E>
  */
 public abstract class SingleEntityRepository<E extends SingleEntity> {
     

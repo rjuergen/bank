@@ -4,6 +4,7 @@
  */
 package de.jreichl.jpa.entity;
 
+import de.jreichl.jpa.entity.type.TanType;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Column;
@@ -37,6 +38,8 @@ public class Account extends SingleEntity implements Serializable {
     @ManyToOne
     private Employee accountManager;
     
+    private TanType tanType;
+    
     @OneToMany(mappedBy = "account")
     private List<AccountTransaction> transactions;
 
@@ -44,6 +47,13 @@ public class Account extends SingleEntity implements Serializable {
         
     }
     
+    public TanType getTanType() {
+        return tanType;
+    }
+
+    public void setTanType(TanType tanType) {
+        this.tanType = tanType;
+    }
     public String getIban() {
         return iban;
     }

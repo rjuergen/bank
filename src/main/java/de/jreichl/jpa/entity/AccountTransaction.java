@@ -6,6 +6,7 @@ package de.jreichl.jpa.entity;
 
 import de.jreichl.jpa.entity.type.TransactionType;
 import java.io.Serializable;
+import java.sql.Date;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -33,6 +34,8 @@ public class AccountTransaction extends SingleEntity implements Serializable {
      */
     private TransactionType type;
     
+    private Date transactionDate;
+    
     /**
      * value in cent
      */
@@ -40,6 +43,14 @@ public class AccountTransaction extends SingleEntity implements Serializable {
 
     protected AccountTransaction() {
         
+    }
+
+    public Date getTransactionDate() {
+        return transactionDate;
+    }
+
+    public void setTransactionDate(Date transactionDate) {
+        this.transactionDate = transactionDate;
     }
       
     

@@ -5,6 +5,7 @@
 package de.jreichl.jpa.entity;
 
 import java.io.Serializable;
+import java.sql.Date;
 import javax.persistence.Entity;
 
 /**
@@ -17,9 +18,19 @@ public class CompanyCustomer extends Customer implements Serializable {
     private static final long serialVersionUID = 1L;
     
     private String name;
+    
+    private Date dateOfCreation;
 
     public CompanyCustomer() {
         
+    }
+    
+    public Date getDateOfCreation() {
+        return dateOfCreation;
+    }
+
+    public void setDateOfCreation(Date dateOfCreation) {
+        this.dateOfCreation = dateOfCreation;
     }
     
     public void setName(String name) {

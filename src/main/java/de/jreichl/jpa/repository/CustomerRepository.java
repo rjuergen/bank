@@ -9,11 +9,12 @@ import de.jreichl.jpa.entity.Customer;
 /**
  *
  * @author Jürgen Reichl
+ * @param <E>
  */
-public class CustomerRepository extends SingleEntityRepository<Customer> {
+public abstract class CustomerRepository<E extends Customer> extends SingleEntityRepository<E> {
     
-    public CustomerRepository() {
-        super(Customer.class);
+    public CustomerRepository(Class<E> clazz) {
+        super(clazz);
     }
     
 }
