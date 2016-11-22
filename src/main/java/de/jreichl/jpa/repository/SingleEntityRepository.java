@@ -20,7 +20,7 @@ public abstract class SingleEntityRepository<E extends SingleEntity> {
     private final Class<E> clazz;
     
     @PersistenceContext
-    private EntityManager em;
+    protected EntityManager em;
     
     protected SingleEntityRepository(Class<E> clazz) {
         this.clazz = clazz;

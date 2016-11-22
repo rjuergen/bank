@@ -5,10 +5,12 @@
 package de.jreichl.jpa.entity;
 
 import java.io.Serializable;
+import java.sql.Date;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 /**
  *
@@ -22,10 +24,47 @@ public class Credit extends SingleEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     
+    
+    private Date creationDate;
+    
+    @ManyToOne
+    private Customer customer;
+    
+    /**
+     * possible credit in cent
+     */
+    private long credit;
+    
+    
     public Credit() {
         
     }
 
+    public Date getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+
+    public long getCredit() {
+        return credit;
+    }
+
+    public void setCredit(long credit) {
+        this.credit = credit;
+    }
+
+    @Override
     public Long getId() {
         return id;
     }

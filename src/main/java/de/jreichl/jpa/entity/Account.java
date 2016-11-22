@@ -13,6 +13,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 
 /**
@@ -20,6 +21,7 @@ import javax.persistence.OneToMany;
  * @author Jürgen Reichl
  */
 @Entity
+@NamedQuery(name="Account.IBAN",query="SELECT a FROM Account a WHERE a.iban = :iban")
 public class Account extends SingleEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;

@@ -41,6 +41,13 @@ public class AccountTransaction extends SingleEntity implements Serializable {
      */
     private long amount;
 
+    public AccountTransaction(Account account, TransactionType type, long amount, Date transactionDate) {
+        this.account = account;
+        this.type = type;
+        this.amount = amount;  
+        this.transactionDate = transactionDate;
+    }
+    
     protected AccountTransaction() {
         
     }
@@ -51,13 +58,7 @@ public class AccountTransaction extends SingleEntity implements Serializable {
 
     public void setTransactionDate(Date transactionDate) {
         this.transactionDate = transactionDate;
-    }
-      
-    
-    public AccountTransaction(TransactionType type, long amount) {
-        this.type = type;
-        this.amount = amount;
-    }
+    } 
 
     public Account getAccount() {
         return account;
@@ -75,6 +76,7 @@ public class AccountTransaction extends SingleEntity implements Serializable {
         return amount;
     }
     
+    @Override
     public Long getId() {
         return id;
     }
