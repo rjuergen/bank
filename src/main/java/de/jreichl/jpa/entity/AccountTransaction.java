@@ -85,9 +85,5 @@ public class AccountTransaction extends SingleEntity implements Serializable {
         this.id = id;
     }   
 
-    @Override
-    public String toString() {
-        return "de.jreichl.jpa.entity.AccountTransaction[ id=" + id + " ]";
-    }
     
 }

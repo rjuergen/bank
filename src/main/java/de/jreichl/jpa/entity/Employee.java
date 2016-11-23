@@ -85,17 +85,13 @@ public class Employee extends SingleEntity implements Serializable {
         this.gender = gender;
     }
     
+    @Override
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    @Override
-    public String toString() {
-        return "de.jreichl.jpa.entity.Employee[ id=" + id + " ]";
     }
     
 }

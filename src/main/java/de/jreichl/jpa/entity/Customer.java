@@ -59,6 +59,7 @@ public abstract class Customer extends SingleEntity implements Serializable {
         
     public abstract String getName();
     
+    @Override
     public Long getId() {
         return id;
     }
@@ -66,10 +67,5 @@ public abstract class Customer extends SingleEntity implements Serializable {
     public void setId(Long id) {
         this.id = id;
     }  
-
-    @Override
-    public String toString() {
-        return "de.jreichl.jpa.entity.Customer[ id=" + id + " ]";
-    }
     
 }

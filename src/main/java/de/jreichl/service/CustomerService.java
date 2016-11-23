@@ -26,6 +26,10 @@ public class CustomerService {
     @Inject
     private CompanyCustomerRepository companyCustomerRepo;
     
+    public PrivateCustomer createPrivateCustomer(String firstName, String lastName, Gender gender, Date dateOfBirth, String houseNr, String street, String zip, String city) {
+        return createPrivateCustomer(firstName, lastName, gender, dateOfBirth, houseNr, street, zip, city, null, null);
+    }
+    
     @Transactional
     public PrivateCustomer createPrivateCustomer(String firstName, String lastName, Gender gender, Date dateOfBirth, String houseNr, String street, String zip, String city, String county, String country) {
         PrivateCustomer c = new PrivateCustomer();
@@ -34,13 +38,7 @@ public class CustomerService {
         c.setGender(gender);        
         c.setDateOfBirth(new java.sql.Date(dateOfBirth.getTime()));
         
-        Address a = new Address();
-        a.setHouseNr(houseNr);
-        a.setStreet(street);
-        a.setZip(zip);
-        a.setCity(city);
-        a.setCounty(county);
-        a.setCountry(country); 
+        Address a = createAddress(houseNr, street, zip, city, county, country);
         c.setAddress(a);
         
         privateCustomerRepo.persist(c);
@@ -48,19 +46,17 @@ public class CustomerService {
         return c;
     }
     
-        @Transactional
+    public CompanyCustomer createCompanyCustomer(String name, Date dateOfCreation, String houseNr, String street, String zip, String city) {
+        return createCompanyCustomer(name, dateOfCreation, houseNr, street, zip, city, null, null);
+    }
+    
+    @Transactional
     public CompanyCustomer createCompanyCustomer(String name, Date dateOfCreation, String houseNr, String street, String zip, String city, String county, String country) {
         CompanyCustomer c = new CompanyCustomer();
         c.setName(name);    
         c.setDateOfCreation(new java.sql.Date(dateOfCreation.getTime()));
         
-        Address a = new Address();
-        a.setHouseNr(houseNr);
-        a.setStreet(street);
-        a.setZip(zip);
-        a.setCity(city);
-        a.setCounty(county);
-        a.setCountry(country); 
+        Address a = createAddress(houseNr, street, zip, city, county, country);
         c.setAddress(a);
         
         companyCustomerRepo.persist(c);
@@ -68,17 +64,15 @@ public class CustomerService {
         return c;
     }
     
-    @Transactional
-    public PrivateCustomer createDummyPrivateCustomer() {
-        // PrivateCustomer (entity) anlegen (im Heap)
-        PrivateCustomer c = new PrivateCustomer();
-        c.setFirstName("Hans");
-        c.setLastName("Meier");
-        c.setGender(Gender.MALE);        
-        
-        privateCustomerRepo.persist(c);
-        
-        return c;
+    private Address createAddress(String houseNr, String street, String zip, String city, String county, String country) {
+        Address a = new Address();
+        a.setHouseNr(houseNr);
+        a.setStreet(street);
+        a.setZip(zip);
+        a.setCity(city);
+        a.setCounty(county);
+        a.setCountry(country); 
+        return a;
     }
     
 }

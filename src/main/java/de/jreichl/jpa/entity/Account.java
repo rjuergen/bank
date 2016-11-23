@@ -6,6 +6,7 @@ package de.jreichl.jpa.entity;
 
 import de.jreichl.jpa.entity.type.TanType;
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -31,8 +32,6 @@ public class Account extends SingleEntity implements Serializable {
 
     @Column(unique=true)
     private String iban;
-        
-    private String accountNr;
     
     @ManyToOne
     private Customer owner;
@@ -44,7 +43,7 @@ public class Account extends SingleEntity implements Serializable {
     
     @OneToMany(mappedBy = "account")
     private List<AccountTransaction> transactions;
-
+    
     public Account() {
         
     }
@@ -64,14 +63,6 @@ public class Account extends SingleEntity implements Serializable {
         this.iban = iban;
     }
 
-    public String getAccountNr() {
-        return accountNr;
-    }
-
-    public void setAccountNr(String accountNr) {
-        this.accountNr = accountNr;
-    }
-
     public Customer getOwner() {
         return owner;
     }
@@ -88,15 +79,11 @@ public class Account extends SingleEntity implements Serializable {
         this.accountManager = accountManager;
     }
 
-    public List<AccountTransaction> getTransactions() {
-        return transactions;
-    }
-
-    public void setTransactions(List<AccountTransaction> transactions) {
-        this.transactions = transactions;
-    } 
+    public List<AccountTransaction> getTransactions() {        
+        return Collections.unmodifiableList(transactions);
+    }    
     
-    
+    @Override
     public Long getId() {
         return id;
     }
@@ -104,11 +91,5 @@ public class Account extends SingleEntity implements Serializable {
     public void setId(Long id) {
         this.id = id;
     }
-
-
-    @Override
-    public String toString() {
-        return "de.jreichl.jpa.entity.Account[ id=" + id + " ]";
-    }
-    
+   
 }

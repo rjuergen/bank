@@ -5,9 +5,11 @@
 package de.jreichl.servlet;
 
 import de.jreichl.jpa.entity.PrivateCustomer;
+import de.jreichl.jpa.entity.type.Gender;
 import de.jreichl.service.CustomerService;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Date;
 import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -47,7 +49,8 @@ public class AccountServlet extends HttpServlet {
             out.println("<body>");
             out.println("<h1>Servlet AccountServlet at " + request.getContextPath() + "</h1>");
             
-            PrivateCustomer c1 = service.createDummyPrivateCustomer();
+            PrivateCustomer c1 = service.createPrivateCustomer("Hans", "Meier", Gender.MALE, new Date(1989, 1, 23), "2a", "Lilienstraße", "93047", "Regensburg");
+            
             out.println(String.format("<br>Dummy PrivateCustomer mit ID %s erstellt.<br>",c1.getId()));
             
             out.println("</body>");

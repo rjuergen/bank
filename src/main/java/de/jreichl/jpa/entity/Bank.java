@@ -30,8 +30,6 @@ public class Bank extends SingleEntity implements Serializable {
     private String name;
     
     private String bic;
-    
-    private String bankNr;
 
     public Bank() {
         
@@ -59,18 +57,9 @@ public class Bank extends SingleEntity implements Serializable {
 
     public void setBic(String bic) {
         this.bic = bic;
-    }
-
-    public String getBankNr() {
-        return bankNr;
-    }
-
-    public void setBankNr(String bankNr) {
-        this.bankNr = bankNr;
-    }
+    }   
     
-    
-    
+    @Override
     public Long getId() {
         return id;
     }
@@ -78,10 +67,5 @@ public class Bank extends SingleEntity implements Serializable {
     public void setId(Long id) {
         this.id = id;
     }
-   
-    @Override
-    public String toString() {
-        return "de.jreichl.jpa.entity.Bank[ id=" + id + " ]";
-    }
-    
+
 }

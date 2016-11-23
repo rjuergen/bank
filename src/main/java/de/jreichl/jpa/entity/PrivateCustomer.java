@@ -67,10 +67,4 @@ public class PrivateCustomer extends Customer implements Serializable {
         this.gender = gender;
     }
     
-
-    @Override
-    public String toString() {
-        return "de.jreichl.jpa.entity.PrivateCustomer[ id=" + getId() + " ]";
-    }
-    
 }

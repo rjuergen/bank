@@ -70,11 +70,5 @@ public class Creditworthiness extends SingleEntity implements Serializable {
     public void setId(Long id) {
         this.id = id;
     }
-  
-
-    @Override
-    public String toString() {
-        return "de.jreichl.jpa.entity.Bonity[ id=" + id + " ]";
-    }
-    
+      
 }

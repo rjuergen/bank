@@ -26,6 +26,10 @@ public class Address implements Serializable {
     
     private String country;
 
+    public Address() {
+        
+    }
+    
     public String getStreet() {
         return street;
     }

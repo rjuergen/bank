@@ -13,7 +13,10 @@ import javax.persistence.MappedSuperclass;
 @MappedSuperclass
 public abstract class SingleEntity {
     
-        
+    /**
+     * ID in Long
+     * @return the ID
+     */
     public abstract Long getId();
     
         @Override
@@ -33,6 +36,11 @@ public abstract class SingleEntity {
             return false;
         }
         return true;
+    }  
+    
+    @Override
+    public String toString() {
+        return String.format("%s[ id=%s ]",getClass().getName(), getId());
     }
     
 }

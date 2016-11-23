@@ -42,9 +42,4 @@ public class CompanyCustomer extends Customer implements Serializable {
         return name;
     }       
     
-    @Override
-    public String toString() {
-        return "de.jreichl.jpa.entity.CompanyCustomer[ id=" + getId() + " ]";
-    }
-    
 }
