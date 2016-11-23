@@ -26,6 +26,7 @@ public class CustomerService {
     @Inject
     private CompanyCustomerRepository companyCustomerRepo;
     
+    @Transactional
     public PrivateCustomer createPrivateCustomer(String firstName, String lastName, Gender gender, Date dateOfBirth, String houseNr, String street, String zip, String city) {
         return createPrivateCustomer(firstName, lastName, gender, dateOfBirth, houseNr, street, zip, city, null, null);
     }
@@ -46,6 +47,7 @@ public class CustomerService {
         return c;
     }
     
+    @Transactional
     public CompanyCustomer createCompanyCustomer(String name, Date dateOfCreation, String houseNr, String street, String zip, String city) {
         return createCompanyCustomer(name, dateOfCreation, houseNr, street, zip, city, null, null);
     }
@@ -64,6 +66,7 @@ public class CustomerService {
         return c;
     }
     
+    @Transactional
     private Address createAddress(String houseNr, String street, String zip, String city, String county, String country) {
         Address a = new Address();
         a.setHouseNr(houseNr);
