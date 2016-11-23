@@ -37,6 +37,7 @@ public class AccountService {
         return a;
     }
     
+    @Transactional
     private String createIBAN() {   
         while(true) {
             Random r = new Random(System.currentTimeMillis());

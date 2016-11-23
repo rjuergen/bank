@@ -20,7 +20,7 @@ public class AccountRepository extends SingleEntityRepository<Account> {
     
     public Account findByIBAN(String IBAN) {
         TypedQuery<Account> query = em.createNamedQuery("Account.IBAN", Account.class);
-        query.setParameter("iban", IBAN);        
+        query.setParameter("iban", IBAN.replace(" ", ""));        
         return query.getSingleResult();
     }
     
