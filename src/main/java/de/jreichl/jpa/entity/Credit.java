@@ -5,7 +5,7 @@
 package de.jreichl.jpa.entity;
 
 import java.io.Serializable;
-import java.sql.Date;
+import java.sql.Timestamp;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -25,7 +25,7 @@ public class Credit extends SingleEntity implements Serializable {
     private Long id;
     
     
-    private Date creationDate;
+    private Timestamp creationDate;
     
     @ManyToOne
     private Customer customer;
@@ -40,11 +40,11 @@ public class Credit extends SingleEntity implements Serializable {
         
     }
 
-    public Date getCreationDate() {
+    public Timestamp getCreationDate() {
         return creationDate;
     }
 
-    public void setCreationDate(Date creationDate) {
+    public void setCreationDate(Timestamp creationDate) {
         this.creationDate = creationDate;
     }
 

@@ -6,11 +6,16 @@ package de.jreichl.service;
 
 import de.jreichl.jpa.entity.Account;
 import de.jreichl.jpa.entity.AccountTransaction;
+import de.jreichl.jpa.entity.StandingOrder;
 import de.jreichl.jpa.entity.type.TransactionType;
 import de.jreichl.jpa.repository.AccountRepository;
 import de.jreichl.jpa.repository.AccountTransactionRepository;
+import de.jreichl.jpa.repository.StandingOrderRepository;
 import de.jreichl.service.exceptions.TransactionFailedException;
+import java.sql.Timestamp;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.inject.Inject;
 import javax.persistence.NoResultException;
 import javax.transaction.Transactional;
@@ -28,6 +33,9 @@ public class TransactionService {
     @Inject 
     private AccountRepository accountRepo;
     
+    @Inject
+    private StandingOrderRepository standingOrderRepo;
+    
     /**
      * method to transfer amount in cent from one account(fromIBAN) to another(toIBAN)
      * @param amountInCent amount in cent
@@ -38,7 +46,7 @@ public class TransactionService {
      */
     @Transactional
     public boolean transfer(long amountInCent, String fromIBAN, String toIBAN) throws TransactionFailedException {        
-         // get current/transaction date
+        // get current/transaction date
         Date currentDate = new Date();
         
         try {
@@ -58,21 +66,44 @@ public class TransactionService {
                 throw new TransactionFailedException(nrex, String.format("Transaction failed! %s is not a valid IBAN", toIBAN), fromIBAN, toIBAN, currentDate, amountInCent);
             }
 
-            // create Transaction
-            AccountTransaction t1 = new AccountTransaction(fromAccount, TransactionType.DEBIT, amountInCent, new java.sql.Date(currentDate.getTime()));        
-
-            AccountTransaction t2 = new AccountTransaction(toAccount, TransactionType.CREDIT, amountInCent, new java.sql.Date(currentDate.getTime()));
+            return transfer(amountInCent, fromAccount, toAccount);
             
-            // persist
-            accountTransactionRepo.persist(t1);
-            accountTransactionRepo.persist(t2);
-            
-            return true;
         } catch(TransactionFailedException ex) {
             throw ex;
         } catch(Exception ex) {
             throw new TransactionFailedException(ex, "Transaction failed!", fromIBAN, toIBAN, currentDate, amountInCent);
         }
+    }
+    
+    @Transactional
+    boolean transfer(StandingOrder order, Timestamp newLastTransactionDate) throws TransactionFailedException {
+        transfer(order.getAmount(), order.getFromAccount(), order.getToAccount());                        
+        order.setLastTransaction(newLastTransactionDate);
+        standingOrderRepo.persist(order);
+        Logger.getLogger(getClass().getName()).log(Level.INFO, String.format(" # %s standing order(id=%d) successfull handled!", order.getType().name() ,order.getId()) );
+        return true;
+    }
+    
+    @Transactional
+    boolean transfer(long amountInCent, Account fromAccount, Account toAccount) throws TransactionFailedException {
+        Date currentDate = new Date();
+        
+        try {
+        
+            // create Transaction
+            AccountTransaction t1 = new AccountTransaction(fromAccount, TransactionType.DEBIT, amountInCent, new java.sql.Timestamp(currentDate.getTime()));        
+
+            AccountTransaction t2 = new AccountTransaction(toAccount, TransactionType.CREDIT, amountInCent, new java.sql.Timestamp(currentDate.getTime()));
+
+            // persist
+            accountTransactionRepo.persist(t1);
+            accountTransactionRepo.persist(t2);
+
+        } catch(Exception ex) {
+            throw new TransactionFailedException(ex, "Transaction failed!", fromAccount.getIban(), toAccount.getIban(), currentDate, amountInCent);
+        }
+        
+        return true;
     }
         
 }

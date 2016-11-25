@@ -6,6 +6,7 @@ package de.jreichl.jpa.entity;
 
 import de.jreichl.jpa.entity.type.TanType;
 import java.io.Serializable;
+import java.sql.Date;
 import java.util.Collections;
 import java.util.List;
 import javax.persistence.Column;
@@ -41,12 +42,29 @@ public class Account extends SingleEntity implements Serializable {
     
     private TanType tanType;
     
+    private Date dateOfCreation;
+    
     @OneToMany(mappedBy = "account")
     private List<AccountTransaction> transactions;
+    
+    @OneToMany(mappedBy = "fromAccount")
+    private List<StandingOrder> standingOrders;   
     
     public Account() {
         
     }
+
+    public Date getDateOfCreation() {
+        return dateOfCreation;
+    }
+
+    public void setDateOfCreation(Date dateOfCreation) {
+        this.dateOfCreation = dateOfCreation;
+    }
+
+    public List<StandingOrder> getStandingOrders() {
+        return Collections.unmodifiableList(standingOrders);
+    }    
     
     public TanType getTanType() {
         return tanType;
