@@ -4,25 +4,27 @@
  */
 package de.jreichl.jpa.entity.type;
 
+import java.util.Calendar;
+
 /**
  *
  * @author Jürgen Reichl
  */
 public enum StandingOrderType {
-    HOURLY(1000*60*60),
-    DAILY(1000*60*60*24),
-    WEEKLY(1000*60*60*24*7),
-    MONTHLY(0),
-    YEARLY(0);
+    HOURLY(Calendar.HOUR),
+    DAILY(Calendar.DATE),
+    WEEKLY(Calendar.DATE),
+    MONTHLY(Calendar.MONTH),
+    YEARLY(Calendar.YEAR);
     
-    private final long milliseconds;
+    private final int calendarType;
     
-    private StandingOrderType(long milliseconds) {
-        this.milliseconds = milliseconds;
+    private StandingOrderType(int calendarType) {
+        this.calendarType = calendarType;
     }
 
-    public long getMilliseconds() {
-        return milliseconds;
-    }    
+    public int getCalendarType() {
+        return calendarType;
+    }
     
 }

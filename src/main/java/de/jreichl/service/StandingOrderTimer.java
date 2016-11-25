@@ -33,10 +33,10 @@ public class StandingOrderTimer {
     
     
     /**
-     * runs every hour
+     * runs every 10 minutes
      * @param timer 
      */
-    @Schedule(second="*", minute="1",hour="*", persistent=false)
+    @Schedule(second="*", minute="*/10",hour="*", persistent=false)
     public void handleStandingOrders(final Timer timer) {
         List<StandingOrder> orders = standingOrderRepo.findAll();
         Logger.getLogger(getClass().getName()).log(Level.INFO, String.format("Running handleStandingOrders with %d orders..",orders.size()));
@@ -46,21 +46,13 @@ public class StandingOrderTimer {
                     // first transaction!
                     transactionService.transfer(o, o.getStartDate());                           
                 } else {
-                    if(o.getType().equals(StandingOrderType.YEARLY) || o.getType().equals(StandingOrderType.MONTHLY)) {
-                        Calendar cal = Calendar.getInstance();
-                        cal.setTime(o.getLastTransaction());                        
-                        cal.add( o.getType().equals(StandingOrderType.YEARLY) ? Calendar.YEAR : Calendar.MONTH, 1 );
-                        
-                        if(cal.getTimeInMillis() < System.currentTimeMillis()) {
-                            transactionService.transfer(o, new Timestamp(cal.getTimeInMillis()));
-                        }
-
-                    } else {                        
-                        long lastTransactionMS = o.getLastTransaction().getTime();
-                        if(lastTransactionMS + o.getType().getMilliseconds() < System.currentTimeMillis()) {    
-                            transactionService.transfer(o, new Timestamp(lastTransactionMS + o.getType().getMilliseconds()));                
-                        }
-                    }
+                    Calendar cal = Calendar.getInstance();
+                    cal.setTime(o.getLastTransaction());                        
+                    cal.add( o.getType().getCalendarType(), o.getType().equals(StandingOrderType.WEEKLY) ? 7 : 1 );
+                    
+                    if(cal.getTimeInMillis() < System.currentTimeMillis()) {
+                        transactionService.transfer(o, new Timestamp(cal.getTimeInMillis()));
+                    }                   
                 }
             } catch (TransactionFailedException ex) {
                 Logger.getLogger(getClass().getName()).log(Level.SEVERE, "Failed to handle standing order with id=" + o.getId(), ex);
