@@ -11,13 +11,15 @@ import de.jreichl.jpa.entity.type.Gender;
 import de.jreichl.jpa.repository.CompanyCustomerRepository;
 import de.jreichl.jpa.repository.PrivateCustomerRepository;
 import java.util.Date;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 
 /**
- *
+ * Service to create private and company customers
  * @author Jürgen Reichl
  */
+@RequestScoped
 public class CustomerService {
     
     @Inject

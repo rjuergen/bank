@@ -16,14 +16,16 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.persistence.NoResultException;
 import javax.transaction.Transactional;
 
 /**
- *
+ * Service to transfer money to different accounts
  * @author Jürgen Reichl
  */
+@RequestScoped
 public class TransactionService {   
     
     

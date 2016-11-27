@@ -11,13 +11,15 @@ import de.jreichl.jpa.repository.AccountRepository;
 import de.jreichl.jpa.repository.StandingOrderRepository;
 import java.sql.Timestamp;
 import java.util.Date;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 
 /**
- *
+ * Service to create standing orders (Dauerauftraege)
  * @author Jürgen Reichl
  */
+@RequestScoped
 public class StandingOrderService {
     
     @Inject

@@ -19,7 +19,7 @@ import javax.ejb.Timer;
 import javax.inject.Inject;
 
 /**
- *
+ * Timer which runs on the server in defined intervals. Handles the standing orders.
  * @author Jürgen Reichl
  */
 @Stateless

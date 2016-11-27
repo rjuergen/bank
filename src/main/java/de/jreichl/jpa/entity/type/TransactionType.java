@@ -5,7 +5,7 @@
 package de.jreichl.jpa.entity.type;
 
 /**
- *
+ * TransactionType defines if the Transaction is a DEBIT (-) or a CREDIT (+)
  * @author Jürgen Reichl
  */
 public enum TransactionType {
