@@ -82,7 +82,7 @@ public class TransactionService {
         transfer(order.getAmount(), order.getFromAccount(), order.getToAccount());                        
         order.setLastTransaction(newLastTransactionDate);
         standingOrderRepo.persist(order);
-        Logger.getLogger(getClass().getName()).log(Level.INFO, String.format(" # %s standing order(id=%d) successfull handled!", order.getType().name() ,order.getId()) );
+        Logger.getLogger(getClass().getName()).log(Level.INFO, String.format(" # %s standing order(id=%d) successfull handled!", order.getIntervalUnit().name() ,order.getId()) );
         return true;
     }
     

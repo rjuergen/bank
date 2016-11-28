@@ -6,7 +6,7 @@ package de.jreichl.service;
 
 import de.jreichl.jpa.entity.Account;
 import de.jreichl.jpa.entity.StandingOrder;
-import de.jreichl.jpa.entity.type.StandingOrderType;
+import de.jreichl.jpa.entity.type.IntervalUnit;
 import de.jreichl.jpa.repository.AccountRepository;
 import de.jreichl.jpa.repository.StandingOrderRepository;
 import java.sql.Timestamp;
@@ -35,12 +35,29 @@ public class StandingOrderService {
      * @param toIBAN the account to credit(+)
      * @param amountInCent amount in cent
      * @param startDate date to start with the transfers
-     * @param type interval type (hourly, daily, weekly, monthly or yearly)
+     * @param unit interval unit (hourly, daily, weekly, monthly or yearly)
      * @param description short description of the standing order
      * @return the created standing order
      */
     @Transactional
-    public StandingOrder createStandingOrder(String fromIBAN, String toIBAN, long amountInCent, Date startDate, StandingOrderType type, String description) {
+    public StandingOrder createStandingOrder(String fromIBAN, String toIBAN, long amountInCent, Date startDate, IntervalUnit unit, String description) {
+        return createStandingOrder(fromIBAN, toIBAN, amountInCent, startDate, 1, unit, description);
+    }
+    
+    /**
+     * create a standing order.
+     * a standing order transfers amount in cent from one account(fromIBAN) to another(toIBAN) in regular intervals     
+     * @param fromIBAN the account to debit(-)
+     * @param toIBAN the account to credit(+)
+     * @param amountInCent amount in cent
+     * @param startDate date to start with the transfers
+     * @param interval the interval (in interval unit)
+     * @param unit interval unit (hourly, daily, weekly, monthly or yearly)
+     * @param description short description of the standing order
+     * @return the created standing order
+     */
+    @Transactional
+    public StandingOrder createStandingOrder(String fromIBAN, String toIBAN, long amountInCent, Date startDate, int interval, IntervalUnit unit, String description) {
         StandingOrder o = new StandingOrder();
         
         Account fromAccount = accountRepo.findByIBAN(fromIBAN);
@@ -48,7 +65,8 @@ public class StandingOrderService {
         
         o.setFromAccount(fromAccount);
         o.setToAccount(toAccount);
-        o.setType(type);
+        o.setInterval(interval);
+        o.setIntervalUnit(unit);
         o.setAmount(amountInCent);
         o.setStartDate(new Timestamp(startDate.getTime()));
         o.setDescription(description);

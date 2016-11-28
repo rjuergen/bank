@@ -4,7 +4,7 @@
  */
 package de.jreichl.jpa.entity;
 
-import de.jreichl.jpa.entity.type.StandingOrderType;
+import de.jreichl.jpa.entity.type.IntervalUnit;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import javax.persistence.Entity;
@@ -36,7 +36,9 @@ public class StandingOrder extends SingleEntity implements Serializable {
      */
     private long amount;
     
-    private StandingOrderType type;
+    private int intervalAmount = 1;
+    
+    private IntervalUnit intervalUnit;
      
     private Timestamp startDate;
     
@@ -97,16 +99,23 @@ public class StandingOrder extends SingleEntity implements Serializable {
         this.amount = amount;
     }
 
-    public StandingOrderType getType() {
-        return type;
+    public int getInterval() {
+        return intervalAmount;
     }
 
-    public void setType(StandingOrderType type) {
-        this.type = type;
+    public void setInterval(int interval) {
+        this.intervalAmount = interval;
+    }
+
+    public IntervalUnit getIntervalUnit() {
+        return intervalUnit;
+    }
+
+    public void setIntervalUnit(IntervalUnit intervalUnit) {
+        this.intervalUnit = intervalUnit;
     }
     
-    
-    
+
     @Override
     public Long getId() {
         return id;

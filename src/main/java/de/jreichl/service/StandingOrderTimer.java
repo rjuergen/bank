@@ -5,7 +5,6 @@
 package de.jreichl.service;
 
 import de.jreichl.jpa.entity.StandingOrder;
-import de.jreichl.jpa.entity.type.StandingOrderType;
 import de.jreichl.jpa.repository.StandingOrderRepository;
 import de.jreichl.service.exceptions.TransactionFailedException;
 import java.sql.Timestamp;
@@ -47,8 +46,8 @@ public class StandingOrderTimer {
                     transactionService.transfer(o, o.getStartDate());                           
                 } else {
                     Calendar cal = Calendar.getInstance();
-                    cal.setTime(o.getLastTransaction());                        
-                    cal.add( o.getType().getCalendarType(), o.getType().equals(StandingOrderType.WEEKLY) ? 7 : 1 );
+                    cal.setTime(o.getLastTransaction());  
+                    cal.add(o.getIntervalUnit().getCalendarType(), o.getIntervalUnit().getCalendarAmount() * o.getInterval() );
                     
                     if(cal.getTimeInMillis() < System.currentTimeMillis()) {
                         transactionService.transfer(o, new Timestamp(cal.getTimeInMillis()));
