@@ -41,9 +41,11 @@ public class StandingOrderTimer {
         Logger.getLogger(getClass().getName()).log(Level.INFO, String.format("Running handleStandingOrders with %d orders..",orders.size()));
         for(StandingOrder o : orders) {
             try {
-                if(o.getLastTransaction()==null && o.getStartDate().getTime() < System.currentTimeMillis()) {
-                    // first transaction!
-                    transactionService.transfer(o, o.getStartDate());                           
+                if(o.getLastTransaction()==null) {
+                    if(o.getStartDate().getTime() < System.currentTimeMillis()) {
+                        // first transaction!
+                        transactionService.transfer(o, o.getStartDate());        
+                    }
                 } else {
                     Calendar cal = Calendar.getInstance();
                     cal.setTime(o.getLastTransaction());  

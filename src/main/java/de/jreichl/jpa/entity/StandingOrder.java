@@ -36,6 +36,9 @@ public class StandingOrder extends SingleEntity implements Serializable {
      */
     private long amount;
     
+    /**
+     * the intervalAmount (in interval unit) for e.g. if you choose IntervalUnit.Hourly and have an intervalAmount=3 the standing order will run every 3 hours.
+     */
     private int intervalAmount = 1;
     
     private IntervalUnit intervalUnit;

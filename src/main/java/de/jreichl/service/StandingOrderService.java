@@ -51,7 +51,7 @@ public class StandingOrderService {
      * @param toIBAN the account to credit(+)
      * @param amountInCent amount in cent
      * @param startDate date to start with the transfers
-     * @param interval the interval (in interval unit)
+     * @param interval the interval (in interval unit) for e.g. if you choose IntervalUnit.Hourly and have an interval=3 the standing order will run every 3 hours.
      * @param unit interval unit (hourly, daily, weekly, monthly or yearly)
      * @param description short description of the standing order
      * @return the created standing order
