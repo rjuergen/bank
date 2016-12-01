@@ -5,11 +5,13 @@
 package de.jreichl.jpa.repository;
 
 import de.jreichl.jpa.entity.AccountTransaction;
+import javax.enterprise.context.RequestScoped;
 
 /**
  *
  * @author Jürgen Reichl
  */
+@RequestScoped
 public class AccountTransactionRepository extends SingleEntityRepository<AccountTransaction> {
     
     public AccountTransactionRepository() {

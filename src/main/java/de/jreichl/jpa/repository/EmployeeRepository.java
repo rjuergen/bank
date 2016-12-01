@@ -5,11 +5,13 @@
 package de.jreichl.jpa.repository;
 
 import de.jreichl.jpa.entity.Employee;
+import javax.enterprise.context.RequestScoped;
 
 /**
  *
  * @author Jürgen Reichl
  */
+@RequestScoped
 public class EmployeeRepository extends SingleEntityRepository<Employee>{
     
     public EmployeeRepository() {

@@ -5,12 +5,14 @@
 package de.jreichl.jpa.repository;
 
 import de.jreichl.jpa.entity.Account;
+import javax.enterprise.context.RequestScoped;
 import javax.persistence.TypedQuery;
 
 /**
  *
  * @author Jürgen Reichl
  */
+@RequestScoped
 public class AccountRepository extends SingleEntityRepository<Account> {
     
     public AccountRepository() {

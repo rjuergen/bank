@@ -47,7 +47,7 @@ public class TransactionService {
      * @throws TransactionFailedException 
      */
     @Transactional
-    public boolean transfer(long amountInCent, String fromIBAN, String toIBAN) throws TransactionFailedException {        
+    public boolean transfer(long amountInCent, String fromIBAN, String toIBAN, String description) throws TransactionFailedException {        
         // get current/transaction date
         Date currentDate = new Date();
         
@@ -68,7 +68,7 @@ public class TransactionService {
                 throw new TransactionFailedException(nrex, String.format("Transaction failed! %s is not a valid IBAN", toIBAN), fromIBAN, toIBAN, currentDate, amountInCent);
             }
 
-            return transfer(amountInCent, fromAccount, toAccount);
+            return transfer(amountInCent, fromAccount, toAccount, description);
             
         } catch(TransactionFailedException ex) {
             throw ex;
@@ -79,7 +79,7 @@ public class TransactionService {
     
     @Transactional
     boolean transfer(StandingOrder order, Timestamp newLastTransactionDate) throws TransactionFailedException {
-        transfer(order.getAmount(), order.getFromAccount(), order.getToAccount());                        
+        transfer(order.getAmount(), order.getFromAccount(), order.getToAccount(), order.getDescription());                        
         order.setLastTransaction(newLastTransactionDate);
         standingOrderRepo.persist(order);
         Logger.getLogger(getClass().getName()).log(Level.INFO, String.format(" # %s standing order(id=%d) successfull handled!", order.getIntervalUnit().name() ,order.getId()) );
@@ -87,16 +87,18 @@ public class TransactionService {
     }
     
     @Transactional
-    boolean transfer(long amountInCent, Account fromAccount, Account toAccount) throws TransactionFailedException {
+    boolean transfer(long amountInCent, Account fromAccount, Account toAccount, String description) throws TransactionFailedException {
         Date currentDate = new Date();
         
         try {
         
             // create Transaction
             AccountTransaction t1 = new AccountTransaction(fromAccount, TransactionType.DEBIT, amountInCent, new java.sql.Timestamp(currentDate.getTime()));        
-
+            t1.setDescription(description);
+            
             AccountTransaction t2 = new AccountTransaction(toAccount, TransactionType.CREDIT, amountInCent, new java.sql.Timestamp(currentDate.getTime()));
-
+            t2.setDescription(description);
+            
             // persist
             accountTransactionRepo.persist(t1);
             accountTransactionRepo.persist(t2);

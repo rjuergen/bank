@@ -12,6 +12,6 @@ INSERT INTO EMPLOYEE (id, firstname, lastname, gender, dateOfBirth, housenr, str
 INSERT INTO ACCOUNT(id, iban, owner_id, accountManager_id, tanType, dateOfCreation) VALUES(1, 'DE49830600211111099610', 1, 1, 0, '2009-01-01')
 INSERT INTO ACCOUNT(id, iban, owner_id, accountManager_id, tanType, dateOfCreation) VALUES(2, 'DE96303244471000023401', 2, 2, 1, '2013-04-01')
 
-INSERT INTO STANDINGORDER (id, fromAccount_id, toAccount_id, amount, type, description, startDate) VALUES (1, 1, 2, 5, 0, 'Test Standing Order (Hourly)', '2016-11-25 15:00:00')
+INSERT INTO STANDINGORDER (id, fromAccount_id, toAccount_id, intervalUnit, intervalAmount, amount, description, startDate) VALUES (1, 1, 2, 0, 1, 5, 'Test Standing Order (Hourly)', '2016-12-01 12:00:00')
 
 

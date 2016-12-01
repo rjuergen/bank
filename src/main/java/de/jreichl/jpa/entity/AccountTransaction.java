@@ -40,6 +40,8 @@ public class AccountTransaction extends SingleEntity implements Serializable {
      * value in cent
      */
     private long amount;
+    
+    private String description;
 
     public AccountTransaction(Account account, TransactionType type, long amount, Timestamp transactionDate) {
         this.account = account;
@@ -52,6 +54,14 @@ public class AccountTransaction extends SingleEntity implements Serializable {
         
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }    
+    
     public Timestamp getTransactionDate() {
         return transactionDate;
     }

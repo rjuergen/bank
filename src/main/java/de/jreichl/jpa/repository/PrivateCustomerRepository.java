@@ -5,11 +5,13 @@
 package de.jreichl.jpa.repository;
 
 import de.jreichl.jpa.entity.PrivateCustomer;
+import javax.enterprise.context.RequestScoped;
 
 /**
  *
  * @author Jürgen Reichl
  */
+@RequestScoped
 public class PrivateCustomerRepository extends CustomerRepository<PrivateCustomer> {
     
     public PrivateCustomerRepository() {
