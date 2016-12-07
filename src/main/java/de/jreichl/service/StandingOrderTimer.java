@@ -50,10 +50,12 @@ public class StandingOrderTimer {
                     Calendar cal = Calendar.getInstance();
                     cal.setTime(o.getLastTransaction());  
                     cal.add(o.getIntervalUnit().getCalendarType(), o.getIntervalUnit().getCalendarAmount() * o.getInterval() );
-                    
-                    if(cal.getTimeInMillis() < System.currentTimeMillis()) {
+                    while(cal.getTimeInMillis() < System.currentTimeMillis()) {
                         transactionService.transfer(o, new Timestamp(cal.getTimeInMillis()));
-                    }                   
+                        
+                        cal.setTime(o.getLastTransaction());  
+                        cal.add(o.getIntervalUnit().getCalendarType(), o.getIntervalUnit().getCalendarAmount() * o.getInterval() );
+                    }                    
                 }
             } catch (TransactionFailedException ex) {
                 Logger.getLogger(getClass().getName()).log(Level.SEVERE, "Failed to handle standing order with id=" + o.getId(), ex);
