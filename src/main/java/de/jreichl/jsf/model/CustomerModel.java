@@ -2,7 +2,7 @@
  * License: Free to use. It's just a small project.
  * Feel free and use everything you want  * 
  */
-package de.jreichl.jsf;
+package de.jreichl.jsf.model;
 
 import de.jreichl.jpa.entity.type.Gender;
 import de.jreichl.service.CustomerService;

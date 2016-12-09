@@ -9,6 +9,7 @@ import de.jreichl.jpa.repository.StandingOrderRepository;
 import de.jreichl.service.exceptions.TransactionFailedException;
 import java.sql.Timestamp;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -34,19 +35,18 @@ public class StandingOrderTimer {
     /**
      * runs every 10 minutes
      * @param timer 
-     */
-    @Schedule(second="*", minute="*/10",hour="*", persistent=false)
+     */ 
+    @Schedule(second="0", minute="*/10",hour="*", persistent=false)
     public void handleStandingOrders(final Timer timer) {
         List<StandingOrder> orders = standingOrderRepo.findAll();
-        Logger.getLogger(getClass().getName()).log(Level.INFO, String.format("Running handleStandingOrders with %d orders..",orders.size()));
+        Logger.getLogger(getClass().getName()).log(Level.INFO, String.format("%s - Running handleStandingOrders with %d orders..", new Date().toString(),orders.size()));
         for(StandingOrder o : orders) {
             try {
-                if(o.getLastTransaction()==null) {
-                    if(o.getStartDate().getTime() < System.currentTimeMillis()) {
-                        // first transaction!
-                        transactionService.transfer(o, o.getStartDate());        
-                    }
-                } else {
+                if(o.getLastTransaction()==null && o.getStartDate().getTime() < System.currentTimeMillis()) {                    
+                    // first transaction!
+                    transactionService.transfer(o, o.getStartDate());                    
+                }
+                if(o.getLastTransaction()!=null) {
                     Calendar cal = Calendar.getInstance();
                     cal.setTime(o.getLastTransaction());  
                     cal.add(o.getIntervalUnit().getCalendarType(), o.getIntervalUnit().getCalendarAmount() * o.getInterval() );

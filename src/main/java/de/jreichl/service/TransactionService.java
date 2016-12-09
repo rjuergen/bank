@@ -18,6 +18,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import javax.jws.WebMethod;
+import javax.jws.WebService;
 import javax.persistence.NoResultException;
 import javax.transaction.Transactional;
 
@@ -26,6 +28,7 @@ import javax.transaction.Transactional;
  * @author Jürgen Reichl
  */
 @RequestScoped
+@WebService
 public class TransactionService {   
     
     
@@ -47,6 +50,7 @@ public class TransactionService {
      * @throws TransactionFailedException 
      */
     @Transactional
+    @WebMethod
     public boolean transfer(long amountInCent, String fromIBAN, String toIBAN, String description) throws TransactionFailedException {        
         // get current/transaction date
         Date currentDate = new Date();
