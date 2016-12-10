@@ -27,7 +27,6 @@ public class AccountTransaction extends SingleEntity implements Serializable {
         
     @ManyToOne
     private Account account;
-
         
     /**
      * Type of the transaction: CREDIT(+) or DEBIT(-)

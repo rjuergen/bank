@@ -11,6 +11,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 
 /**
  *
@@ -30,7 +31,13 @@ public class Bank extends SingleEntity implements Serializable {
     private String name;
     
     private String bic;
+    
+    @OneToOne
+    private Account creditAccount;
 
+    @OneToOne
+    private Account salaryAccount;
+    
     public Bank() {
         
     }
@@ -68,4 +75,22 @@ public class Bank extends SingleEntity implements Serializable {
         this.id = id;
     }
 
+    public Account getCreditAccount() {
+        return creditAccount;
+    }
+
+    public void setCreditAccount(Account creditAccount) {
+        this.creditAccount = creditAccount;
+    }
+
+    public Account getSalaryAccount() {
+        return salaryAccount;
+    }
+
+    public void setSalaryAccount(Account salaryAccount) {
+        this.salaryAccount = salaryAccount;
+    }
+
+    
+    
 }

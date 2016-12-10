@@ -13,8 +13,6 @@ import java.sql.Timestamp;
 import java.util.Date;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-import javax.jws.WebMethod;
-import javax.jws.WebService;
 import javax.transaction.Transactional;
 
 /**
@@ -22,7 +20,7 @@ import javax.transaction.Transactional;
  * @author Jürgen Reichl
  */
 @RequestScoped
-@WebService
+//@WebService
 public class StandingOrderService {
     
     @Inject
@@ -43,7 +41,7 @@ public class StandingOrderService {
      * @return the created standing order
      */
     @Transactional
-    @WebMethod
+    //@WebMethod
     public StandingOrder createStandingOrder(String fromIBAN, String toIBAN, long amountInCent, Date startDate, IntervalUnit unit, String description) {
         return createStandingOrder(fromIBAN, toIBAN, amountInCent, startDate, 1, unit, description);
     }
@@ -61,7 +59,7 @@ public class StandingOrderService {
      * @return the created standing order
      */
     @Transactional
-    @WebMethod
+    //@WebMethod
     public StandingOrder createStandingOrder(String fromIBAN, String toIBAN, long amountInCent, Date startDate, int interval, IntervalUnit unit, String description) {
         StandingOrder o = new StandingOrder();
         

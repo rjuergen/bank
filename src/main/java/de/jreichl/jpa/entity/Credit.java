@@ -5,12 +5,16 @@
 package de.jreichl.jpa.entity;
 
 import java.io.Serializable;
+import java.sql.Date;
 import java.sql.Timestamp;
+import java.util.Collections;
+import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 /**
  *
@@ -30,16 +34,47 @@ public class Credit extends SingleEntity implements Serializable {
     @ManyToOne
     private Customer customer;
     
+    @ManyToOne
+    private Account account;
+        
     /**
-     * possible credit in cent
+     * credit in cent
      */
     private long credit;
+    
+    @OneToMany
+    private List<AccountTransaction> transactions;
+    
+    /**
+     * interest rate (Zinssatz) in ‱ (per ten thousand | 1‱ = 0.01%)
+     */
+    private int interestRate;
+    
+    /**
+     * interest to pay back in cent
+     */
+    private long interesToPay;
+    
+    /**
+     * date of last addition of interest to toPay(remaining amount to pay back)
+     */
+    private Date interestAddedDate;
     
     
     public Credit() {
         
     }
 
+    public Account getAccount() {
+        return account;
+    }
+
+    public void setAccount(Account account) {
+        this.account = account;
+    }
+
+    
+    
     public Timestamp getCreationDate() {
         return creationDate;
     }
@@ -72,5 +107,43 @@ public class Credit extends SingleEntity implements Serializable {
     public void setId(Long id) {
         this.id = id;
     }
+
+    public int getInterestRate() {
+        return interestRate;
+    }
+
+    public void setInterestRate(int interestRate) {
+        this.interestRate = interestRate;
+    }
+
+    public List<AccountTransaction> getTransactions() {
+        return Collections.unmodifiableList(transactions);
+    }
+
+    public void setTransactions(List<AccountTransaction> transactions) {
+        this.transactions = transactions;
+    }
+
+    public long getInteresToPay() {
+        return interesToPay;
+    }
+
+    public void setInteresToPay(long interesToPay) {
+        this.interesToPay = interesToPay;
+    }
+
+   
+
+    /**
+     * date of last addition of interest to toPay(remaining amount to pay back)
+     */
+    public Date getInterestAddedDate() {
+        return interestAddedDate;
+    }
+
+    public void setInterestAddedDate(Date interestAddedDate) {
+        this.interestAddedDate = interestAddedDate;
+    }
+
     
 }

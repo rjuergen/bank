@@ -36,7 +36,7 @@ public class StandingOrderTimer {
      * runs every 10 minutes
      * @param timer 
      */ 
-    @Schedule(second="0", minute="*/10",hour="*", persistent=false)
+    @Schedule(minute="*/10",hour="*", persistent=false)
     public void handleStandingOrders(final Timer timer) {
         List<StandingOrder> orders = standingOrderRepo.findAll();
         Logger.getLogger(getClass().getName()).log(Level.INFO, String.format("%s - Running handleStandingOrders with %d orders..", new Date().toString(),orders.size()));

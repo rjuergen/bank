@@ -32,9 +32,15 @@ public abstract class Customer extends SingleEntity implements Serializable {
     @Embedded
     private Address address;
 
-    @OneToMany
+    @OneToMany(mappedBy = "owner")
     private List<Account> accounts;
 
+    @OneToMany(mappedBy = "customer")
+    private List<Credit> credits;
+        
+    @OneToMany(mappedBy = "customer")
+    private List<Creditworthiness> creditworthinesses;
+    
     public Customer() {
         
     }
@@ -46,8 +52,22 @@ public abstract class Customer extends SingleEntity implements Serializable {
     public void setAccounts(List<Account> accounts) {
         this.accounts = accounts;
     }
-    
-    
+
+    public List<Credit> getCredits() {
+        return credits;
+    }
+
+    public void setCredits(List<Credit> credits) {
+        this.credits = credits;
+    }
+
+    public List<Creditworthiness> getCreditworthinesses() {
+        return creditworthinesses;
+    }
+
+    public void setCreditworthinesses(List<Creditworthiness> creditworthinesses) {
+        this.creditworthinesses = creditworthinesses;
+    }    
     
     public Address getAddress() {
         return address;
