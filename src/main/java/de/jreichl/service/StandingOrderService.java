@@ -13,6 +13,8 @@ import java.sql.Timestamp;
 import java.util.Date;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import javax.jws.WebMethod;
+import javax.jws.WebService;
 import javax.transaction.Transactional;
 
 /**
@@ -20,7 +22,7 @@ import javax.transaction.Transactional;
  * @author Jürgen Reichl
  */
 @RequestScoped
-//@WebService
+@WebService
 public class StandingOrderService {
     
     @Inject
@@ -29,22 +31,6 @@ public class StandingOrderService {
     @Inject
     private AccountRepository accountRepo;
     
-    /**
-     * create a standing order.
-     * a standing order transfers amount in cent from one account(fromIBAN) to another(toIBAN) in regular intervals     
-     * @param fromIBAN the account to debit(-)
-     * @param toIBAN the account to credit(+)
-     * @param amountInCent amount in cent
-     * @param startDate date to start with the transfers
-     * @param unit interval unit (hourly, daily, weekly, monthly or yearly)
-     * @param description short description of the standing order
-     * @return the created standing order
-     */
-    @Transactional
-    //@WebMethod
-    public StandingOrder createStandingOrder(String fromIBAN, String toIBAN, long amountInCent, Date startDate, IntervalUnit unit, String description) {
-        return createStandingOrder(fromIBAN, toIBAN, amountInCent, startDate, 1, unit, description);
-    }
     
     /**
      * create a standing order.
@@ -59,7 +45,7 @@ public class StandingOrderService {
      * @return the created standing order
      */
     @Transactional
-    //@WebMethod
+    @WebMethod
     public StandingOrder createStandingOrder(String fromIBAN, String toIBAN, long amountInCent, Date startDate, int interval, IntervalUnit unit, String description) {
         StandingOrder o = new StandingOrder();
         
