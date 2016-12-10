@@ -14,6 +14,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 
 /**
@@ -21,6 +22,7 @@ import javax.persistence.OneToMany;
  * @author Jürgen Reichl
  */
 @Entity
+@NamedQuery(name="Credit.unpaid",query="SELECT c FROM Credit c WHERE c.paybackComplete = false")
 public class Credit extends SingleEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -46,19 +48,21 @@ public class Credit extends SingleEntity implements Serializable {
     private List<AccountTransaction> transactions;
     
     /**
-     * interest rate (Zinssatz) in ‱ (per ten thousand | 1‱ = 0.01%)
+     * interest rate (Zinssatz) in ‱ (per ten thousand | 123‱ = 1.23% = 0.0123)
      */
     private int interestRate;
     
     /**
      * interest to pay back in cent
      */
-    private long interesToPay;
+    private long interestToPay = 0;
     
     /**
      * date of last addition of interest to toPay(remaining amount to pay back)
      */
     private Date interestAddedDate;
+    
+    private boolean paybackComplete = false;
     
     
     public Credit() {
@@ -71,6 +75,14 @@ public class Credit extends SingleEntity implements Serializable {
 
     public void setAccount(Account account) {
         this.account = account;
+    }
+
+    public boolean isPaybackComplete() {
+        return paybackComplete;
+    }
+
+    public void setPaybackComplete(boolean paybackComplete) {
+        this.paybackComplete = paybackComplete;
     }
 
     
@@ -124,15 +136,15 @@ public class Credit extends SingleEntity implements Serializable {
         this.transactions = transactions;
     }
 
-    public long getInteresToPay() {
-        return interesToPay;
+    public long getInterestToPay() {
+        return interestToPay;
     }
 
-    public void setInteresToPay(long interesToPay) {
-        this.interesToPay = interesToPay;
+    public void setInterestToPay(long interestToPay) {
+        this.interestToPay = interestToPay;
     }
 
-   
+       
 
     /**
      * date of last addition of interest to toPay(remaining amount to pay back)

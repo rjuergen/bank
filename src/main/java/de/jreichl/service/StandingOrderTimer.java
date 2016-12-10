@@ -38,8 +38,8 @@ public class StandingOrderTimer {
      */ 
     @Schedule(minute="*/10",hour="*", persistent=false)
     public void handleStandingOrders(final Timer timer) {
-        List<StandingOrder> orders = standingOrderRepo.findAll();
-        Logger.getLogger(getClass().getName()).log(Level.INFO, String.format("%s - Running handleStandingOrders with %d orders..", new Date().toString(),orders.size()));
+        Logger.getLogger(getClass().getName()).log(Level.INFO, String.format("%s - Running handleStandingOrders..", new Date().toString()));
+        List<StandingOrder> orders = standingOrderRepo.findAll();        
         for(StandingOrder o : orders) {
             try {
                 if(o.getLastTransaction()==null && o.getStartDate().getTime() < System.currentTimeMillis()) {                    

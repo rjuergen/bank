@@ -6,11 +6,13 @@ package de.jreichl.jpa.repository;
 
 import de.jreichl.jpa.entity.Bank;
 import java.util.List;
+import javax.enterprise.context.RequestScoped;
 
 /**
  *
  * @author Jürgen Reichl
  */
+@RequestScoped
 public class BankRepository extends SingleEntityRepository<Bank>{
     
     public BankRepository() {
