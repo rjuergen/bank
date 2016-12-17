@@ -38,6 +38,10 @@ public class Account extends SingleEntity implements Serializable {
     
     private Date dateOfCreation;
     
+    private String hashedPassword;
+    
+    private String passwordSalt;
+    
     @OneToMany(mappedBy = "account")
     private List<AccountTransaction> transactions;
     
@@ -48,6 +52,23 @@ public class Account extends SingleEntity implements Serializable {
         
     }
 
+    public String getHashedPassword() {
+        return hashedPassword;
+    }
+
+    public void setHashedPassword(String hashedPassword) {
+        this.hashedPassword = hashedPassword;
+    }  
+
+    public String getPasswordSalt() {
+        return passwordSalt;
+    }
+
+    public void setPasswordSalt(String passwordSalt) {
+        this.passwordSalt = passwordSalt;
+    }
+    
+    
     public Date getDateOfCreation() {
         return dateOfCreation;
     }
