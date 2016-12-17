@@ -15,10 +15,7 @@ import javax.enterprise.context.RequestScoped;
 @RequestScoped
 public class BankRepository extends SingleEntityRepository<Bank>{
     
-    public BankRepository() {
-        super(Bank.class);
-    }
-    
+      
     public Bank getBank() {
         List<Bank> r = findAll();        
         return r.get(0);

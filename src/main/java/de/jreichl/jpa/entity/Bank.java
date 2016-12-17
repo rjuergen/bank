@@ -8,9 +8,6 @@ import de.jreichl.jpa.entity.embeddable.Address;
 import java.io.Serializable;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
 /**
@@ -21,10 +18,7 @@ import javax.persistence.OneToOne;
 public class Bank extends SingleEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-
+    
     @Embedded
     private Address address;
     
@@ -66,15 +60,6 @@ public class Bank extends SingleEntity implements Serializable {
         this.bic = bic;
     }   
     
-    @Override
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public Account getCreditAccount() {
         return creditAccount;
     }

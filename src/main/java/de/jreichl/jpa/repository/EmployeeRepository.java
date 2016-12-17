@@ -13,9 +13,6 @@ import javax.enterprise.context.RequestScoped;
  */
 @RequestScoped
 public class EmployeeRepository extends SingleEntityRepository<Employee>{
-    
-    public EmployeeRepository() {
-        super(Employee.class);
-    }
+  
     
 }

@@ -16,11 +16,7 @@ import javax.persistence.TypedQuery;
  */
 @RequestScoped
 public class CreditworthinessRepository extends SingleEntityRepository<Creditworthiness>{
-    
-    public CreditworthinessRepository() {
-        super(Creditworthiness.class);
-    }
-    
+  
     public List<Creditworthiness> findAllByCustomer(Customer customer) {        
         TypedQuery<Creditworthiness> query = em.createNamedQuery("Creditworthiness.Customer", Creditworthiness.class);
         query.setParameter("customer", customer);        

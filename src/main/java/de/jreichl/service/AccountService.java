@@ -8,6 +8,7 @@ import de.jreichl.jpa.entity.Account;
 import de.jreichl.jpa.entity.Customer;
 import de.jreichl.jpa.entity.Employee;
 import de.jreichl.jpa.entity.type.TanType;
+import de.jreichl.jpa.entity.util.EntityUtils;
 import de.jreichl.jpa.repository.AccountRepository;
 import de.jreichl.jpa.repository.EmployeeRepository;
 import java.util.List;
@@ -72,18 +73,17 @@ public class AccountService {
      */
     @Transactional
     private String createIBAN() {   
-        while(true) {
-            Random r = new Random(System.currentTimeMillis());
-            StringBuilder iban = new StringBuilder("DE");
-            for(int i = 0; i<20; i++)
-                iban.append(r.nextInt(10));
-
-            String IBAN = iban.toString();
+        int tries = 0;
+        while(true) {            
+            String IBAN = EntityUtils.createRandomIBAN();
 
             Account a = null;
             try{
+                tries++;
                 a = accountRepo.findByIBAN(IBAN);
             } catch(Exception ex) {
+                if(tries > 20)
+                    throw ex;
             }
             if (a==null)
                 return IBAN;

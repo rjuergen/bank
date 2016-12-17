@@ -16,10 +16,7 @@ import javax.persistence.TypedQuery;
 @RequestScoped
 public class CreditRepository extends SingleEntityRepository<Credit> {
     
-    public CreditRepository() {
-        super(Credit.class);
-    }
-    
+       
     public List<Credit> findAllUnpaid() {        
         TypedQuery<Credit> query = em.createNamedQuery("Credit.unpaid", Credit.class);               
         return query.getResultList();

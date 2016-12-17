@@ -12,9 +12,5 @@ import de.jreichl.jpa.entity.Customer;
  * @param <E>
  */
 public abstract class CustomerRepository<E extends Customer> extends SingleEntityRepository<E> {
-    
-    public CustomerRepository(Class<E> clazz) {
-        super(clazz);
-    }
-    
+       
 }

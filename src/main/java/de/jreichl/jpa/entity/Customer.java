@@ -9,9 +9,6 @@ import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.OneToMany;
@@ -25,10 +22,7 @@ import javax.persistence.OneToMany;
 public abstract class Customer extends SingleEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-    
+       
     @Embedded
     private Address address;
 
@@ -79,13 +73,5 @@ public abstract class Customer extends SingleEntity implements Serializable {
         
     public abstract String getName();
     
-    @Override
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }  
-    
+  
 }

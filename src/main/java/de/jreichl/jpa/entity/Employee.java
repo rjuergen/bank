@@ -10,9 +10,6 @@ import java.io.Serializable;
 import java.sql.Date;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 
 /**
  *
@@ -22,10 +19,7 @@ import javax.persistence.Id;
 public class Employee extends SingleEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-
+    
     @Embedded
     private Address address;
     
@@ -84,14 +78,5 @@ public class Employee extends SingleEntity implements Serializable {
     public void setGender(Gender gender) {
         this.gender = gender;
     }
-    
-    @Override
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-    
+  
 }

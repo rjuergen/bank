@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" prefer="system">
+    <system systemId="http://172.16.34.116:8080/RetailerPoschinger/CreditworthinessServiceService?wsdl" uri="wsdl/172.16.34.116_8080/RetailerPoschinger/CreditworthinessServiceService.wsdl"/>
+    <system systemId="http://172.16.34.116:8080/RetailerPoschinger/CreditworthinessServiceService?xsd=1" uri="wsdl/172.16.34.116_8080/RetailerPoschinger/CreditworthinessServiceService.xsd_1.xsd"/>
+</catalog>

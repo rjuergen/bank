@@ -13,9 +13,6 @@ import javax.enterprise.context.RequestScoped;
  */
 @RequestScoped
 public class PrivateCustomerRepository extends CustomerRepository<PrivateCustomer> {
-    
-    public PrivateCustomerRepository() {
-        super(PrivateCustomer.class);
-    }
+      
     
 }

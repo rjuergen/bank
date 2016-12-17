@@ -7,9 +7,6 @@ package de.jreichl.jpa.entity;
 import java.io.Serializable;
 import java.sql.Date;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
 
@@ -22,10 +19,7 @@ import javax.persistence.NamedQuery;
 public class Creditworthiness extends SingleEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-
+   
     private Date creationDate;
     
     @ManyToOne
@@ -63,14 +57,5 @@ public class Creditworthiness extends SingleEntity implements Serializable {
     public void setPossibleCredit(long possibleCredit) {
         this.possibleCredit = possibleCredit;
     }
-    
-    @Override
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-      
+            
 }

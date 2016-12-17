@@ -14,8 +14,5 @@ import javax.enterprise.context.RequestScoped;
 @RequestScoped
 public class AccountTransactionRepository extends SingleEntityRepository<AccountTransaction> {
     
-    public AccountTransactionRepository() {
-        super(AccountTransaction.class);
-    }
     
 }

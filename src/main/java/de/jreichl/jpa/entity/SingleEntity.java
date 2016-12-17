@@ -4,6 +4,9 @@
  */
 package de.jreichl.jpa.entity;
 
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
 /**
@@ -13,13 +16,23 @@ import javax.persistence.MappedSuperclass;
 @MappedSuperclass
 public abstract class SingleEntity {
     
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+    
     /**
      * ID in Long
      * @return the ID
      */
-    public abstract Long getId();
+    public Long getId() {
+        return id;
+    }
     
-        @Override
+    protected void setId(Long id) {
+        this.id = id;
+    }
+    
+    @Override
     public int hashCode() {
         int hash = 0;
         hash += (getId() != null ? getId().hashCode() : 0);

@@ -13,9 +13,5 @@ import javax.enterprise.context.RequestScoped;
  */
 @RequestScoped
 public class StandingOrderRepository extends SingleEntityRepository<StandingOrder> {
-    
-    public StandingOrderRepository() {
-        super(StandingOrder.class);
-    }
-    
+  
 }

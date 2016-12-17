@@ -37,8 +37,12 @@ public class CustomerModel implements Serializable {
     private String zip;
     private String city;
     
+    //@Inject
+    //private CreditworthinessService testService;
+    
     public void CreatePrivateCustomer() {        
         Logger.getLogger(getClass().getName()).log(Level.INFO, String.format("Creating private customer! firstName=%s lastName=%s",firstName, lastName));
+        //testService.requestCreditworthinessFromRetailerPoschinger(null);
     }
 
     public String getFirstName() {

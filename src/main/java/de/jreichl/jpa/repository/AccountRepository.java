@@ -14,10 +14,6 @@ import javax.persistence.TypedQuery;
  */
 @RequestScoped
 public class AccountRepository extends SingleEntityRepository<Account> {
-    
-    public AccountRepository() {
-        super(Account.class);
-    }
         
     
     public Account findByIBAN(String IBAN) {
