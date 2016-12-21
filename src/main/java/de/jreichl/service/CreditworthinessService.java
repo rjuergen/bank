@@ -6,16 +6,11 @@ package de.jreichl.service;
 
 import de.jreichl.jpa.entity.Creditworthiness;
 import de.jreichl.jpa.entity.Customer;
-import de.jreichl.jpa.entity.PrivateCustomer;
 import de.jreichl.jpa.repository.CreditworthinessRepository;
 import java.sql.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
-import net.poschinger.retailerposchinger.service.contractor.CreditWorthiness;
-import net.poschinger.retailerposchinger.service.contractor.CreditworthinessServiceService;
 
 
 /**
@@ -28,6 +23,7 @@ public class CreditworthinessService {
     @Inject
     private CreditworthinessRepository creditworthinessRepo;
     
+    /*
     @Inject
     private CreditworthinessServiceService poschingerService;
     
@@ -46,7 +42,7 @@ public class CreditworthinessService {
         }
         return null;
     }
-    
+    */
     @Transactional
     private Creditworthiness createCreditworthiness(Customer customer, long possibleCredit) {
         Creditworthiness c = new Creditworthiness();

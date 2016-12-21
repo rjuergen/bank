@@ -44,14 +44,14 @@ public class StandingOrderTimer {
             try {
                 if(o.getLastTransaction()==null && o.getStartDate().getTime() < System.currentTimeMillis()) {                    
                     // first transaction!
-                    transactionService.transfer(o, o.getStartDate());                    
+                    transactionService.transferStandingOrder(o, o.getStartDate());                    
                 }
                 if(o.getLastTransaction()!=null) {
                     Calendar cal = Calendar.getInstance();
                     cal.setTime(o.getLastTransaction());  
                     cal.add(o.getIntervalUnit().getCalendarType(), o.getIntervalUnit().getCalendarAmount() * o.getInterval() );
                     while(cal.getTimeInMillis() < System.currentTimeMillis()) {
-                        transactionService.transfer(o, new Timestamp(cal.getTimeInMillis()));
+                        transactionService.transferStandingOrder(o, new Timestamp(cal.getTimeInMillis()));
                         
                         cal.setTime(o.getLastTransaction());  
                         cal.add(o.getIntervalUnit().getCalendarType(), o.getIntervalUnit().getCalendarAmount() * o.getInterval() );

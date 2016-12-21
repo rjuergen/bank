@@ -4,6 +4,7 @@
  */
 package de.jreichl.service;
 
+import de.jreichl.service.interfaces.ITransactionService;
 import de.jreichl.jpa.entity.Account;
 import de.jreichl.jpa.entity.AccountTransaction;
 import de.jreichl.jpa.entity.StandingOrder;
@@ -29,7 +30,7 @@ import javax.transaction.Transactional;
  */
 @RequestScoped
 @WebService
-public class TransactionService {   
+public class TransactionService implements ITransactionService {   
     
     
     @Inject
@@ -46,11 +47,13 @@ public class TransactionService {
      * @param amountInCent amount in cent
      * @param fromIBAN the account to debit(-)
      * @param toIBAN the account to credit(+)
+     * @param description description of the transaction
      * @return true if account transactions were successfully
      * @throws TransactionFailedException 
      */
-    @Transactional
+    @Transactional    
     @WebMethod
+    @Override
     public boolean transfer(long amountInCent, String fromIBAN, String toIBAN, String description) throws TransactionFailedException {        
         // get current/transaction date
         Date currentDate = new Date();
@@ -82,7 +85,7 @@ public class TransactionService {
     }
     
     @Transactional
-    boolean transfer(StandingOrder order, Timestamp newLastTransactionDate) throws TransactionFailedException {
+    boolean transferStandingOrder(StandingOrder order, Timestamp newLastTransactionDate) throws TransactionFailedException {
         transfer(order.getAmount(), order.getFromAccount(), order.getToAccount(), order.getDescription());                        
         order.setLastTransaction(newLastTransactionDate);
         standingOrderRepo.persist(order);
@@ -91,7 +94,7 @@ public class TransactionService {
     }
     
     @Transactional
-    boolean transfer(long amountInCent, Account fromAccount, Account toAccount, String description) throws TransactionFailedException {
+    private boolean transfer(long amountInCent, Account fromAccount, Account toAccount, String description) throws TransactionFailedException {
         Date currentDate = new Date();
         
         try {

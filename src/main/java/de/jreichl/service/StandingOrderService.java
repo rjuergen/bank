@@ -4,6 +4,7 @@
  */
 package de.jreichl.service;
 
+import de.jreichl.service.interfaces.IStandingOrderService;
 import de.jreichl.jpa.entity.Account;
 import de.jreichl.jpa.entity.StandingOrder;
 import de.jreichl.jpa.entity.type.IntervalUnit;
@@ -23,7 +24,7 @@ import javax.transaction.Transactional;
  */
 @RequestScoped
 @WebService
-public class StandingOrderService {
+public class StandingOrderService implements IStandingOrderService{
     
     @Inject
     private StandingOrderRepository standingOrderRepo;
@@ -46,6 +47,7 @@ public class StandingOrderService {
      */
     @Transactional
     @WebMethod
+    @Override
     public StandingOrder createStandingOrder(String fromIBAN, String toIBAN, long amountInCent, Date startDate, int interval, IntervalUnit unit, String description) {
         StandingOrder o = new StandingOrder();
         
