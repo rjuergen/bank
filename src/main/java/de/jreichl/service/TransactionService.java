@@ -4,7 +4,6 @@
  */
 package de.jreichl.service;
 
-import de.jreichl.service.interfaces.ITransactionService;
 import de.jreichl.jpa.entity.Account;
 import de.jreichl.jpa.entity.AccountTransaction;
 import de.jreichl.jpa.entity.StandingOrder;
@@ -13,14 +12,13 @@ import de.jreichl.jpa.repository.AccountRepository;
 import de.jreichl.jpa.repository.AccountTransactionRepository;
 import de.jreichl.jpa.repository.StandingOrderRepository;
 import de.jreichl.service.exceptions.TransactionFailedException;
+import de.jreichl.service.interfaces.ITransactionService;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-import javax.jws.WebMethod;
-import javax.jws.WebService;
 import javax.persistence.NoResultException;
 import javax.transaction.Transactional;
 
@@ -29,7 +27,6 @@ import javax.transaction.Transactional;
  * @author Jürgen Reichl
  */
 @RequestScoped
-@WebService
 public class TransactionService implements ITransactionService {   
     
     
@@ -52,7 +49,6 @@ public class TransactionService implements ITransactionService {
      * @throws TransactionFailedException 
      */
     @Transactional    
-    @WebMethod
     @Override
     public boolean transfer(long amountInCent, String fromIBAN, String toIBAN, String description) throws TransactionFailedException {        
         // get current/transaction date
