@@ -24,17 +24,40 @@ public class Bank extends SingleEntity implements Serializable {
     
     private String name;
     
+    private String bankCode;
+    
     private String bic;
+    
+    private String countryAlpha2Code;
     
     @OneToOne
     private Account creditAccount;
 
     @OneToOne
     private Account salaryAccount;
+        
     
     public Bank() {
         
     }
+
+    public String getBankCode() {
+        return bankCode;
+    }
+
+    public void setBankCode(String bankCode) {
+        this.bankCode = bankCode;
+    }
+
+    public String getCountryAlpha2Code() {
+        return countryAlpha2Code;
+    }
+
+    public void setCountryAlpha2Code(String countryAlpha2Code) {
+        this.countryAlpha2Code = countryAlpha2Code;
+    }
+
+
     
     public Address getAddress() {
         return address;

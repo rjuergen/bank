@@ -81,7 +81,8 @@ public class TransactionService implements ITransactionService {
     }
     
     @Transactional
-    boolean transferStandingOrder(StandingOrder order, Timestamp newLastTransactionDate) throws TransactionFailedException {
+    @Override
+    public boolean transferStandingOrder(StandingOrder order, Timestamp newLastTransactionDate) throws TransactionFailedException {
         transfer(order.getAmount(), order.getFromAccount(), order.getToAccount(), order.getDescription());                        
         order.setLastTransaction(newLastTransactionDate);
         standingOrderRepo.persist(order);

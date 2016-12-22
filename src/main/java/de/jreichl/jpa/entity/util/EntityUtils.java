@@ -5,13 +5,11 @@ import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
-import java.util.Random;
 import java.util.UUID;
 
 public class EntityUtils {
 
     private static final String algorithm = "SHA-256";
-    private static final Random random = new Random(System.currentTimeMillis());
     
     public static String hashPassword(String password, String salt) throws EntityUtilException {
         try {
@@ -46,11 +44,12 @@ public class EntityUtils {
         }
     }
     
-    public static String createRandomIBAN() {        
-        StringBuilder iban = new StringBuilder("DE");
-        for(int i = 0; i<20; i++)
-            iban.append(random.nextInt(10));
-
+    public static String createAccountNumber(Long id) {            
+        String end = id.toString();
+        StringBuilder iban = new StringBuilder();
+        for(int i = end.length(); i<11; i++)
+            iban.append("0");
+        iban.append(end);
         return iban.toString();
     }
 }

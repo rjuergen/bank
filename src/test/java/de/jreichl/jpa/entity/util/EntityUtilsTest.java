@@ -80,18 +80,14 @@ public class EntityUtilsTest {
     }
     
     /**
-     * Test of createRandomIBAN method, of class EntityUtils.
+     * Test of createAccountNumber method, of class EntityUtils.
      */
     @org.junit.Test
-    public void testCreateRandomIBAN() {
-        System.out.println("createRandomIBAN");
-        Set<String> IBANs = new HashSet<String>(100);
-        for(int i = 0; i<100; i++) {
-            String iban = EntityUtils.createRandomIBAN();
-            IBANs.add(iban);
-            System.out.println(iban);
-        }   
-        Assert.assertEquals(IBANs.size(), 100);        
+    public void testCreateAccountNumber() {
+        System.out.println("createAccountNumber");
+        String accountNumber = EntityUtils.createAccountNumber(123L);
+        Assert.assertEquals("00000000123", accountNumber);        
     }
+        
     
 }

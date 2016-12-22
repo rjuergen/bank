@@ -7,6 +7,7 @@ package de.jreichl.service;
 import de.jreichl.jpa.entity.StandingOrder;
 import de.jreichl.jpa.repository.StandingOrderRepository;
 import de.jreichl.service.exceptions.TransactionFailedException;
+import de.jreichl.service.interfaces.ITransactionService;
 import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Date;
@@ -29,7 +30,7 @@ public class StandingOrderTimer {
     private StandingOrderRepository standingOrderRepo;
     
     @Inject
-    private TransactionService transactionService;
+    private ITransactionService transactionService;
     
     
     /**

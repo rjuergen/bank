@@ -26,6 +26,9 @@ public class Account extends SingleEntity implements Serializable {
     private static final long serialVersionUID = 1L;    
 
     @Column(unique=true)
+    private String accountNumber;
+    
+    @Column(unique=true)
     private String iban;
     
     @ManyToOne
@@ -66,6 +69,14 @@ public class Account extends SingleEntity implements Serializable {
 
     public void setPasswordSalt(String passwordSalt) {
         this.passwordSalt = passwordSalt;
+    }
+
+    public String getAccountNumber() {
+        return accountNumber;
+    }
+
+    public void setAccountNumber(String accountNumber) {
+        this.accountNumber = accountNumber;
     }
     
     

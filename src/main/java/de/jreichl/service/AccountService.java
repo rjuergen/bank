@@ -5,11 +5,13 @@
 package de.jreichl.service;
 
 import de.jreichl.jpa.entity.Account;
+import de.jreichl.jpa.entity.Bank;
 import de.jreichl.jpa.entity.Customer;
 import de.jreichl.jpa.entity.Employee;
 import de.jreichl.jpa.entity.type.TanType;
 import de.jreichl.jpa.entity.util.EntityUtils;
 import de.jreichl.jpa.repository.AccountRepository;
+import de.jreichl.jpa.repository.BankRepository;
 import de.jreichl.jpa.repository.EmployeeRepository;
 import java.util.List;
 import java.util.Random;
@@ -18,6 +20,8 @@ import java.util.logging.Logger;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
+import org.iban4j.CountryCode;
+import org.iban4j.Iban;
 
 /**
  * Account service to create accounts for Customers
@@ -31,6 +35,9 @@ public class AccountService {
     
     @Inject
     private EmployeeRepository employeeRepo;
+    
+    @Inject 
+    private BankRepository bankRepo;
     
     /**
      * Create a new Account for an Customer. (account manager will be choosen by the bank)
@@ -72,34 +79,22 @@ public class AccountService {
             throw new RuntimeException(ex);
         }
         
-        a.setIban(createIBAN());
+        String accountNumber = EntityUtils.createAccountNumber(accountRepo.getHighestID());
+        a.setAccountNumber(accountNumber);
+        
+        Bank bank = bankRepo.getBank();
+        
+        Iban iban = new Iban.Builder()
+                .countryCode(CountryCode.getByCode(bank.getCountryAlpha2Code()))
+                .bankCode(bank.getBankCode())
+                .accountNumber(accountNumber)
+                .build();
+        
+        a.setIban(iban.toString());
         
         accountRepo.persist(a);
         
         return a;
-    }
-    
-    /**
-     * Create a random unique IBAN
-     * @return a new unique IBAN
-     */
-    @Transactional
-    private String createIBAN() {   
-        int tries = 0;
-        while(true) {            
-            String IBAN = EntityUtils.createRandomIBAN();
-
-            Account a = null;
-            try{
-                tries++;
-                a = accountRepo.findByIBAN(IBAN);
-            } catch(Exception ex) {
-                if(tries > 20)
-                    throw ex;
-            }
-            if (a==null)
-                return IBAN;
-        }        
     }
     
 }
