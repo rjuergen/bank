@@ -4,7 +4,7 @@
  */
 package de.jreichl.service.web;
 
-import de.jreichl.service.exceptions.TransactionFailedException;
+import de.jreichl.service.exception.TransactionFailedException;
 import de.jreichl.service.interfaces.ITransactionService;
 import javax.inject.Inject;
 import javax.jws.WebMethod;

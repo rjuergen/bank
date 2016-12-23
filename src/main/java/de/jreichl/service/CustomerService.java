@@ -10,6 +10,8 @@ import de.jreichl.jpa.entity.embeddable.Address;
 import de.jreichl.jpa.entity.type.Gender;
 import de.jreichl.jpa.repository.CompanyCustomerRepository;
 import de.jreichl.jpa.repository.PrivateCustomerRepository;
+import de.jreichl.service.dto.AddressDTO;
+import de.jreichl.service.interfaces.ICustomerService;
 import java.util.Date;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -20,47 +22,41 @@ import javax.transaction.Transactional;
  * @author Jürgen Reichl
  */
 @RequestScoped
-public class CustomerService {
+public class CustomerService implements ICustomerService {
     
     @Inject
     private PrivateCustomerRepository privateCustomerRepo;
  
     @Inject
     private CompanyCustomerRepository companyCustomerRepo;
+
     
     @Transactional
-    public PrivateCustomer createPrivateCustomer(String firstName, String lastName, Gender gender, Date dateOfBirth, String houseNr, String street, String zip, String city) {
-        return createPrivateCustomer(firstName, lastName, gender, dateOfBirth, houseNr, street, zip, city, null, null);
-    }
-    
-    @Transactional
-    public PrivateCustomer createPrivateCustomer(String firstName, String lastName, Gender gender, Date dateOfBirth, String houseNr, String street, String zip, String city, String county, String country) {
+    @Override
+    public PrivateCustomer createPrivateCustomer(String firstName, String lastName, Gender gender, Date dateOfBirth, AddressDTO address) {
         PrivateCustomer c = new PrivateCustomer();
         c.setFirstName(firstName);
         c.setLastName(lastName);
         c.setGender(gender);        
         c.setDateOfBirth(new java.sql.Date(dateOfBirth.getTime()));
         
-        Address a = createAddress(houseNr, street, zip, city, county, country);
+        Address a = createAddress(address);
         c.setAddress(a);
         
         privateCustomerRepo.persist(c);
         
         return c;
     }
+
     
     @Transactional
-    public CompanyCustomer createCompanyCustomer(String name, Date dateOfCreation, String houseNr, String street, String zip, String city) {
-        return createCompanyCustomer(name, dateOfCreation, houseNr, street, zip, city, null, null);
-    }
-    
-    @Transactional
-    public CompanyCustomer createCompanyCustomer(String name, Date dateOfCreation, String houseNr, String street, String zip, String city, String county, String country) {
+    @Override
+    public CompanyCustomer createCompanyCustomer(String name, Date dateOfCreation, AddressDTO address) {
         CompanyCustomer c = new CompanyCustomer();
         c.setName(name);    
         c.setDateOfCreation(new java.sql.Date(dateOfCreation.getTime()));
         
-        Address a = createAddress(houseNr, street, zip, city, county, country);
+        Address a = createAddress(address);
         c.setAddress(a);
         
         companyCustomerRepo.persist(c);
@@ -69,14 +65,14 @@ public class CustomerService {
     }
     
     @Transactional
-    private Address createAddress(String houseNr, String street, String zip, String city, String county, String country) {
+    private Address createAddress(AddressDTO dto) {
         Address a = new Address();
-        a.setHouseNr(houseNr);
-        a.setStreet(street);
-        a.setZip(zip);
-        a.setCity(city);
-        a.setCounty(county);
-        a.setCountry(country); 
+        a.setHouseNr(dto.getHouseNr());
+        a.setStreet(dto.getStreet());
+        a.setZip(dto.getZip());
+        a.setCity(dto.getCity());
+        a.setCounty(dto.getCounty());
+        a.setCountry(dto.getCountry()); 
         return a;
     }
     

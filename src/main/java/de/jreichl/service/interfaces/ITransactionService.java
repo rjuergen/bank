@@ -5,7 +5,7 @@
 package de.jreichl.service.interfaces;
 
 import de.jreichl.jpa.entity.StandingOrder;
-import de.jreichl.service.exceptions.TransactionFailedException;
+import de.jreichl.service.exception.TransactionFailedException;
 import java.sql.Timestamp;
 
 /**
@@ -18,4 +18,7 @@ public interface ITransactionService {
  
     public boolean transferStandingOrder(StandingOrder order, Timestamp newLastTransactionDate) throws TransactionFailedException;
     
+    public boolean transferCashCredit(long amountInCent, String toIBAN, String description) throws TransactionFailedException;
+    
+    public boolean transferCashDebit(long amountInCent, String fromIBAN, String description) throws TransactionFailedException;
 }

@@ -2,7 +2,7 @@
  * License: Free to use. It's just a small project.
  * Feel free and use everything you want  * 
  */
-package de.jreichl.service.exceptions;
+package de.jreichl.service.exception;
 
 import java.util.Date;
 

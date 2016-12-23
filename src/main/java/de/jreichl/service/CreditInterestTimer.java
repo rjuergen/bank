@@ -6,6 +6,7 @@ package de.jreichl.service;
 
 import de.jreichl.jpa.entity.Credit;
 import de.jreichl.jpa.repository.CreditRepository;
+import de.jreichl.service.interfaces.ICreditService;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -27,7 +28,7 @@ public class CreditInterestTimer {
     private CreditRepository creditRepo;
     
     @Inject
-    private CreditService creditService;
+    private ICreditService creditService;
     
     /**
      * runs every day at 1:00 o'clock
@@ -43,7 +44,7 @@ public class CreditInterestTimer {
             cal.add(Calendar.MONTH, 1 );
             while(cal.getTimeInMillis() < System.currentTimeMillis()) {
                 // update interests
-                creditService.UpdateInterestsToPay(c);
+                creditService.updateInterestsToPay(c);
                 
                 if(c.isPaybackComplete())
                     break;

@@ -4,12 +4,14 @@
  */
 package de.jreichl.service;
 
+import de.jreichl.jpa.entity.Account;
 import de.jreichl.jpa.entity.AccountTransaction;
 import de.jreichl.jpa.entity.Bank;
 import de.jreichl.jpa.entity.Credit;
 import de.jreichl.jpa.entity.type.TransactionType;
 import de.jreichl.jpa.repository.BankRepository;
 import de.jreichl.jpa.repository.CreditRepository;
+import de.jreichl.service.interfaces.ICreditService;
 import java.sql.Date;
 import java.util.Calendar;
 import java.util.List;
@@ -22,7 +24,7 @@ import javax.transaction.Transactional;
  * @author Jürgen Reichl
  */
 @RequestScoped
-public class CreditService {
+public class CreditService implements ICreditService {
     
     @Inject
     private BankRepository bankRepo;
@@ -31,7 +33,8 @@ public class CreditService {
     private CreditRepository creditRepo;
     
     @Transactional
-    void UpdateInterestsToPay(Credit credit) {        
+    @Override
+    public void updateInterestsToPay(Credit credit) {        
         Bank bank = bankRepo.getBank();
         List<AccountTransaction> transactions = credit.getTransactions();
         long remaining = credit.getCredit();
@@ -54,6 +57,16 @@ public class CreditService {
         }
         
         creditRepo.persist(credit);
+    }
+
+    @Override
+    public Credit takeCredit(Account account, long amountInCent, java.util.Date creationDate) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Credit payback(Account fromAccount, Credit credit, long amountInCent) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }

@@ -12,6 +12,7 @@ import de.jreichl.jpa.repository.StandingOrderRepository;
 import de.jreichl.service.interfaces.IStandingOrderService;
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.List;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
@@ -61,6 +62,16 @@ public class StandingOrderService implements IStandingOrderService{
         standingOrderRepo.persist(o);
         
         return o;
+    }
+
+    @Override
+    public boolean deleteStandingOrder(StandingOrder toDelete) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<StandingOrder> getStandingOrders(Account fromAccount) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }

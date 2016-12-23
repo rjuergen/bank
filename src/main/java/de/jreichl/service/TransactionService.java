@@ -11,7 +11,7 @@ import de.jreichl.jpa.entity.type.TransactionType;
 import de.jreichl.jpa.repository.AccountRepository;
 import de.jreichl.jpa.repository.AccountTransactionRepository;
 import de.jreichl.jpa.repository.StandingOrderRepository;
-import de.jreichl.service.exceptions.TransactionFailedException;
+import de.jreichl.service.exception.TransactionFailedException;
 import de.jreichl.service.interfaces.ITransactionService;
 import java.sql.Timestamp;
 import java.util.Date;
@@ -113,5 +113,17 @@ public class TransactionService implements ITransactionService {
         
         return true;
     }
+
+    @Override
+    public boolean transferCashCredit(long amountInCent, String toIBAN, String description) throws TransactionFailedException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean transferCashDebit(long amountInCent, String fromIBAN, String description) throws TransactionFailedException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    
         
 }

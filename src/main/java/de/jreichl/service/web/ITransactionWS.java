@@ -4,7 +4,7 @@
  */
 package de.jreichl.service.web;
 
-import de.jreichl.service.exceptions.TransactionFailedException;
+import de.jreichl.service.exception.TransactionFailedException;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebService;

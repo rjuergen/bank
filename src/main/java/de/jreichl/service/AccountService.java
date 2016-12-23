@@ -13,6 +13,7 @@ import de.jreichl.jpa.entity.util.EntityUtils;
 import de.jreichl.jpa.repository.AccountRepository;
 import de.jreichl.jpa.repository.BankRepository;
 import de.jreichl.jpa.repository.EmployeeRepository;
+import de.jreichl.service.interfaces.IAccountService;
 import java.util.List;
 import java.util.Random;
 import java.util.logging.Level;
@@ -28,7 +29,7 @@ import org.iban4j.Iban;
  * @author Jürgen Reichl
  */
 @RequestScoped
-public class AccountService {
+public class AccountService implements IAccountService {
     
     @Inject
     private AccountRepository accountRepo;
@@ -47,6 +48,7 @@ public class AccountService {
      * @return The new account
      */
     @Transactional
+    @Override
     public Account createAccount(Customer owner, TanType type, String password) {                
         List<Employee> employees = employeeRepo.findAll();
         Random r = new Random(System.currentTimeMillis());
@@ -64,6 +66,7 @@ public class AccountService {
      * @return 
      */
     @Transactional
+    @Override
     public Account createAccount(Customer owner, Employee accountManager, TanType type, String password) {
         Account a = new Account();        
         
@@ -95,6 +98,16 @@ public class AccountService {
         accountRepo.persist(a);
         
         return a;
+    }
+
+    @Override
+    public boolean deleteAccount(Account toDelete) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<Account> getAccounts(Customer owner) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }
