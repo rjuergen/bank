@@ -2,7 +2,7 @@
  * License: Free to use. It's just a small project.
  * Feel free and use everything you want  * 
  */
-package de.jreichl.service;
+package de.jreichl.service.timer;
 
 import de.jreichl.jpa.entity.StandingOrder;
 import de.jreichl.jpa.repository.StandingOrderRepository;
@@ -13,7 +13,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.ejb.Schedule;
 import javax.ejb.Stateless;
 import javax.ejb.Timer;
@@ -24,7 +23,7 @@ import javax.inject.Inject;
  * @author Jürgen Reichl
  */
 @Stateless
-public class StandingOrderTimer {
+public class StandingOrderTimer extends BaseTimer {
     
     @Inject
     private StandingOrderRepository standingOrderRepo;
@@ -39,7 +38,7 @@ public class StandingOrderTimer {
      */ 
     @Schedule(minute="*/10",hour="*", persistent=false)
     public void handleStandingOrders(final Timer timer) {
-        Logger.getLogger(getClass().getName()).log(Level.INFO, String.format("%s - Running handleStandingOrders..", new Date().toString()));
+        logger.log(Level.INFO, String.format("%s - Running handleStandingOrders..", new Date().toString()));
         List<StandingOrder> orders = standingOrderRepo.findAll();        
         for(StandingOrder o : orders) {
             try {
@@ -59,7 +58,7 @@ public class StandingOrderTimer {
                     }                    
                 }
             } catch (TransactionFailedException ex) {
-                Logger.getLogger(getClass().getName()).log(Level.SEVERE, "Failed to handle standing order with id=" + o.getId(), ex);
+                logger.log(Level.SEVERE, "Failed to handle standing order with id=" + o.getId(), ex);
             }            
         }
     }

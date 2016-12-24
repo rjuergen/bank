@@ -24,7 +24,7 @@ import javax.transaction.Transactional;
  * @author Jürgen Reichl
  */
 @RequestScoped
-public class CreditService implements ICreditService {
+public class CreditService extends BaseService implements ICreditService {
     
     @Inject
     private BankRepository bankRepo;

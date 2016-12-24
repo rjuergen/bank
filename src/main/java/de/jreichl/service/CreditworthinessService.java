@@ -12,7 +12,7 @@ import java.sql.Date;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
-import net.poschinger.retailerposchinger.service.contractor.CreditWorthiness;
+
 
 
 /**
@@ -20,20 +20,20 @@ import net.poschinger.retailerposchinger.service.contractor.CreditWorthiness;
  * @author Jürgen Reichl
  */
 @RequestScoped
-public class CreditworthinessService implements ICreditworthinessService {
+public class CreditworthinessService extends BaseService implements ICreditworthinessService {
     
     @Inject
     private CreditworthinessRepository creditworthinessRepo;
     
     
     @Override
-    public CreditWorthiness requestCreditworthiness(Customer customer) {
+    public Creditworthiness requestCreditworthiness(Customer customer) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         
     }
     
     @Override
-    public CreditWorthiness requestCreditworthinessFromRetailerPoschinger(Customer customer) {
+    public Creditworthiness requestCreditworthinessFromRetailerPoschinger(Customer customer) {
         /*
         try{
             CreditworthinessServiceService poschingerService = new CreditworthinessServiceService();
@@ -42,11 +42,11 @@ public class CreditworthinessService implements ICreditworthinessService {
                     customer.getAddress().getStreet()+" "+customer.getAddress().getHouseNr(), 
                     customer.getAddress().getZip(), customer.getAddress().getCountry());
             if(c != null) {
-                Logger.getLogger(getClass().getName()).log(Level.INFO, "Received CreditWorthiness from poschinger = "+c.name());
+                logger.log(Level.INFO, "Received CreditWorthiness from poschinger = "+c.name());
                 return c;
             }
         } catch(Exception ex) {
-            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "Failed to get CreditworthinessServicePort", ex);
+            logger.log(Level.SEVERE, "Failed to get CreditworthinessServicePort", ex);
         }        
         */
         return null;

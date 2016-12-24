@@ -17,7 +17,6 @@ import de.jreichl.service.interfaces.IAccountService;
 import java.util.List;
 import java.util.Random;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
@@ -29,7 +28,7 @@ import org.iban4j.Iban;
  * @author Jürgen Reichl
  */
 @RequestScoped
-public class AccountService implements IAccountService {
+public class AccountService extends BaseService implements IAccountService { 
     
     @Inject
     private AccountRepository accountRepo;
@@ -78,7 +77,7 @@ public class AccountService implements IAccountService {
         try {
             a.setHashedPassword(EntityUtils.hashPassword(password, salt));
         } catch (EntityUtils.EntityUtilException ex) {
-            Logger.getLogger(AccountService.class.getName()).log(Level.SEVERE, null, ex);
+            logger.log(Level.SEVERE, "Failed to hash password!", ex);
             throw new RuntimeException(ex);
         }
         
@@ -102,6 +101,7 @@ public class AccountService implements IAccountService {
 
     @Override
     public boolean deleteAccount(Account toDelete) {
+        accountRepo.remove(toDelete);
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

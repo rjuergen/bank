@@ -22,7 +22,7 @@ import javax.transaction.Transactional;
  * @author Jürgen Reichl
  */
 @RequestScoped
-public class CustomerService implements ICustomerService {
+public class CustomerService extends BaseService implements ICustomerService {
     
     @Inject
     private PrivateCustomerRepository privateCustomerRepo;

@@ -2,7 +2,7 @@
  * License: Free to use. It's just a small project.
  * Feel free and use everything you want  * 
  */
-package de.jreichl.service;
+package de.jreichl.service.timer;
 
 import de.jreichl.jpa.entity.Credit;
 import de.jreichl.jpa.repository.CreditRepository;
@@ -11,7 +11,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.ejb.Schedule;
 import javax.ejb.Stateless;
 import javax.ejb.Timer;
@@ -22,7 +21,7 @@ import javax.inject.Inject;
  * @author Jürgen Reichl
  */
 @Stateless
-public class CreditInterestTimer {
+public class CreditInterestTimer extends BaseTimer {
     
     @Inject
     private CreditRepository creditRepo;
@@ -36,7 +35,7 @@ public class CreditInterestTimer {
      */ 
     @Schedule(hour="1", persistent=false)
     public void handleCreditInterests(final Timer timer) {
-        Logger.getLogger(getClass().getName()).log(Level.INFO, String.format("%s - Running handleCreditInterests..", new Date().toString()));
+        logger.log(Level.INFO, String.format("%s - Running handleCreditInterests..", new Date().toString()));
         List<Credit> credits = creditRepo.findAllUnpaid();
         for(Credit c : credits) {               
             Calendar cal = Calendar.getInstance();

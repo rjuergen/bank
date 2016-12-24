@@ -22,7 +22,7 @@ import javax.transaction.Transactional;
  * @author Jürgen Reichl
  */
 @RequestScoped
-public class StandingOrderService implements IStandingOrderService{
+public class StandingOrderService extends BaseService implements IStandingOrderService{
     
     @Inject
     private StandingOrderRepository standingOrderRepo;

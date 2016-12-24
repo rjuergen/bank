@@ -4,8 +4,8 @@
  */
 package de.jreichl.service.interfaces;
 
+import de.jreichl.jpa.entity.Creditworthiness;
 import de.jreichl.jpa.entity.Customer;
-import net.poschinger.retailerposchinger.service.contractor.CreditWorthiness;
 
 /**
  *
@@ -13,8 +13,8 @@ import net.poschinger.retailerposchinger.service.contractor.CreditWorthiness;
  */
 public interface ICreditworthinessService {
     
-    public CreditWorthiness requestCreditworthiness(Customer customer);
+    public Creditworthiness requestCreditworthiness(Customer customer);
     
-    public CreditWorthiness requestCreditworthinessFromRetailerPoschinger(Customer customer);
+    public Creditworthiness requestCreditworthinessFromRetailerPoschinger(Customer customer);
     
 }

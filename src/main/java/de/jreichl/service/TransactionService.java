@@ -16,7 +16,6 @@ import de.jreichl.service.interfaces.ITransactionService;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.persistence.NoResultException;
@@ -27,8 +26,7 @@ import javax.transaction.Transactional;
  * @author Jürgen Reichl
  */
 @RequestScoped
-public class TransactionService implements ITransactionService {   
-    
+public class TransactionService extends BaseService implements ITransactionService {   
     
     @Inject
     private AccountTransactionRepository accountTransactionRepo;
@@ -86,7 +84,7 @@ public class TransactionService implements ITransactionService {
         transfer(order.getAmount(), order.getFromAccount(), order.getToAccount(), order.getDescription());                        
         order.setLastTransaction(newLastTransactionDate);
         standingOrderRepo.persist(order);
-        Logger.getLogger(getClass().getName()).log(Level.INFO, String.format(" # %s standing order(id=%d) successfull handled!", order.getIntervalUnit().name() ,order.getId()) );
+        logger.log(Level.INFO, String.format(" # %s standing order(id=%d) successfull handled!", order.getIntervalUnit().name() ,order.getId()) );
         return true;
     }
     
