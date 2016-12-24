@@ -12,6 +12,7 @@ import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 
@@ -20,7 +21,10 @@ import javax.persistence.OneToMany;
  * @author Jürgen Reichl
  */
 @Entity
-@NamedQuery(name="Account.IBAN",query="SELECT a FROM Account a WHERE a.iban = :iban")
+@NamedQueries({
+    @NamedQuery(name="Account.IBAN",query="SELECT a FROM Account a WHERE a.iban = :iban"),
+    @NamedQuery(name="Account.AccountNumber",query="SELECT a FROM Account a WHERE a.accountNumber = :accountNumber")
+})
 public class Account extends SingleEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;    

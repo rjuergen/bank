@@ -24,6 +24,12 @@ public class AccountRepository extends SingleEntityRepository<Account> {
         return query.getSingleResult();
     }
     
+    public Account findByAccountNumber(String accountNumber) {
+        TypedQuery<Account> query = em.createNamedQuery("Account.AccountNumber", Account.class);
+        query.setParameter("accountNumber", accountNumber);        
+        return query.getSingleResult();
+    }
+    
     public Long getHighestID() {
         Query query = em.createQuery("Select max(id) From Account");    
         Long id = 0L;

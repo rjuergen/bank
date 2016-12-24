@@ -102,12 +102,24 @@ public class AccountService extends BaseService implements IAccountService {
     @Override
     public boolean deleteAccount(Account toDelete) {
         accountRepo.remove(toDelete);
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        logger.log(Level.INFO, String.format("Account %s deleted!",toDelete.getAccountNumber()));
+        return true;
     }
 
     @Override
-    public List<Account> getAccounts(Customer owner) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Account login(String accountNumber, String password) throws IllegalArgumentException {
+        Account a = accountRepo.findByAccountNumber(accountNumber);
+        String hashedPW = null;
+        try {
+            hashedPW = EntityUtils.hashPassword(password, a.getPasswordSalt());
+        } catch (EntityUtils.EntityUtilException ex) {
+            logger.log(Level.SEVERE, "Failed to hash password!", ex);
+            throw new RuntimeException(ex);
+        }
+        if(!a.getHashedPassword().equals(hashedPW)) {            
+            throw new IllegalArgumentException("Password is not correct!");
+        }        
+        return a;
     }
     
 }

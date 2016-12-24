@@ -86,42 +86,79 @@ public class TransactionService extends BaseService implements ITransactionServi
         standingOrderRepo.persist(order);
         logger.log(Level.INFO, String.format(" # %s standing order(id=%d) successfull handled!", order.getIntervalUnit().name() ,order.getId()) );
         return true;
+    }    
+
+    @Override
+    public boolean transferCashCredit(long amountInCent, String toIBAN, String description) throws TransactionFailedException {
+        // get current/transaction date
+        Date currentDate = new Date();
+        
+        try {
+            Account toAccount = null;     
+            
+            try{
+                // get account with given IBAN
+                toAccount = accountRepo.findByIBAN(toIBAN);     
+            } catch (NoResultException nrex) {
+                throw new TransactionFailedException(nrex, String.format("Transaction failed! %s is not a valid IBAN", toIBAN), null, toIBAN, currentDate, amountInCent);
+            }
+
+            return transfer(amountInCent, null, toAccount, description);
+            
+        } catch(TransactionFailedException ex) {
+            throw ex;
+        } catch(Exception ex) {
+            throw new TransactionFailedException(ex, "Transaction failed!", null, toIBAN, currentDate, amountInCent);
+        }
+    }
+
+    @Override
+    public boolean transferCashDebit(long amountInCent, String fromIBAN, String description) throws TransactionFailedException {
+        // get current/transaction date
+        Date currentDate = new Date();
+        
+        try {
+            Account fromAccount = null;     
+            
+            try{
+                // get account with given IBAN
+                fromAccount = accountRepo.findByIBAN(fromIBAN);     
+            } catch (NoResultException nrex) {
+                throw new TransactionFailedException(nrex, String.format("Transaction failed! %s is not a valid IBAN", fromIBAN), fromIBAN, null, currentDate, amountInCent);
+            }
+
+            return transfer(amountInCent, fromAccount, null, description);
+            
+        } catch(TransactionFailedException ex) {
+            throw ex;
+        } catch(Exception ex) {
+            throw new TransactionFailedException(ex, "Transaction failed!", fromIBAN, null, currentDate, amountInCent);
+        }
     }
     
-    @Transactional
+        @Transactional
     private boolean transfer(long amountInCent, Account fromAccount, Account toAccount, String description) throws TransactionFailedException {
         Date currentDate = new Date();
         
         try {
         
-            // create Transaction
-            AccountTransaction t1 = new AccountTransaction(fromAccount, TransactionType.DEBIT, amountInCent, new java.sql.Timestamp(currentDate.getTime()));        
-            t1.setDescription(description);
+            if(fromAccount != null) {
+                AccountTransaction t1 = new AccountTransaction(fromAccount, TransactionType.DEBIT, amountInCent, new java.sql.Timestamp(currentDate.getTime()));        
+                t1.setDescription(description);            
+                accountTransactionRepo.persist(t1);
+            }
             
-            AccountTransaction t2 = new AccountTransaction(toAccount, TransactionType.CREDIT, amountInCent, new java.sql.Timestamp(currentDate.getTime()));
-            t2.setDescription(description);
+            if(toAccount != null) {
+                AccountTransaction t2 = new AccountTransaction(toAccount, TransactionType.CREDIT, amountInCent, new java.sql.Timestamp(currentDate.getTime()));
+                t2.setDescription(description);
+                accountTransactionRepo.persist(t2);
+            }
             
-            // persist
-            accountTransactionRepo.persist(t1);
-            accountTransactionRepo.persist(t2);
-
         } catch(Exception ex) {
             throw new TransactionFailedException(ex, "Transaction failed!", fromAccount.getIban(), toAccount.getIban(), currentDate, amountInCent);
         }
         
         return true;
     }
-
-    @Override
-    public boolean transferCashCredit(long amountInCent, String toIBAN, String description) throws TransactionFailedException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public boolean transferCashDebit(long amountInCent, String fromIBAN, String description) throws TransactionFailedException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    
-    
         
 }

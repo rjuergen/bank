@@ -8,7 +8,6 @@ import de.jreichl.jpa.entity.Account;
 import de.jreichl.jpa.entity.Customer;
 import de.jreichl.jpa.entity.Employee;
 import de.jreichl.jpa.entity.type.TanType;
-import java.util.List;
 
 /**
  *
@@ -21,7 +20,7 @@ public interface IAccountService {
     public Account createAccount(Customer owner, TanType type, String password);
     
     public boolean deleteAccount(Account toDelete);
-    
-    public List<Account> getAccounts(Customer owner);
+
+    public Account login(String accountNumber, String password) throws IllegalArgumentException;
     
 }
