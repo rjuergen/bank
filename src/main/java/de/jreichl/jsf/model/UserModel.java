@@ -4,9 +4,12 @@
  */
 package de.jreichl.jsf.model;
 
+import de.jreichl.jpa.entity.Account;
 import de.jreichl.jpa.entity.Customer;
+import de.jreichl.service.interfaces.IAccountService;
 import java.io.Serializable;
 import javax.enterprise.context.SessionScoped;
+import javax.inject.Inject;
 import javax.inject.Named;
 
 /**
@@ -18,30 +21,33 @@ import javax.inject.Named;
 public class UserModel implements Serializable {
     private static final long serialVersionUID = 1L;
     
-    private String username;
+    private String accountNumber;
     
     private String passwort;
     
-    private Customer currentUser;
+    private Account currentAccount;
+    
+    @Inject
+    private IAccountService accountService;
     
     public boolean hasActiveUser() {
-        return true;
+        return currentAccount != null;
     }
     
     public void login() {
-        
+        currentAccount = accountService.login(accountNumber, passwort);
     }
     
     public void logout() {
-        
+        currentAccount = null;
     }
 
-    public String getUsername() {
-        return username;
+    public String getAccountNumber() {
+        return accountNumber;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setAccountNumber(String accountNumber) {
+        this.accountNumber = accountNumber;
     }
 
     public String getPasswort() {
@@ -53,12 +59,7 @@ public class UserModel implements Serializable {
     }
 
     public Customer getCurrentUser() {
-        return currentUser;
-    }
-
-    public void setCurrentUser(Customer currentUser) {
-        this.currentUser = currentUser;
-    }
-    
+        return currentAccount.getOwner();
+    }   
     
 }

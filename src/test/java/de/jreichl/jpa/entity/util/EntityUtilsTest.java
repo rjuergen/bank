@@ -88,6 +88,5 @@ public class EntityUtilsTest {
         String accountNumber = EntityUtils.createAccountNumber(123L);
         Assert.assertEquals("00000000123", accountNumber);        
     }
-        
-    
+            
 }

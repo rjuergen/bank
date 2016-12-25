@@ -34,24 +34,27 @@
                 <ui:insert name="left">
                 
                     <h:form rendered="#{!userModel.hasActiveUser()}">
-                        <h:outputText value="Username:"/>
-                        <h:inputText value="#{userModel.username}"/>
+                        <h:outputText value="Kontonummer:"/>
+                        <h:inputText value="#{userModel.accountNumber}"/>
                         <br/>
-                        <h:outputText value="Password:"/>
+                        <h:outputText value="Passwort:"/>
                         <h:inputSecret value="#{userModel.passwort}"/>
                         <br/>
                         <h:commandButton action="#{userModel.login()}" value="login"/>
                     </h:form>
                     
                     <h:form  rendered="#{userModel.hasActiveUser()}">
-                        <h:outputText value="Willkommen #{userModel.currentUser.getName()}"/>
+                        <h:outputText value="Willkommen #{userModel.getCurrentUser().getName()}"/>
+                        <br/>
                         <h:commandButton value="logout" action="#{userModel.logout()}"/>
                     </h:form>
                 
                 </ui:insert>
             </div>
             <div id="content" class="left_content">
-                <ui:insert name="content">Content</ui:insert>
+                <ui:insert name="content">
+                    Content
+                </ui:insert>
             </div>
         </div>
         <div id="bottom">
