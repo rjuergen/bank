@@ -1,0 +1,63 @@
+<?xml version='1.0' encoding='UTF-8' ?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <h:outputStylesheet name="/css/default.css"/>         
+        <h:outputStylesheet name="/css/cssLayout.css"/>
+        <title>Bank Reichl</title>
+    </h:head>
+
+    <h:body>
+
+        <div id="top">
+            <ui:insert name="top">Willkommen bei der Bank Reichl<br/></ui:insert>            
+            <h:panelGrid columns="4">
+                <h:form>
+                    <h:commandLink value="Home" action="ext_home"/>
+                    &nbsp;
+                    <h:commandLink value="Banking" action="ext_banking" rendered="#{userModel.hasActiveUser()}"/>
+                    &nbsp;
+                    <h:commandLink value="Dauerauftr&auml;ge" action="ext_standingOrder" rendered="#{userModel.hasActiveUser()}"/>
+                    &nbsp;
+                    <h:commandLink value="Credit" action="ext_credit" rendered="#{userModel.hasActiveUser()}"/>
+                    &nbsp;
+                    <h:commandLink value="Bargeld einzahlen/auszahlen" action="ext_cash" rendered="#{userModel.hasActiveUser()}"/>
+                </h:form>
+            </h:panelGrid>            
+        </div>
+        <div>
+            <div id="left">
+                <ui:insert name="left">
+                
+                    <h:form rendered="#{!userModel.hasActiveUser()}">
+                        <h:outputText value="Username:"/>
+                        <h:inputText value="#{userModel.username}"/>
+                        <br/>
+                        <h:outputText value="Password:"/>
+                        <h:inputSecret value="#{userModel.passwort}"/>
+                        <br/>
+                        <h:commandButton action="#{userModel.login()}" value="login"/>
+                    </h:form>
+                    
+                    <h:form  rendered="#{userModel.hasActiveUser()}">
+                        <h:outputText value="Willkommen #{userModel.currentUser.getName()}"/>
+                        <h:commandButton value="logout" action="#{userModel.logout()}"/>
+                    </h:form>
+                
+                </ui:insert>
+            </div>
+            <div id="content" class="left_content">
+                <ui:insert name="content">Content</ui:insert>
+            </div>
+        </div>
+        <div id="bottom">
+            <ui:insert name="bottom">&copy; Bank Reichl 2016</ui:insert>
+        </div>
+
+    </h:body>
+
+</html>

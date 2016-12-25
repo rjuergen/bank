@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<faces-config version="2.2"
+              xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_2.xsd">
+
+    <navigation-rule>
+        <description>Allgemeine Routingregeln</description>
+        <from-view-id>views/*</from-view-id>
+        
+        <navigation-case>
+            <from-outcome>ext_home</from-outcome>
+            <to-view-id>views/external/home.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>ext_banking</from-outcome>
+            <to-view-id>views/external/home.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>ext_credit</from-outcome>
+            <to-view-id>views/external/home.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>ext_standingOrder</from-outcome>
+            <to-view-id>views/external/home.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>ext_cash</from-outcome>
+            <to-view-id>views/external/home.xhtml</to-view-id>
+        </navigation-case>
+        
+        
+        <navigation-case>
+            <from-outcome>int_customer</from-outcome>
+            <to-view-id>views/internal/customer.xhtml</to-view-id>
+        </navigation-case>
+
+    </navigation-rule>
+    
+</faces-config>
