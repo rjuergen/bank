@@ -1,15 +1,84 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
-
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    
     <body>
 
         <ui:composition template="./../../WEB-INF/BankReichlManagementTemplate.xhtml">
 
             <ui:define name="content">
-                content
-                <br/><br/><br/><br/><br/><br/><br/><br/><br/>
+                <h2>Kunde</h2>
+                
+                <h:form rendered="#{!customerModel.isCreating()}">
+                    <h:commandButton value="Neuen Privatkunden anlegen" action="#{customerModel.newPrivateCustomer()}"/>
+                    <h:commandButton value="Neuen Firmenkunden anlegen" action="#{customerModel.newCompanyCustomer()}"/>
+                </h:form>                
+                
+                <h:form rendered="#{customerModel.isCreating()}">
+                    
+                    <h:panelGrid columns="2" rendered="#{customerModel.privateCustomer != null}">
+                        <h:outputText value="Vorname"/>
+                        <h:inputText value="#{customerModel.privateCustomer.firstName}"/>
+                        
+                        <h:outputText value="Nachname"/>
+                        <h:inputText value="#{customerModel.privateCustomer.lastName}"/>
+
+                    </h:panelGrid>
+                    <h:panelGrid columns="2" rendered="#{customerModel.companyCustomer != null}">
+                        <h:outputText value="Name"/>
+                        <h:inputText value="#{customerModel.companyCustomer.name}"/>
+
+                    </h:panelGrid>
+                    <br/>
+                    <h:panelGrid columns="2">                        
+                        <h:outputText value="Stra&szlig;e"/>
+                        <h:inputText value="#{customerModel.address.street}"/>
+                        
+                        <h:outputText value="Hausnummer"/>
+                        <h:inputText value="#{customerModel.address.houseNr}"/>
+                        
+                        <h:outputText value="Postleitzahl"/>
+                        <h:inputText value="#{customerModel.address.zip}"/>
+                        
+                        <h:outputText value="Ort"/>
+                        <h:inputText value="#{customerModel.address.city}"/>
+                        
+                        <h:outputText value="Landkreis"/>
+                        <h:inputText value="#{customerModel.address.county}"/>
+                        
+                        <h:outputText value="Land"/>
+                        <h:inputText value="#{customerModel.address.country}"/>
+
+                        <br/>
+                        <br/>
+                        <h:commandButton action="#{customerModel.create()}" value="anlegen"/>
+                        <br/>
+                        <br/>    
+                    </h:panelGrid>
+                </h:form>
+                
+                <h:form>
+                    <h:panelGroup>
+                        <h:dataTable var="c" value="#{customerModel.customers}">
+                            <h:column>
+                                <f:facet name="header">Name</f:facet>
+                                <h:outputText value="#{c.getName()}"/>
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">Konten</f:facet>
+                                <h:outputText value="#{c.accounts.size()}"/>
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">Aktionen</f:facet>
+                                <h:commandButton value="Details" action="#{customerModel.select(c)}"/>
+                            </h:column>                            
+                        </h:dataTable>
+                    </h:panelGroup>
+                </h:form>
+                
             </ui:define>
 
         </ui:composition>

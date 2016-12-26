@@ -5,6 +5,7 @@
 package de.jreichl.service;
 
 import de.jreichl.jpa.entity.CompanyCustomer;
+import de.jreichl.jpa.entity.Customer;
 import de.jreichl.jpa.entity.PrivateCustomer;
 import de.jreichl.jpa.entity.embeddable.Address;
 import de.jreichl.jpa.entity.type.Gender;
@@ -12,7 +13,9 @@ import de.jreichl.jpa.repository.CompanyCustomerRepository;
 import de.jreichl.jpa.repository.PrivateCustomerRepository;
 import de.jreichl.service.dto.AddressDTO;
 import de.jreichl.service.interfaces.ICustomerService;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
@@ -74,6 +77,13 @@ public class CustomerService extends BaseService implements ICustomerService {
         a.setCounty(dto.getCounty());
         a.setCountry(dto.getCountry()); 
         return a;
+    }
+
+    public List<Customer> getCustomers() {
+        List<Customer> customer = new ArrayList<>();
+        customer.addAll(privateCustomerRepo.findAll());
+        customer.addAll(companyCustomerRepo.findAll());        
+        return customer;
     }
     
 }

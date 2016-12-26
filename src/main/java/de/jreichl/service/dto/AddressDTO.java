@@ -35,6 +35,10 @@ public class AddressDTO {
         this.city = city;
     }
     
+    public AddressDTO() {
+        
+    }
+    
     public String getStreet() {
         return street;
     }

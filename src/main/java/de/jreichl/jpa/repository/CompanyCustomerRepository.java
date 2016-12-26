@@ -12,7 +12,7 @@ import javax.enterprise.context.RequestScoped;
  * @author Jürgen Reichl
  */
 @RequestScoped
-public class CompanyCustomerRepository extends CustomerRepository<CompanyCustomer> {
+public class CompanyCustomerRepository extends SingleEntityRepository<CompanyCustomer> {
     
  
 }

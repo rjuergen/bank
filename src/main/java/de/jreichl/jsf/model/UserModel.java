@@ -6,8 +6,11 @@ package de.jreichl.jsf.model;
 
 import de.jreichl.jpa.entity.Account;
 import de.jreichl.jpa.entity.Customer;
+import de.jreichl.service.BaseService;
+import de.jreichl.service.exception.LoginFailedException;
 import de.jreichl.service.interfaces.IAccountService;
 import java.io.Serializable;
+import java.util.logging.Level;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -18,7 +21,7 @@ import javax.inject.Named;
  */
 @Named
 @SessionScoped
-public class UserModel implements Serializable {
+public class UserModel extends BaseService implements Serializable {
     private static final long serialVersionUID = 1L;
     
     private String accountNumber;
@@ -35,7 +38,12 @@ public class UserModel implements Serializable {
     }
     
     public void login() {
-        currentAccount = accountService.login(accountNumber, passwort);
+        try {
+            currentAccount = accountService.login(accountNumber, passwort);
+        } catch (LoginFailedException ex) {
+            currentAccount = null;
+            logger.log(Level.SEVERE, String.format("Failed to login! Wrong password for account %s.", ex.getAccountNumber()), ex);
+        }
     }
     
     public void logout() {

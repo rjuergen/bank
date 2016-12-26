@@ -5,10 +5,12 @@
 package de.jreichl.service.interfaces;
 
 import de.jreichl.jpa.entity.CompanyCustomer;
+import de.jreichl.jpa.entity.Customer;
 import de.jreichl.jpa.entity.PrivateCustomer;
 import de.jreichl.jpa.entity.type.Gender;
 import de.jreichl.service.dto.AddressDTO;
 import java.util.Date;
+import java.util.List;
 
 /**
  *
@@ -19,5 +21,7 @@ public interface ICustomerService {
     public PrivateCustomer createPrivateCustomer(String firstName, String lastName, Gender gender, Date dateOfBirth, AddressDTO address);
     
     public CompanyCustomer createCompanyCustomer(String name, Date dateOfCreation, AddressDTO address);
+    
+    public List<Customer> getCustomers();
     
 }

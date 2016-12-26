@@ -13,6 +13,7 @@ import de.jreichl.jpa.entity.util.EntityUtils;
 import de.jreichl.jpa.repository.AccountRepository;
 import de.jreichl.jpa.repository.BankRepository;
 import de.jreichl.jpa.repository.EmployeeRepository;
+import de.jreichl.service.exception.LoginFailedException;
 import de.jreichl.service.interfaces.IAccountService;
 import java.util.List;
 import java.util.Random;
@@ -107,7 +108,7 @@ public class AccountService extends BaseService implements IAccountService {
     }
 
     @Override
-    public Account login(String accountNumber, String password) throws IllegalArgumentException {
+    public Account login(String accountNumber, String password) throws LoginFailedException {
         Account a = accountRepo.findByAccountNumber(accountNumber);
         String hashedPW = null;
         try {
@@ -117,7 +118,7 @@ public class AccountService extends BaseService implements IAccountService {
             throw new RuntimeException(ex);
         }
         if(!a.getHashedPassword().equals(hashedPW)) {            
-            throw new IllegalArgumentException("Password is not correct!");
+            throw new LoginFailedException(accountNumber, "Password is not correct!");
         }        
         return a;
     }
