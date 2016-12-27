@@ -5,6 +5,7 @@
 package de.jreichl.jsf;
 
 import de.jreichl.jpa.entity.type.Gender;
+import de.jreichl.jpa.entity.type.TanType;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
 
@@ -20,4 +21,7 @@ public class EnumValuesProvider {
         return Gender.values();
     }
     
+    public TanType[] getTanTypeValues() {
+        return TanType.values();
+    }    
 }

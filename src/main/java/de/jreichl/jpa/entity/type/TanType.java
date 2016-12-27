@@ -18,4 +18,8 @@ public enum TanType {
         this.name = name;
     }
     
+    public String getName() {
+        return name;
+    }
+    
 }

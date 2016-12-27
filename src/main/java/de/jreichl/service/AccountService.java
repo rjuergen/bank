@@ -49,12 +49,8 @@ public class AccountService extends BaseService implements IAccountService {
      */
     @Transactional
     @Override
-    public Account createAccount(Customer owner, TanType type, String password) {                
-        List<Employee> employees = employeeRepo.findAll();
-        Random r = new Random(System.currentTimeMillis());
-        int randIndex = r.nextInt(employees.size());
-        
-        return createAccount(owner, employees.get(randIndex), type, password);
+    public Account createAccount(Customer owner, TanType type, String password) {       
+        return createAccount(owner, null, type, password);
     }
     
     /**
@@ -72,7 +68,15 @@ public class AccountService extends BaseService implements IAccountService {
         
         a.setOwner(owner);
         a.setTanType(type);
-        a.setAccountManager(accountManager);        
+        
+        if(accountManager == null) {
+            List<Employee> employees = employeeRepo.findAll();
+            Random r = new Random(System.currentTimeMillis());
+            int randIndex = r.nextInt(employees.size());        
+            accountManager = employees.get(randIndex);
+        }
+        a.setAccountManager(accountManager);       
+        
         String salt = EntityUtils.createRandomString(10);
         a.setPasswordSalt(salt);
         try {
@@ -121,6 +125,11 @@ public class AccountService extends BaseService implements IAccountService {
             throw new LoginFailedException(accountNumber, "Password is not correct!");
         }        
         return a;
+    }
+
+    @Override
+    public List<Employee> getAccountManager() {
+        return employeeRepo.findAll();
     }
     
 }

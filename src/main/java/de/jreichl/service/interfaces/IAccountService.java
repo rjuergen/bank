@@ -9,6 +9,7 @@ import de.jreichl.jpa.entity.Customer;
 import de.jreichl.jpa.entity.Employee;
 import de.jreichl.jpa.entity.type.TanType;
 import de.jreichl.service.exception.LoginFailedException;
+import java.util.List;
 
 /**
  *
@@ -23,5 +24,7 @@ public interface IAccountService {
     public boolean deleteAccount(Account toDelete);
 
     public Account login(String accountNumber, String password) throws LoginFailedException;
+    
+    public List<Employee> getAccountManager();
     
 }
