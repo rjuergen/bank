@@ -30,6 +30,10 @@ public class Address implements Serializable {
         
     }
     
+    public String getDisplayString() {
+        return street + " " + houseNr + ", " + zip + " " + city;
+    }
+    
     public String getStreet() {
         return street;
     }

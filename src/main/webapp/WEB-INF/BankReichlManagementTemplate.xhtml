@@ -19,6 +19,8 @@
             <h:panelGrid columns="1">
                 <h:form>
                     <h:commandLink value="Home" action="int_customer"/>
+                    &nbsp;
+                    <h:commandLink value="#{accountModel.customer.name}" action="int_account" rendered="#{accountModel.customer != null}"/>
                 </h:form>
             </h:panelGrid>
         </div>

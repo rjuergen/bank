@@ -2,7 +2,7 @@
  * License: Free to use. It's just a small project.
  * Feel free and use everything you want  * 
  */
-package de.jreichl.jsf.dto;
+package de.jreichl.service.dto;
 
 import java.util.Date;
 
@@ -11,9 +11,33 @@ import java.util.Date;
  * @author Jürgen Reichl
  */
 public class CompanyCustomerDTO {
+    private Long id = null;
     private String name;
     private Date dateOfCreation;               
+    private AddressDTO address;
+    
+    public boolean isNew() {
+        return id==null;
+    }
 
+    public AddressDTO getAddress() {
+        return address;
+    }
+
+    public void setAddress(AddressDTO address) {
+        this.address = address;
+    }
+    
+    
+    
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+    
     public String getName() {
         return name;
     }
@@ -29,5 +53,4 @@ public class CompanyCustomerDTO {
     public void setDateOfCreation(Date dateOfCreation) {
         this.dateOfCreation = dateOfCreation;
     }  
-    
 }

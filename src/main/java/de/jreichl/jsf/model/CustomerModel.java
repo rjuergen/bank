@@ -4,14 +4,17 @@
  */
 package de.jreichl.jsf.model;
 
+import de.jreichl.jpa.entity.CompanyCustomer;
 import de.jreichl.jpa.entity.Customer;
-import de.jreichl.jsf.dto.CompanyCustomerDTO;
-import de.jreichl.jsf.dto.PrivateCustomerDTO;
+import de.jreichl.jpa.entity.PrivateCustomer;
 import de.jreichl.service.BaseService;
-import de.jreichl.service.CustomerService;
 import de.jreichl.service.dto.AddressDTO;
+import de.jreichl.service.dto.CompanyCustomerDTO;
+import de.jreichl.service.dto.PrivateCustomerDTO;
+import de.jreichl.service.interfaces.ICustomerService;
 import java.io.Serializable;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -27,53 +30,78 @@ public class CustomerModel extends BaseService implements Serializable {
     private static final long serialVersionUID = 1L;
     
     @Inject
-    private CustomerService customerService;
+    private ICustomerService customerService;
     
-    private List<Customer> customers;
+    @Inject
+    private AccountModel accountModel;
     
-    private PrivateCustomerDTO privateCustomer;     
-    private CompanyCustomerDTO companyCustomer;
-    private AddressDTO address;
+    private Set<Customer> customers;
+    
+    /**
+     * 0 = PrivateCustomer;
+     * 1 = CompanyCustomer
+     */
+    private int activeTab = 0;
+    
+    private PrivateCustomerDTO privateCustomer = new PrivateCustomerDTO();     
+    private CompanyCustomerDTO companyCustomer = new CompanyCustomerDTO();
+    private AddressDTO address = new AddressDTO();
         
-    public List<Customer> getCustomers() {
+    public Set<Customer> getCustomers() {
         if(customers == null) {
-            customers = customerService.getCustomers();
-        }
+            customers = new HashSet<>(customerService.getCustomers());
+        }        
         return customers;
     }    
     
-    public void select(Customer c) {
-        
+    public void editCustomer(Customer c) {
+        clear();
+        if(c instanceof PrivateCustomer) {
+            activeTab = 0;
+            PrivateCustomer pc = (PrivateCustomer)c;
+            privateCustomer.setDateOfBirth(pc.getDateOfBirth());
+            privateCustomer.setFirstName(pc.getFirstName());
+            privateCustomer.setGender(pc.getGender());
+            privateCustomer.setId(pc.getId());
+            privateCustomer.setLastName(pc.getLastName());
+            
+        } else if(c instanceof CompanyCustomer) {
+            activeTab = 1;
+            CompanyCustomer cc = (CompanyCustomer)c;
+            companyCustomer.setDateOfCreation(cc.getDateOfCreation());
+            companyCustomer.setId(cc.getId());
+            companyCustomer.setName(cc.getName());
+        }   
+        address.setCity(c.getAddress().getCity());
+        address.setCountry(c.getAddress().getCountry());
+        address.setCounty(c.getAddress().getCounty());
+        address.setHouseNr(c.getAddress().getHouseNr());
+        address.setStreet(c.getAddress().getStreet());
+        address.setZip(c.getAddress().getZip());
     }
     
-    public void create() {        
+    public String editAccounts(Customer c) {
+        accountModel.setCustomer(c);        
+        return "int_account";
+    }    
+    
+    public void save() {        
         Customer newOne = null;
-        if(privateCustomer != null) {
-            newOne = customerService.createPrivateCustomer(privateCustomer.getFirstName(), 
-                    privateCustomer.getLastName(), privateCustomer.getGender(), 
-                    privateCustomer.getDateOfBirth(), address);
+        if(activeTab == 0) {            
+            privateCustomer.setAddress(address);
+            newOne = customerService.updatePrivateCustomer(privateCustomer);
         } else if(companyCustomer != null) {
-            newOne = customerService.createCompanyCustomer(companyCustomer.getName(), 
-                    companyCustomer.getDateOfCreation(), address);
-        }
-        privateCustomer = null;    
-        companyCustomer = null;
-        address = null;
-        customers.set(0, newOne);
-    }
+            companyCustomer.setAddress(address);
+            newOne = customerService.updateCompanyCustomer(companyCustomer);
+        }               
+        customers.add(newOne);
+        clear();
+    }    
     
-    public void newPrivateCustomer() {
-        privateCustomer = new PrivateCustomerDTO();
-        address = new AddressDTO();
-    }
-    
-    public void newCompanyCustomer() {
+    public void clear() {
+        privateCustomer = new PrivateCustomerDTO();    
         companyCustomer = new CompanyCustomerDTO();
         address = new AddressDTO();
-    }
-
-    public boolean isCreating() {
-        return privateCustomer != null || companyCustomer != null;
     }
     
     public PrivateCustomerDTO getPrivateCustomer() {
@@ -99,4 +127,14 @@ public class CustomerModel extends BaseService implements Serializable {
     public void setAddress(AddressDTO address) {
         this.address = address;
     }    
+
+    public int getActiveTab() {
+        return activeTab;
+    }
+
+    public void setActiveTab(int activeTab) {
+        this.activeTab = activeTab;
+    }
+    
+    
 }

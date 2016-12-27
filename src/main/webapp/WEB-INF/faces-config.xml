@@ -34,6 +34,10 @@
             <from-outcome>int_customer</from-outcome>
             <to-view-id>views/internal/customer.xhtml</to-view-id>
         </navigation-case>
+        <navigation-case>
+            <from-outcome>int_account</from-outcome>
+            <to-view-id>views/internal/account.xhtml</to-view-id>
+        </navigation-case>
 
     </navigation-rule>
     

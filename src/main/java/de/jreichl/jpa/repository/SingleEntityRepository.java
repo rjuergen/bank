@@ -36,7 +36,7 @@ public abstract class SingleEntityRepository<E extends SingleEntity> {
         em.remove(entity);
     }
     
-    public E findById(int id) {
+    public E findById(long id) {
         return em.find(getEntityClass(), id);
     }
     

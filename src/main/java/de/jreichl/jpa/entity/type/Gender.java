@@ -9,8 +9,8 @@ package de.jreichl.jpa.entity.type;
  * @author Jürgen Reichl
  */
 public enum Gender {
-    MALE("Male"),
-    FEMALE("Female");
+    MALE("M&aumlnnlich"),
+    FEMALE("Weiblich");
 
     private String name;
 

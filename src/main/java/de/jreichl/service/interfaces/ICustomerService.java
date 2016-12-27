@@ -7,9 +7,8 @@ package de.jreichl.service.interfaces;
 import de.jreichl.jpa.entity.CompanyCustomer;
 import de.jreichl.jpa.entity.Customer;
 import de.jreichl.jpa.entity.PrivateCustomer;
-import de.jreichl.jpa.entity.type.Gender;
-import de.jreichl.service.dto.AddressDTO;
-import java.util.Date;
+import de.jreichl.service.dto.CompanyCustomerDTO;
+import de.jreichl.service.dto.PrivateCustomerDTO;
 import java.util.List;
 
 /**
@@ -18,9 +17,9 @@ import java.util.List;
  */
 public interface ICustomerService {
     
-    public PrivateCustomer createPrivateCustomer(String firstName, String lastName, Gender gender, Date dateOfBirth, AddressDTO address);
+    public PrivateCustomer updatePrivateCustomer(PrivateCustomerDTO dto);
     
-    public CompanyCustomer createCompanyCustomer(String name, Date dateOfCreation, AddressDTO address);
+    public CompanyCustomer updateCompanyCustomer(CompanyCustomerDTO dto);
     
     public List<Customer> getCustomers();
     
