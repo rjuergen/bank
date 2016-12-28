@@ -7,6 +7,7 @@ package de.jreichl.jpa.entity;
 import de.jreichl.jpa.entity.type.TransactionType;
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.text.DecimalFormat;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 
@@ -16,8 +17,9 @@ import javax.persistence.ManyToOne;
  */
 @Entity
 public class AccountTransaction extends SingleEntity implements Serializable {
-
     private static final long serialVersionUID = 1L;
+    
+    private static final DecimalFormat df = new DecimalFormat("#.00");
            
     @ManyToOne
     private Account account;
@@ -77,6 +79,10 @@ public class AccountTransaction extends SingleEntity implements Serializable {
 
     public long getAmount() {
         return amount;
+    }
+    
+    public String getAmountFormatted() {
+        return df.format((double)amount / 100) + " €";
     }
     
 }

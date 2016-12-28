@@ -30,6 +30,8 @@ public class UserModel extends BaseService implements Serializable {
     
     private Account currentAccount;
     
+    private String homeTitel = "";
+    
     @Inject
     private IAccountService accountService;
     
@@ -40,8 +42,12 @@ public class UserModel extends BaseService implements Serializable {
     public void login() {
         try {
             currentAccount = accountService.login(accountNumber, passwort);
+            homeTitel = "Transaktionen von " + getCurrentUser().getName();
+            accountNumber =  null;
+            passwort = null;
         } catch (LoginFailedException ex) {
             currentAccount = null;
+            passwort = null;
             logger.log(Level.SEVERE, String.format("Failed to login! Wrong password for account %s.", ex.getAccountNumber()), ex);
         }
     }
@@ -69,5 +75,23 @@ public class UserModel extends BaseService implements Serializable {
     public Customer getCurrentUser() {
         return currentAccount.getOwner();
     }   
+
+    public Account getCurrentAccount() {
+        return currentAccount;
+    }
+
+    public void setCurrentAccount(Account currentAccount) {
+        this.currentAccount = currentAccount;
+    }
+
+    public String getHomeTitel() {
+        return homeTitel;
+    }
+
+    public void setHomeTitel(String homeTitel) {
+        this.homeTitel = homeTitel;
+    }
+    
+    
     
 }

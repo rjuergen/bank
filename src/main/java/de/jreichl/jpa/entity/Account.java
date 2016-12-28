@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -144,6 +145,16 @@ public class Account extends SingleEntity implements Serializable {
     }
 
     public List<AccountTransaction> getTransactions() {        
+        return Collections.unmodifiableList(transactions);
+    }  
+    
+    public List<AccountTransaction> getTransactionsSorted() {      
+        transactions.sort(new Comparator<AccountTransaction>() {
+            @Override
+            public int compare(AccountTransaction o1, AccountTransaction o2) {
+                return o1.getTransactionDate().compareTo(o2.getTransactionDate());
+            }
+        });
         return Collections.unmodifiableList(transactions);
     }  
    
