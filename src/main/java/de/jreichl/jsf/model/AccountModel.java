@@ -10,6 +10,7 @@ import de.jreichl.jpa.entity.Employee;
 import de.jreichl.jpa.entity.type.TanType;
 import de.jreichl.service.BaseService;
 import de.jreichl.service.interfaces.IAccountService;
+import de.jreichl.service.interfaces.ICustomerService;
 import java.io.Serializable;
 import java.util.List;
 import javax.enterprise.context.SessionScoped;
@@ -52,6 +53,9 @@ public class AccountModel extends BaseService implements Serializable {
     @Inject
     private IAccountService accountService;
     
+    @Inject
+    private ICustomerService customerService;
+    
     private Customer customer = null;
    
     private List<Employee> employees;
@@ -60,7 +64,9 @@ public class AccountModel extends BaseService implements Serializable {
     
     public void save() {        
         Account a = accountService.createAccount(customer, account.getAccountManager(), account.getTanType(), account.getPassword());
-        customer = a.getOwner();        
+        if(a != null)
+            customer = customerService.findCustomer(a.getOwner());
+        clear();
     }
     
     public void clear() {
@@ -88,5 +94,5 @@ public class AccountModel extends BaseService implements Serializable {
             employees = accountService.getAccountManager();
         return employees;
     }
-    
+
 }
