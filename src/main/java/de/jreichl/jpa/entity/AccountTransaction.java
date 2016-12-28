@@ -19,7 +19,7 @@ import javax.persistence.ManyToOne;
 public class AccountTransaction extends SingleEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     
-    private static final DecimalFormat df = new DecimalFormat("#.00");
+    private static final DecimalFormat df = new DecimalFormat("#0.00");
            
     @ManyToOne
     private Account account;
