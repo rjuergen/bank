@@ -30,6 +30,15 @@ public class Address implements Serializable {
         
     }
     
+    public Address(String street, String houseNr, String zip, String city, String county, String country) {
+        this.street = street;
+        this.houseNr = houseNr;
+        this.zip = zip;
+        this.city = city;
+        this.county = county;
+        this.country = country;
+    }
+    
     public String getDisplayString() {
         return street + " " + houseNr + ", " + zip + " " + city;
     }

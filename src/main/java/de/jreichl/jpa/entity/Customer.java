@@ -6,6 +6,7 @@ package de.jreichl.jpa.entity;
 
 import de.jreichl.jpa.entity.embeddable.Address;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -24,16 +25,16 @@ public abstract class Customer extends SingleEntity implements Serializable {
     private static final long serialVersionUID = 1L;
        
     @Embedded
-    private Address address;
+    protected Address address;
 
     @OneToMany(mappedBy = "owner")
-    private List<Account> accounts;
+    private List<Account> accounts = new ArrayList<>();
 
     @OneToMany(mappedBy = "customer")
-    private List<Credit> credits;
+    private List<Credit> credits = new ArrayList<>();
         
     @OneToMany(mappedBy = "customer")
-    private List<Creditworthiness> creditworthinesses;
+    private List<Creditworthiness> creditworthinesses = new ArrayList<>();
     
     public Customer() {
         
@@ -47,6 +48,11 @@ public abstract class Customer extends SingleEntity implements Serializable {
         this.accounts = accounts;
     }
 
+    public void addAccount(Account account) {
+        account.setOwner(this);
+        accounts.add(account);
+    }
+    
     public List<Credit> getCredits() {
         return credits;
     }
@@ -72,6 +78,6 @@ public abstract class Customer extends SingleEntity implements Serializable {
     }    
         
     public abstract String getName();
-    
+   
   
 }

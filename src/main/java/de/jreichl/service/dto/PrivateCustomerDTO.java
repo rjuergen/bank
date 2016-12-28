@@ -5,14 +5,17 @@
 package de.jreichl.service.dto;
 
 import de.jreichl.jpa.entity.type.Gender;
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  *
  * @author Jürgen Reichl
  */
-public class PrivateCustomerDTO {
-     private Long id = null;
+public class PrivateCustomerDTO implements Serializable {
+    private static final long serialVersionUID = 1L;
+    
+    private Long id = null;
     private String firstName;
     private String lastName;
     private Gender gender;

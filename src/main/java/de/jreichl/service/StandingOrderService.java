@@ -65,6 +65,7 @@ public class StandingOrderService extends BaseService implements IStandingOrderS
 
     @Override
     public boolean deleteStandingOrder(StandingOrder toDelete) {
+        toDelete = standingOrderRepo.merge(toDelete);
         standingOrderRepo.remove(toDelete);        
         return true;
     }

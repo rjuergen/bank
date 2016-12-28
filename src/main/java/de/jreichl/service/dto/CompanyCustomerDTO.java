@@ -4,13 +4,16 @@
  */
 package de.jreichl.service.dto;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  *
  * @author Jürgen Reichl
  */
-public class CompanyCustomerDTO {
+public class CompanyCustomerDTO implements Serializable {
+    private static final long serialVersionUID = 1L;
+    
     private Long id = null;
     private String name;
     private Date dateOfCreation;               

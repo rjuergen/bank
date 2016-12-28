@@ -40,6 +40,14 @@ public class Bank extends SingleEntity implements Serializable {
     public Bank() {
         
     }
+    
+    public Bank(String bankCode, String bic, String countryAlpha2Code, String name, Address address) {
+        this.bankCode = bankCode;
+        this.bic = bic;
+        this.countryAlpha2Code = countryAlpha2Code;
+        this.name = name;
+        this.address = address;        
+    }
 
     public String getBankCode() {
         return bankCode;

@@ -46,6 +46,15 @@ public class StandingOrder extends SingleEntity implements Serializable {
     public StandingOrder() {
         
     }
+
+    public StandingOrder(Account toAccount, IntervalUnit intervalUnit, int intervalAmount, long amountInCent, String description, Timestamp startDate) {
+        this.toAccount = toAccount;
+        this.intervalUnit = intervalUnit;
+        this.intervalAmount = intervalAmount;
+        this.amount = amountInCent;
+        this.description = description;
+        this.startDate = startDate;
+    }
     
     public String getDescription() {
         return description;

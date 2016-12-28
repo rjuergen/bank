@@ -22,5 +22,9 @@ public interface ICustomerService {
     public CompanyCustomer updateCompanyCustomer(CompanyCustomerDTO dto);
     
     public List<Customer> getCustomers();
+
+    public void persistCustomer(Customer c);
+
+    public Customer findCustomer(Customer customer);
     
 }

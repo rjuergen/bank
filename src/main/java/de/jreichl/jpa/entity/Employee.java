@@ -34,6 +34,14 @@ public class Employee extends SingleEntity implements Serializable {
     public Employee() {
         
     }
+
+    public Employee(String firstName, String lastName, Gender gender, Date dateOfBirth, Address address) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.gender = gender;
+        this.dateOfBirth = dateOfBirth;
+        this.address = address;
+    }
     
     public Date getDateOfBirth() {
         return dateOfBirth;

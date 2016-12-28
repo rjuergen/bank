@@ -4,11 +4,15 @@
  */
 package de.jreichl.service.dto;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Jürgen Reichl
  */
-public class AddressDTO {
+public class AddressDTO implements Serializable {
+    private static final long serialVersionUID = 1L;
+    
     
     private String street;
     

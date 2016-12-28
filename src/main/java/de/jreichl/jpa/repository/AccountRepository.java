@@ -31,11 +31,11 @@ public class AccountRepository extends SingleEntityRepository<Account> {
     }
     
     public Long getHighestID() {
-        Query query = em.createQuery("Select max(id) From Account");    
+        Query query = em.createQuery("Select max(a.id) From Account a");    
         Long id = 0L;
         try {
-        Object o = query.getSingleResult();
-        id = (Long) o;
+            Object o = query.getSingleResult();
+            id = (Long) o;
         } catch(NoResultException ex) {
             // do nothing. it's just the first Account
         }

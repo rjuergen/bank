@@ -28,6 +28,7 @@ import javax.inject.Named;
 @SessionScoped
 public class CustomerModel extends BaseService implements Serializable {
     private static final long serialVersionUID = 1L;
+
     
     @Inject
     private ICustomerService customerService;

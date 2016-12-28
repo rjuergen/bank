@@ -95,5 +95,21 @@ public class CustomerService extends BaseService implements ICustomerService {
         return customer;
     }
 
+    @Transactional
+    @Override
+    public void persistCustomer(Customer c) {
+        if(c instanceof PrivateCustomer)
+            privateCustomerRepo.persist((PrivateCustomer)c);
+        else if (c instanceof CompanyCustomer)
+            companyCustomerRepo.persist((CompanyCustomer)c);
+    }
+
+    @Override
+    public Customer findCustomer(Customer c) {
+        if(c instanceof PrivateCustomer)
+            return privateCustomerRepo.findById(c.getId());
+        else
+            return companyCustomerRepo.findById(c.getId());
+    }
     
 }

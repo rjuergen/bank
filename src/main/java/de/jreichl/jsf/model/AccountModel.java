@@ -60,7 +60,7 @@ public class AccountModel extends BaseService implements Serializable {
     
     public void save() {        
         Account a = accountService.createAccount(customer, account.getAccountManager(), account.getTanType(), account.getPassword());
-        customer.getAccounts().add(a);
+        customer = a.getOwner();        
     }
     
     public void clear() {

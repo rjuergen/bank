@@ -15,6 +15,8 @@ import de.jreichl.jpa.repository.BankRepository;
 import de.jreichl.jpa.repository.EmployeeRepository;
 import de.jreichl.service.exception.LoginFailedException;
 import de.jreichl.service.interfaces.IAccountService;
+import de.jreichl.service.interfaces.ICustomerService;
+import java.sql.Date;
 import java.util.List;
 import java.util.Random;
 import java.util.logging.Level;
@@ -39,6 +41,11 @@ public class AccountService extends BaseService implements IAccountService {
     
     @Inject 
     private BankRepository bankRepo;
+    
+    @Inject
+    private ICustomerService customerService;
+    
+    private static final Random random = new Random(System.currentTimeMillis());
     
     /**
      * Create a new Account for an Customer. (account manager will be choosen by the bank)
@@ -66,14 +73,15 @@ public class AccountService extends BaseService implements IAccountService {
     public Account createAccount(Customer owner, Employee accountManager, TanType type, String password) {
         Account a = new Account();        
         
-        a.setOwner(owner);
+        a.setDateOfCreation(new Date(new java.util.Date().getTime()));
         a.setTanType(type);
         
         if(accountManager == null) {
-            List<Employee> employees = employeeRepo.findAll();
-            Random r = new Random(System.currentTimeMillis());
-            int randIndex = r.nextInt(employees.size());        
+            List<Employee> employees = employeeRepo.findAll();            
+            int randIndex = random.nextInt(employees.size());        
             accountManager = employees.get(randIndex);
+        } else {
+            accountManager = employeeRepo.findById(accountManager.getId());
         }
         a.setAccountManager(accountManager);       
         
@@ -85,10 +93,9 @@ public class AccountService extends BaseService implements IAccountService {
             logger.log(Level.SEVERE, "Failed to hash password!", ex);
             throw new RuntimeException(ex);
         }
-        
-        String accountNumber = EntityUtils.createAccountNumber(accountRepo.getHighestID());
+        long highestID = accountRepo.getHighestID();
+        String accountNumber = EntityUtils.createAccountNumber(highestID);
         a.setAccountNumber(accountNumber);
-        
         Bank bank = bankRepo.getBank();
         
         Iban iban = new Iban.Builder()
@@ -98,14 +105,21 @@ public class AccountService extends BaseService implements IAccountService {
                 .build();
         
         a.setIban(iban.toString());
+                
+        owner = customerService.findCustomer(owner);
         
+        owner.addAccount(a);
+                
         accountRepo.persist(a);
-        
+        customerService.persistCustomer(owner);
+                
         return a;
     }
 
+    @Transactional
     @Override
     public boolean deleteAccount(Account toDelete) {
+        toDelete = accountRepo.merge(toDelete);
         accountRepo.remove(toDelete);
         logger.log(Level.INFO, String.format("Account %s deleted!",toDelete.getAccountNumber()));
         return true;

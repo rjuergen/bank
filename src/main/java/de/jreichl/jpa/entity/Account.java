@@ -7,6 +7,7 @@ package de.jreichl.jpa.entity;
 import de.jreichl.jpa.entity.type.TanType;
 import java.io.Serializable;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import javax.persistence.Column;
@@ -50,15 +51,30 @@ public class Account extends SingleEntity implements Serializable {
     private String passwordSalt;
     
     @OneToMany(mappedBy = "account")
-    private List<AccountTransaction> transactions;
+    private List<AccountTransaction> transactions = new ArrayList<>();
     
     @OneToMany(mappedBy = "fromAccount")
-    private List<StandingOrder> standingOrders;   
+    private List<StandingOrder> standingOrders = new ArrayList<>();   
     
     public Account() {
         
     }
 
+    public Account(String accountNumber, String iban, Employee accountManager, TanType tanType, Date dateOfCreation, String passwordSalt, String hashedPassword) {
+        this.accountNumber = accountNumber;
+        this.iban = iban;
+        this.accountManager = accountManager;
+        this.tanType = tanType;
+        this.dateOfCreation = dateOfCreation;
+        this.passwordSalt = passwordSalt;
+        this.hashedPassword = hashedPassword;
+    }
+
+    public void addStandingOrder(StandingOrder order) {
+        order.setFromAccount(this);
+        standingOrders.add(order);
+    }
+    
     public String getHashedPassword() {
         return hashedPassword;
     }

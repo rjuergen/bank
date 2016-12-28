@@ -4,6 +4,7 @@
  */
 package de.jreichl.jpa.entity;
 
+import de.jreichl.jpa.entity.embeddable.Address;
 import de.jreichl.jpa.entity.type.Gender;
 import java.io.Serializable;
 import java.sql.Date;
@@ -28,6 +29,14 @@ public class PrivateCustomer extends Customer implements Serializable {
 
     public PrivateCustomer() {
         
+    }
+
+    public PrivateCustomer(String firstName, String lastName, Gender gender, Date dateOfBirth, Address address) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.gender = gender;
+        this.dateOfBirth = dateOfBirth;
+        this.address = address;
     }
     
     @Override

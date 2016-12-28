@@ -44,8 +44,8 @@ public class EntityUtils {
         }
     }
     
-    public static String createAccountNumber(Long id) {            
-        String end = id.toString();
+    public static String createAccountNumber(long id) {            
+        String end = String.valueOf(id);
         StringBuilder iban = new StringBuilder();
         for(int i = end.length(); i<11; i++)
             iban.append("0");

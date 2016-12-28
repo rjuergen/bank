@@ -4,6 +4,7 @@
  */
 package de.jreichl.jpa.entity;
 
+import de.jreichl.jpa.entity.embeddable.Address;
 import java.io.Serializable;
 import java.sql.Date;
 import javax.persistence.Entity;
@@ -23,6 +24,12 @@ public class CompanyCustomer extends Customer implements Serializable {
 
     public CompanyCustomer() {
         
+    }
+    
+    public CompanyCustomer(String name, Date dateOfCreation, Address address) {
+        this.name = name;
+        this.dateOfCreation = dateOfCreation;
+        this.address = address;
     }
     
     public Date getDateOfCreation() {
