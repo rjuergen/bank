@@ -7,9 +7,7 @@ package de.jreichl.service.timer;
 import de.jreichl.jpa.entity.StandingOrder;
 import de.jreichl.jpa.repository.StandingOrderRepository;
 import de.jreichl.service.exception.TransactionFailedException;
-import de.jreichl.service.interfaces.ITransactionService;
-import java.sql.Timestamp;
-import java.util.Calendar;
+import de.jreichl.service.interfaces.IStandingOrderService;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
@@ -26,10 +24,10 @@ import javax.inject.Inject;
 public class StandingOrderTimer extends BaseTimer {
     
     @Inject
-    private StandingOrderRepository standingOrderRepo;
+    private StandingOrderRepository standingOrderRepo;    
     
     @Inject
-    private ITransactionService transactionService;
+    private IStandingOrderService standingOrderService;
     
     
     /**
@@ -42,21 +40,7 @@ public class StandingOrderTimer extends BaseTimer {
         List<StandingOrder> orders = standingOrderRepo.findAll();        
         for(StandingOrder o : orders) {
             try {
-                if(o.getLastTransaction()==null && o.getStartDate().getTime() < System.currentTimeMillis()) {                    
-                    // first transaction!
-                    transactionService.transferStandingOrder(o, o.getStartDate());                    
-                }
-                if(o.getLastTransaction()!=null) {
-                    Calendar cal = Calendar.getInstance();
-                    cal.setTime(o.getLastTransaction());  
-                    cal.add(o.getIntervalUnit().getCalendarType(), o.getIntervalUnit().getCalendarAmount() * o.getInterval() );
-                    while(cal.getTimeInMillis() < System.currentTimeMillis()) {
-                        transactionService.transferStandingOrder(o, new Timestamp(cal.getTimeInMillis()));
-                        
-                        cal.setTime(o.getLastTransaction());  
-                        cal.add(o.getIntervalUnit().getCalendarType(), o.getIntervalUnit().getCalendarAmount() * o.getInterval() );
-                    }                    
-                }
+                standingOrderService.handleStandingOrder(o);                
             } catch (TransactionFailedException ex) {
                 logger.log(Level.SEVERE, "Failed to handle standing order with id=" + o.getId(), ex);
             }            

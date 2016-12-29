@@ -9,8 +9,11 @@ import de.jreichl.jpa.entity.StandingOrder;
 import de.jreichl.jpa.entity.type.IntervalUnit;
 import de.jreichl.jpa.repository.AccountRepository;
 import de.jreichl.jpa.repository.StandingOrderRepository;
+import de.jreichl.service.exception.TransactionFailedException;
 import de.jreichl.service.interfaces.IStandingOrderService;
+import de.jreichl.service.interfaces.ITransactionService;
 import java.sql.Timestamp;
+import java.util.Calendar;
 import java.util.Date;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -28,6 +31,9 @@ public class StandingOrderService extends BaseService implements IStandingOrderS
     
     @Inject
     private AccountRepository accountRepo;
+    
+    @Inject
+    private ITransactionService transactionService;
     
     
     /**
@@ -59,17 +65,39 @@ public class StandingOrderService extends BaseService implements IStandingOrderS
         o.setDescription(description);
         
         fromAccount.addStandingOrder(o);
-        standingOrderRepo.persist(o);        
-        accountRepo.persist(fromAccount);
+        standingOrderRepo.persist(o);
         
         return o;
     }
 
+    @Transactional
     @Override
     public boolean deleteStandingOrder(StandingOrder toDelete) {
         toDelete = standingOrderRepo.merge(toDelete);
-        standingOrderRepo.remove(toDelete);        
+        Account parent = accountRepo.merge(toDelete.getFromAccount());        
+        parent.removeStandingOrder(toDelete);
+        standingOrderRepo.remove(toDelete);  
+        accountRepo.persist(parent);
         return true;
+    }
+
+    @Override
+    public void handleStandingOrder(StandingOrder o) throws TransactionFailedException {
+        if(o.getLastTransaction()==null && o.getStartDate().getTime() < System.currentTimeMillis()) {                    
+            // first transaction!
+            transactionService.transferStandingOrder(o, o.getStartDate());              
+        }
+        if(o.getLastTransaction()!=null) {
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(o.getLastTransaction());  
+            cal.add(o.getIntervalUnit().getCalendarType(), o.getIntervalUnit().getCalendarAmount() * o.getInterval() );
+            while(cal.getTimeInMillis() < System.currentTimeMillis()) {
+                transactionService.transferStandingOrder(o, new Timestamp(cal.getTimeInMillis()));
+
+                cal.setTime(o.getLastTransaction());  
+                cal.add(o.getIntervalUnit().getCalendarType(), o.getIntervalUnit().getCalendarAmount() * o.getInterval() );
+            }                    
+        }
     }
     
 }

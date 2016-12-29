@@ -7,6 +7,7 @@ package de.jreichl.jsf.model;
 import de.jreichl.jpa.entity.StandingOrder;
 import de.jreichl.jpa.entity.type.IntervalUnit;
 import de.jreichl.service.BaseService;
+import de.jreichl.service.exception.TransactionFailedException;
 import de.jreichl.service.interfaces.IStandingOrderService;
 import java.io.Serializable;
 import java.text.DecimalFormat;
@@ -47,6 +48,11 @@ public class StandingOrderModel extends BaseService implements Serializable {
         try {
             StandingOrder order = standingOrderService.createStandingOrder(userModel.getCurrentAccount().getIban(),
                     iban, getAmountInCent(), startDate, interval, unit, description);
+            try {
+                standingOrderService.handleStandingOrder(order);
+            } catch (TransactionFailedException ex) {
+                logger.log(Level.SEVERE, "Failed to handle standing order!", ex);
+            }
             userModel.refresh();
         } catch (ParseException ex) {
             logger.log(Level.SEVERE, "Failed to create standing order!", ex);
@@ -63,6 +69,7 @@ public class StandingOrderModel extends BaseService implements Serializable {
         boolean deleted = standingOrderService.deleteStandingOrder(order);
         if(!deleted)
             logger.log(Level.WARNING, "Failed to delete standing order!");
+        userModel.refresh();
     }
     
     private long getAmountInCent() throws ParseException {

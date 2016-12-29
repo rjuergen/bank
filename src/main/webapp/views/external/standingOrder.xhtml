@@ -68,7 +68,11 @@
                         <b:dataTableColumn>
                             <f:facet name="header">Beschreibung</f:facet>                            
                             <h:outputText value="#{o.description} "/>
-                        </b:dataTableColumn>                           
+                        </b:dataTableColumn>  
+                        <b:dataTableColumn>
+                            <f:facet name="header">Aktionen</f:facet>
+                            <h:commandButton value="L&ouml;schen" action="#{standingOrderModel.delete(o)}"/>
+                        </b:dataTableColumn>
                     </b:dataTable>
                 </b:panelGrid>
             </ui:define>

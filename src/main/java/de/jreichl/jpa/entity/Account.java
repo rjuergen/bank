@@ -179,5 +179,9 @@ public class Account extends SingleEntity implements Serializable {
     public void addTransaction(AccountTransaction t) {
         transactions.add(t);
     }
+
+    public void removeStandingOrder(StandingOrder toDelete) {
+        standingOrders.remove(toDelete);
+    }
     
 }

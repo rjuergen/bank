@@ -81,6 +81,7 @@ public class TransactionService extends BaseService implements ITransactionServi
     @Transactional
     @Override
     public boolean transferStandingOrder(StandingOrder order, Timestamp newLastTransactionDate) throws TransactionFailedException {
+        order = standingOrderRepo.merge(order);
         transfer(order.getAmount(), order.getFromAccount(), order.getToAccount(), order.getDescription());                        
         order.setLastTransaction(newLastTransactionDate);
         standingOrderRepo.persist(order);
@@ -145,6 +146,7 @@ public class TransactionService extends BaseService implements ITransactionServi
         try {
         
             if(fromAccount != null) {
+                fromAccount = accountRepo.merge(fromAccount);
                 AccountTransaction t1 = new AccountTransaction(fromAccount, TransactionType.DEBIT, amountInCent, new java.sql.Timestamp(currentDate.getTime()));        
                 t1.setDescription(description);    
                 fromAccount.addTransaction(t1);
@@ -153,6 +155,7 @@ public class TransactionService extends BaseService implements ITransactionServi
             }
             
             if(toAccount != null) {
+                toAccount = accountRepo.merge(toAccount);
                 AccountTransaction t2 = new AccountTransaction(toAccount, TransactionType.CREDIT, amountInCent, new java.sql.Timestamp(currentDate.getTime()));
                 t2.setDescription(description);
                 toAccount.addTransaction(t2);
