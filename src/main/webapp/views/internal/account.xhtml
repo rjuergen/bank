@@ -16,13 +16,15 @@
                 <h:form>
                     <b:panelGrid columns="1" smallScreen="3">
                         <b:column>
-                            <b:selectOneMenu>
-                            <f:selectItem value="#{accountModel.account.accountManager}" rendered="#{accountModel.account.accountManager != null}"/>
-                            <f:selectItems value="#{accountModel.employees}"
-                                           var="e"
-                                           itemValue="#{e}"
-                                           itemLabel="#{e.lastName} #{e.firstName}" />
+                            <h:outputLabel value="Kontoverwalter:"/>
+                            <b:selectOneMenu>                                
+                                <f:selectItem value="#{accountModel.account.accountManager}" rendered="#{accountModel.account.accountManager != null}"/>
+                                <f:selectItems value="#{accountModel.employees}"
+                                               var="e"
+                                               itemValue="#{e}"
+                                               itemLabel="#{e.lastName} #{e.firstName}" />
                             </b:selectOneMenu>
+                            <h:outputLabel value="Tantyp:"/>
                             <b:selectOneMenu value="#{accountModel.account.tanType}">
                                 <f:selectItems value="#{enumValuesProvider.tanTypeValues}"
                                                var="t"

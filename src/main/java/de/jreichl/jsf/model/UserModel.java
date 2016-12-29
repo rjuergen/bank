@@ -32,6 +32,8 @@ public class UserModel extends BaseService implements Serializable {
     
     private String homeTitel = "";
     
+    private String message;
+    
     @Inject
     private IAccountService accountService;
     
@@ -92,6 +94,16 @@ public class UserModel extends BaseService implements Serializable {
         this.homeTitel = homeTitel;
     }
     
-    
-    
+    public String getMessage() {
+        return message;
+    } 
+
+    public void setMessage(String message) {
+        this.message = message;
+    }    
+
+    void refresh() {
+        currentAccount = accountService.findAccount(currentAccount.getId());
+    }
+        
 }

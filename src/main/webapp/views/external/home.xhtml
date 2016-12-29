@@ -10,34 +10,34 @@
 
         <ui:composition template="./../../WEB-INF/BankReichlExternalTemplate.xhtml">
 
-            <ui:define name="content">
-                
-                <h:form>
-                    <b:panelGrid columns="1">
-                        <h2>#{userModel.homeTitel}</h2>
-                        <br/><br/>
-                        
-                        <b:dataTable var="t" value="#{userModel.currentAccount.transactionsSorted}" rendered="#{userModel.hasActiveUser()}" >
-                            <b:dataTableColumn>
-                                <f:facet name="header">Zeitpunkt</f:facet>                            
-                                <h:outputText value="#{t.transactionDate}"/>
-                            </b:dataTableColumn>
-                            <b:dataTableColumn>
-                                <f:facet name="header">Transaktion</f:facet>
-                                <h:outputText value="#{t.type} "/>
-                            </b:dataTableColumn>
-                            <b:dataTableColumn>
-                                <f:facet name="header">Betrag</f:facet>                            
-                                <h:outputText value="#{t.amountFormatted}"/>
-                            </b:dataTableColumn>                            
-                            <b:dataTableColumn>
-                                <f:facet name="header">Beschreibung</f:facet>                            
-                                <h:outputText value="#{t.description} "/>
-                            </b:dataTableColumn>                           
-                        </b:dataTable>
-                    </b:panelGrid>
-                </h:form>                    
-                
+            <ui:define name="content">                
+                <h2>#{userModel.homeTitel}</h2>
+                <br/><br/>
+
+                <h:outputLabel value="Kontostand: "/>                        
+                <h:outputText value=" #{userModel.currentAccount.balanceFormatted}"/>
+
+                <br/>
+                <br/>
+
+                <b:dataTable var="t" value="#{userModel.currentAccount.transactionsSorted}">
+                    <b:dataTableColumn>
+                        <f:facet name="header">Zeitpunkt</f:facet>                            
+                        <h:outputText value="#{t.transactionDate}"/>
+                    </b:dataTableColumn>
+                    <b:dataTableColumn>
+                        <f:facet name="header">Transaktion</f:facet>
+                        <h:outputText value="#{t.type} "/>
+                    </b:dataTableColumn>
+                    <b:dataTableColumn>
+                        <f:facet name="header">Betrag</f:facet>                            
+                        <h:outputText value="#{t.type.sign} #{t.amountFormatted}" style="color:#{t.type.color}"/>
+                    </b:dataTableColumn>                            
+                    <b:dataTableColumn>
+                        <f:facet name="header">Beschreibung</f:facet>                            
+                        <h:outputText value="#{t.description} "/>
+                    </b:dataTableColumn>                           
+                </b:dataTable>
             </ui:define>
 
         </ui:composition>

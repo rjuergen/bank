@@ -145,5 +145,10 @@ public class AccountService extends BaseService implements IAccountService {
     public List<Employee> getAccountManager() {
         return employeeRepo.findAll();
     }
+
+    @Override
+    public Account findAccount(long id) {
+        return accountRepo.findById(id);
+    }
     
 }

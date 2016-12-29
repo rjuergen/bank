@@ -16,7 +16,7 @@ public enum TransactionType {
      * to foreigners. 
      * Opposite of credit.
      */
-    DEBIT,
+    DEBIT("-", "red"),
     /**
      * Recorded as positive (+) in the balance of payments, any transaction 
      * that gives rise to a payment into the country, such as an export,
@@ -24,5 +24,23 @@ public enum TransactionType {
      * from abroad. 
      * It is opposite of debit. 
      */
-    CREDIT;
+    CREDIT("+", "black");
+    
+    private String sign;
+    private String color;
+    
+    private TransactionType(String sign, String color) {
+        this.sign = sign;
+        this.color = color;
+    }
+
+    public String getSign() {
+        return sign;
+    }
+
+    public String getColor() {
+        return color;
+    }
+    
+    
 }

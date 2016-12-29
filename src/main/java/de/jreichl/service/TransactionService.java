@@ -88,6 +88,7 @@ public class TransactionService extends BaseService implements ITransactionServi
         return true;
     }    
 
+    @Transactional
     @Override
     public boolean transferCashCredit(long amountInCent, String toIBAN, String description) throws TransactionFailedException {
         // get current/transaction date
@@ -112,6 +113,7 @@ public class TransactionService extends BaseService implements ITransactionServi
         }
     }
 
+    @Transactional
     @Override
     public boolean transferCashDebit(long amountInCent, String fromIBAN, String description) throws TransactionFailedException {
         // get current/transaction date
@@ -136,7 +138,7 @@ public class TransactionService extends BaseService implements ITransactionServi
         }
     }
     
-        @Transactional
+    @Transactional
     private boolean transfer(long amountInCent, Account fromAccount, Account toAccount, String description) throws TransactionFailedException {
         Date currentDate = new Date();
         
@@ -144,18 +146,23 @@ public class TransactionService extends BaseService implements ITransactionServi
         
             if(fromAccount != null) {
                 AccountTransaction t1 = new AccountTransaction(fromAccount, TransactionType.DEBIT, amountInCent, new java.sql.Timestamp(currentDate.getTime()));        
-                t1.setDescription(description);            
+                t1.setDescription(description);    
+                fromAccount.addTransaction(t1);
                 accountTransactionRepo.persist(t1);
+                accountRepo.persist(fromAccount);
             }
             
             if(toAccount != null) {
                 AccountTransaction t2 = new AccountTransaction(toAccount, TransactionType.CREDIT, amountInCent, new java.sql.Timestamp(currentDate.getTime()));
                 t2.setDescription(description);
+                toAccount.addTransaction(t2);
                 accountTransactionRepo.persist(t2);
+                accountRepo.persist(toAccount);
             }
             
         } catch(Exception ex) {
-            throw new TransactionFailedException(ex, "Transaction failed!", fromAccount.getIban(), toAccount.getIban(), currentDate, amountInCent);
+            throw new TransactionFailedException(ex, "Transaction failed!", fromAccount!=null ? fromAccount.getIban() : null,
+                    toAccount!=null ? toAccount.getIban() : null, currentDate, amountInCent);
         }
         
         return true;

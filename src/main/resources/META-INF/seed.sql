@@ -15,5 +15,6 @@ INSERT INTO ACCOUNT(id, accountNumber, iban, owner_id, accountManager_id, tanTyp
 INSERT INTO STANDINGORDER (id, fromAccount_id, toAccount_id, intervalUnit, intervalAmount, amount, description, startDate) VALUES (1, 1, 2, 3, 1, 1499, 'Test Standing Order (Monthly)', '2016-11-01 12:00:00')
 
 INSERT INTO ACCOUNTTRANSACTION (id, account_id, type, transactionDate, amount, description) VALUES (1, 1, 1, '2016-12-01 12:10:02', 30000, '300,- € eingezahlt')
+INSERT INTO ACCOUNTTRANSACTION (id, account_id, type, transactionDate, amount, description) VALUES (2, 1, 0, '2016-12-03 10:30:22', 1500, '15,- € abgehoben')
 
 UPDATE SEQUENCE SET SEQ_COUNT = SEQ_COUNT + 10 WHERE SEQ_NAME = 'SEQ_GEN'

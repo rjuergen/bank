@@ -14,19 +14,19 @@
         </navigation-case>
         <navigation-case>
             <from-outcome>ext_banking</from-outcome>
-            <to-view-id>views/external/home.xhtml</to-view-id>
+            <to-view-id>views/external/banking.xhtml</to-view-id>
         </navigation-case>
         <navigation-case>
             <from-outcome>ext_credit</from-outcome>
-            <to-view-id>views/external/home.xhtml</to-view-id>
+            <to-view-id>views/external/credit.xhtml</to-view-id>
         </navigation-case>
         <navigation-case>
             <from-outcome>ext_standingOrder</from-outcome>
-            <to-view-id>views/external/home.xhtml</to-view-id>
+            <to-view-id>views/external/standingOrder.xhtml</to-view-id>
         </navigation-case>
         <navigation-case>
             <from-outcome>ext_cash</from-outcome>
-            <to-view-id>views/external/home.xhtml</to-view-id>
+            <to-view-id>views/external/cash.xhtml</to-view-id>
         </navigation-case>
         
         

@@ -1,0 +1,36 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:b="http://bootsfaces.net/ui">
+
+    <body>
+
+        <ui:composition template="./../../WEB-INF/BankReichlExternalTemplate.xhtml">
+
+            <ui:define name="content">
+                <b:panelGrid columns="2" smallScreen="6">
+                    <b:column>                                                
+                        <h:outputText value="Betrag:"/>
+                        <b:inputText value="#{transactionModel.cashAmountInEuro}">
+                            <f:facet name="prepend">
+                                <h:outputText value="€" />
+                            </f:facet>
+                            <f:facet name="append">
+                                <h:outputText value=".00" />
+                            </f:facet>
+                        </b:inputText>
+                        <b:inputText value="#{transactionModel.description}" placeholder="Beschreibung"/>
+                        <b:commandButton action="#{transactionModel.creditCash()}" value="Einzahlen"  style="width:200px;height:40px"/>
+                        <b:commandButton action="#{transactionModel.debitCash()}" value="Auszahlen"  style="width:200px;height:40px"/>
+                    </b:column>
+                </b:panelGrid>
+                <h:outputText value="#{transactionModel.message}"/>
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

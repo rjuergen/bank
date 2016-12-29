@@ -26,5 +26,7 @@ public interface IAccountService {
     public Account login(String accountNumber, String password) throws LoginFailedException;
     
     public List<Employee> getAccountManager();
+
+    public Account findAccount(long id);
     
 }

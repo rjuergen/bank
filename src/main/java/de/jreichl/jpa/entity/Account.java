@@ -5,8 +5,10 @@
 package de.jreichl.jpa.entity;
 
 import de.jreichl.jpa.entity.type.TanType;
+import de.jreichl.jpa.entity.type.TransactionType;
 import java.io.Serializable;
 import java.sql.Date;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -28,8 +30,9 @@ import javax.persistence.OneToMany;
     @NamedQuery(name="Account.AccountNumber",query="SELECT a FROM Account a WHERE a.accountNumber = :accountNumber")
 })
 public class Account extends SingleEntity implements Serializable {
-
     private static final long serialVersionUID = 1L;    
+    
+    private static final DecimalFormat df = new DecimalFormat("+ ###,##0.00");
 
     @Column(unique=true)
     private String accountNumber;
@@ -158,4 +161,23 @@ public class Account extends SingleEntity implements Serializable {
         return Collections.unmodifiableList(transactions);
     }  
    
+    public long getBalance() {
+        long balance = 0;
+        for(AccountTransaction at : transactions) {            
+            if(at.getType().equals(TransactionType.CREDIT))
+                balance += at.getAmount();
+            else
+                balance -= at.getAmount();
+        }
+        return balance;
+    }
+    
+    public String getBalanceFormatted() {
+        return df.format((double)getBalance() / 100) + " €";
+    }
+
+    public void addTransaction(AccountTransaction t) {
+        transactions.add(t);
+    }
+    
 }
