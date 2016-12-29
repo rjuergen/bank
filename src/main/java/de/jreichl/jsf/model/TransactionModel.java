@@ -8,6 +8,8 @@ import de.jreichl.service.BaseService;
 import de.jreichl.service.exception.TransactionFailedException;
 import de.jreichl.service.interfaces.ITransactionService;
 import java.io.Serializable;
+import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.util.logging.Level;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
@@ -22,7 +24,10 @@ import javax.inject.Named;
 public class TransactionModel extends BaseService implements Serializable {
     private static final long serialVersionUID = 1L;
     
-    private long cashAmountInEuro = 0;
+    private static final DecimalFormat df = new DecimalFormat("###,##0.00");
+    
+    private String iban;
+    private String amount = "0,00";
     private String description;    
     
     private String message;
@@ -36,14 +41,14 @@ public class TransactionModel extends BaseService implements Serializable {
     public String getMessage() {
         return message;
     }    
-    
-    public long getCashAmountInEuro() {
-        return cashAmountInEuro;
+
+    public String getAmount() {
+        return amount;
     }
 
-    public void setCashAmountInEuro(long cashAmountInEuro) {
-        this.cashAmountInEuro = cashAmountInEuro;
-    }
+    public void setAmount(String amount) {
+        this.amount = amount;
+    }    
 
     public String getDescription() {
         return description;
@@ -52,36 +57,67 @@ public class TransactionModel extends BaseService implements Serializable {
     public void setDescription(String description) {
         this.description = description;
     }
+
+    public String getIban() {
+        return iban;
+    }
+
+    public void setIban(String iban) {
+        this.iban = iban;
+    }
     
-    public void creditCash() {
+    private long getAmountInCent() throws ParseException {
+        long amountInCent = (long)(df.parse(amount).doubleValue()*100);
+        return amountInCent;
+    }
+    
+    public void transferCreditCash() {
         boolean transfered = false;
         try {
-            transfered = transactionService.transferCashCredit(cashAmountInEuro*100, userModel.getCurrentAccount().getIban(), description);
-        } catch (TransactionFailedException ex) {
+            transfered = transactionService.transferCashCredit(getAmountInCent(), userModel.getCurrentAccount().getIban(), description);
+        } catch (TransactionFailedException | ParseException ex) {
             logger.log(Level.SEVERE, "Failed to transfer cash (credit)!", ex);
         }
         if(transfered)
             message = "Geld erfolgreich eingezahlt!";
         else
             message = "Geld einzahlen fehlgeschlagen!";
-        cashAmountInEuro = 0;
+        amount = "0,00";
         description = null;
         userModel.refresh();
     }
     
-    public void debitCash() {
+    public void transferDebitCash() {
         boolean transfered = false;
         try {
-            transfered = transactionService.transferCashDebit(cashAmountInEuro*100, userModel.getCurrentAccount().getIban(), description);
-        } catch (TransactionFailedException ex) {
+            transfered = transactionService.transferCashDebit(getAmountInCent(), userModel.getCurrentAccount().getIban(), description);
+        } catch (TransactionFailedException  | ParseException ex) {
             logger.log(Level.SEVERE, "Failed to transfer cash (credit)!", ex);
         }
         if(transfered)
             message = "Geld erfolgreich ausgezahlt!";
         else
             message = "Geld auszahlen fehlgeschlagen!";
-        cashAmountInEuro = 0;
+        amount = "0,00";
         description = null;
         userModel.refresh();
     }
+    
+    public void transfer() {
+        boolean transfered = false;
+        try {
+            transfered = transactionService.transfer(getAmountInCent(), userModel.getCurrentAccount().getIban(), iban, description);
+        } catch (TransactionFailedException  | ParseException ex) {
+            logger.log(Level.SEVERE, "Failed to transfer cash (credit)!", ex);
+        }
+        if(transfered)
+            message = "Geld erfolgreich überwiesen!";
+        else
+            message = "Geld Überweisung fehlgeschlagen!";
+        iban = "";
+        amount = "0,00";
+        description = null;
+        userModel.refresh();
+    }
+    
 }

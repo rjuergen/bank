@@ -14,17 +14,14 @@
                 <b:panelGrid columns="2" smallScreen="6">
                     <b:column>                                                
                         <h:outputText value="Betrag:"/>
-                        <b:inputText value="#{transactionModel.cashAmountInEuro}">
+                        <b:inputText value="#{transactionModel.amount}">
                             <f:facet name="prepend">
                                 <h:outputText value="€" />
                             </f:facet>
-                            <f:facet name="append">
-                                <h:outputText value=".00" />
-                            </f:facet>
                         </b:inputText>
                         <b:inputText value="#{transactionModel.description}" placeholder="Beschreibung"/>
-                        <b:commandButton action="#{transactionModel.creditCash()}" value="Einzahlen"  style="width:200px;height:40px"/>
-                        <b:commandButton action="#{transactionModel.debitCash()}" value="Auszahlen"  style="width:200px;height:40px"/>
+                        <b:commandButton action="#{transactionModel.transferCreditCash()}" value="Einzahlen"  style="width:200px;height:40px"/>
+                        <b:commandButton action="#{transactionModel.transferDebitCash()}" value="Auszahlen"  style="width:200px;height:40px"/>
                     </b:column>
                 </b:panelGrid>
                 <h:outputText value="#{transactionModel.message}"/>
