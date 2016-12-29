@@ -5,6 +5,7 @@
 package de.jreichl.jsf;
 
 import de.jreichl.jpa.entity.type.Gender;
+import de.jreichl.jpa.entity.type.IntervalUnit;
 import de.jreichl.jpa.entity.type.TanType;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
@@ -23,5 +24,9 @@ public class EnumValuesProvider {
     
     public TanType[] getTanTypeValues() {
         return TanType.values();
+    }    
+    
+    public IntervalUnit[] getIntervalUnitValues() {
+        return IntervalUnit.values();
     }    
 }

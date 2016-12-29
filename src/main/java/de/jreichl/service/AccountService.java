@@ -22,6 +22,7 @@ import java.util.Random;
 import java.util.logging.Level;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import javax.persistence.NoResultException;
 import javax.transaction.Transactional;
 import org.iban4j.CountryCode;
 import org.iban4j.Iban;
@@ -127,18 +128,24 @@ public class AccountService extends BaseService implements IAccountService {
 
     @Override
     public Account login(String accountNumber, String password) throws LoginFailedException {
-        Account a = accountRepo.findByAccountNumber(accountNumber);
-        String hashedPW = null;
-        try {
-            hashedPW = EntityUtils.hashPassword(password, a.getPasswordSalt());
+        try{
+            Account a = accountRepo.findByAccountNumber(accountNumber);
+        
+            String hashedPW = EntityUtils.hashPassword(password, a.getPasswordSalt());
+            if(!a.getHashedPassword().equals(hashedPW)) {            
+                throw new LoginFailedException(accountNumber, "Passwort nicht korrekt!");
+            }     
+            return a;
         } catch (EntityUtils.EntityUtilException ex) {
             logger.log(Level.SEVERE, "Failed to hash password!", ex);
-            throw new RuntimeException(ex);
+            throw new LoginFailedException(accountNumber, "Login aus unbekannten Gründen fehlgeschlagen!", ex);
+        } catch (NoResultException ex) {
+            logger.log(Level.SEVERE, "Failed to find Account!", ex);
+            throw new LoginFailedException(accountNumber, String.format("Kontonummer %s nicht korrekt!",accountNumber), ex);
+        } catch (Exception ex) {
+            logger.log(Level.SEVERE, "Failed to login!", ex);
+            throw new LoginFailedException(accountNumber, "Login aus unbekannten Gründen fehlgeschlagen!", ex);
         }
-        if(!a.getHashedPassword().equals(hashedPW)) {            
-            throw new LoginFailedException(accountNumber, "Password is not correct!");
-        }        
-        return a;
     }
 
     @Override

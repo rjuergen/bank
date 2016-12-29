@@ -58,7 +58,9 @@ public class StandingOrderService extends BaseService implements IStandingOrderS
         o.setStartDate(new Timestamp(startDate.getTime()));
         o.setDescription(description);
         
-        standingOrderRepo.persist(o);
+        fromAccount.addStandingOrder(o);
+        standingOrderRepo.persist(o);        
+        accountRepo.persist(fromAccount);
         
         return o;
     }
