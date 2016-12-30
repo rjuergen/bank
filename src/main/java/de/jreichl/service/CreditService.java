@@ -89,7 +89,7 @@ public class CreditService extends BaseService implements ICreditService {
         c.setCredit(amountInCent);
         c.setInterestRate(interestRateInPerTenThousand);
                 
-        Customer customer = account.getOwner();
+        Customer customer = customerService.findCustomer(account.getOwner());
         customer.addCredit(c);               
         
         creditRepo.persist(c);

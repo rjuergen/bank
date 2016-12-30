@@ -13,6 +13,7 @@ import de.jreichl.service.interfaces.ICreditworthinessService;
 import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
@@ -56,6 +57,13 @@ public class CreditModel extends BaseService implements Serializable {
     private ICreditworthinessService creditworthinessService;
     
     public List<Credit> getCredits() {
+        if(credits == null) {
+            credits = new ArrayList<>();
+            for(Credit c : userModel.getCurrentUser().getCredits()) {
+                if(c.getAccount().equals(userModel.getCurrentAccount()))
+                    credits.add(c);
+            }
+        }        
         return credits;
     }    
     
