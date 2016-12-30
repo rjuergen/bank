@@ -7,12 +7,15 @@ package de.jreichl.jpa.entity;
 import java.io.Serializable;
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 /**
  *
@@ -21,8 +24,9 @@ import javax.persistence.OneToMany;
 @Entity
 @NamedQuery(name="Credit.unpaid",query="SELECT c FROM Credit c WHERE c.paybackComplete = false")
 public class Credit extends SingleEntity implements Serializable {
-
     private static final long serialVersionUID = 1L;
+    
+    private static final DecimalFormat df = new DecimalFormat("###,##0.00");
         
     private Timestamp creationDate;
     
@@ -35,10 +39,10 @@ public class Credit extends SingleEntity implements Serializable {
     /**
      * credit in cent
      */
-    private long credit;
+    private long credit;    
     
     @OneToMany
-    private List<AccountTransaction> transactions;
+    private List<AccountTransaction> transactions = new ArrayList<>();
     
     /**
      * interest rate (Zinssatz) in ‱ (per ten thousand | 123‱ = 1.23% = 0.0123)
@@ -57,9 +61,22 @@ public class Credit extends SingleEntity implements Serializable {
     
     private boolean paybackComplete = false;
     
+    /**
+     * standing order for payback
+     */
+    @OneToOne    
+    private StandingOrder standingOrder;
     
     public Credit() {
         
+    }    
+
+    public StandingOrder getStandingOrder() {
+        return standingOrder;
+    }
+
+    public void setStandingOrder(StandingOrder standingOrder) {
+        this.standingOrder = standingOrder;
     }
 
     public Account getAccount() {
@@ -76,9 +93,7 @@ public class Credit extends SingleEntity implements Serializable {
 
     public void setPaybackComplete(boolean paybackComplete) {
         this.paybackComplete = paybackComplete;
-    }
-
-    
+    }    
     
     public Timestamp getCreationDate() {
         return creationDate;
@@ -104,6 +119,10 @@ public class Credit extends SingleEntity implements Serializable {
         this.credit = credit;
     }
 
+    public String getCreditFormatted() {
+        return df.format((double)credit / 100) + " €";
+    }
+    
     public int getInterestRate() {
         return interestRate;
     }
@@ -126,12 +145,11 @@ public class Credit extends SingleEntity implements Serializable {
 
     public void setInterestToPay(long interestToPay) {
         this.interestToPay = interestToPay;
-    }
-
-       
+    }       
 
     /**
      * date of last addition of interest to toPay(remaining amount to pay back)
+     * @return interest added date
      */
     public Date getInterestAddedDate() {
         return interestAddedDate;
@@ -139,6 +157,10 @@ public class Credit extends SingleEntity implements Serializable {
 
     public void setInterestAddedDate(Date interestAddedDate) {
         this.interestAddedDate = interestAddedDate;
+    }
+
+    public void addTransaction(AccountTransaction t) {
+        transactions.add(t);
     }
 
     

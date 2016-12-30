@@ -1,4 +1,10 @@
-INSERT INTO BANK (id, bankCode, bic, countryAlpha2Code, name, housenr, street, zip, city, county, country) VALUES(1, '7723000', 'BYLADEM1DQE', 'DE', 'Bank Reichl', '3', 'Lilienweg', '93047', 'Regensburg', 'Bayern', 'Deutschland')
+INSERT INTO ACCOUNT(id, accountNumber, iban, tanType, dateOfCreation, passwordSalt, hashedPassword) VALUES(3, '00000000002', 'DE91772300000000000002', 1, '1990-01-01', '9KAFF9OVR8384B9', 'd065cda77a8dbbca87c19eea54f6a7cffa2d62f798bd6637ea84615f5ab82723')
+INSERT INTO ACCOUNT(id, accountNumber, iban, tanType, dateOfCreation, passwordSalt, hashedPassword) VALUES(4, '00000000003', 'DE91772300000000000003', 1, '1990-01-01', '9KAFF9OVR8384B9', 'd065cda77a8dbbca87c19eea54f6a7cffa2d62f798bd6637ea84615f5ab82723')
+
+INSERT INTO BANK (id, bankCode, bic, countryAlpha2Code, name, creditAccount_id, salaryAccount_id, housenr, street, zip, city, county, country) VALUES(1, '7723000', 'BYLADEM1DQE', 'DE', 'Bank Reichl', 3, 4, '3', 'Lilienweg', '93047', 'Regensburg', 'Bayern', 'Deutschland')
+
+INSERT INTO ACCOUNTTRANSACTION (id, account_id, type, transactionDate, amount, description) VALUES (3, 3, 1, '1990-01-01 12:00:00', 100000000000000, 'kapital der bank fuer kredite')
+INSERT INTO ACCOUNTTRANSACTION (id, account_id, type, transactionDate, amount, description) VALUES (4, 4, 1, '1990-01-01 12:00:00', 100000000000000, 'kapital der bank fuer loehne')
 
 INSERT INTO EMPLOYEE (id, firstname, lastname, gender, dateOfBirth, housenr, street, zip, city, county, country) VALUES(1, 'Johann', 'Meier', 0, '1988-04-02', '23', 'Galgenbergstraße', '93047', 'Regensburg', 'Bayern', 'Deutschland')
 INSERT INTO EMPLOYEE (id, firstname, lastname, gender, dateOfBirth, housenr, street, zip, city, county, country) VALUES(2, 'Maria', 'Dinkel', 1, '1981-12-10', '8b', 'Grabenstraße', '93047', 'Regensburg', 'Bayern', 'Deutschland')

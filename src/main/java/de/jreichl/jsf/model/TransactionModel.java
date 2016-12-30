@@ -5,7 +5,6 @@
 package de.jreichl.jsf.model;
 
 import de.jreichl.service.BaseService;
-import de.jreichl.service.exception.TransactionFailedException;
 import de.jreichl.service.interfaces.ITransactionService;
 import java.io.Serializable;
 import java.text.DecimalFormat;
@@ -72,48 +71,39 @@ public class TransactionModel extends BaseService implements Serializable {
     }
     
     public void transferCreditCash() {
-        boolean transfered = false;
         try {
-            transfered = transactionService.transferCashCredit(getAmountInCent(), userModel.getCurrentAccount().getIban(), description);
-        } catch (TransactionFailedException | ParseException ex) {
-            logger.log(Level.SEVERE, "Failed to transfer cash (credit)!", ex);
-        }
-        if(transfered)
+            transactionService.transferCashCredit(getAmountInCent(), userModel.getCurrentAccount().getIban(), description);
             message = "Geld erfolgreich eingezahlt!";
-        else
-            message = "Geld einzahlen fehlgeschlagen!";
+        } catch (Exception ex) {
+            logger.log(Level.SEVERE, "Failed to transfer cash (credit)!", ex);
+            message = "Geld einzahlen fehlgeschlagen!";            
+        }
         amount = "0,00";
         description = null;
         userModel.refresh();
     }
     
     public void transferDebitCash() {
-        boolean transfered = false;
         try {
-            transfered = transactionService.transferCashDebit(getAmountInCent(), userModel.getCurrentAccount().getIban(), description);
-        } catch (TransactionFailedException  | ParseException ex) {
-            logger.log(Level.SEVERE, "Failed to transfer cash (credit)!", ex);
-        }
-        if(transfered)
+            transactionService.transferCashDebit(getAmountInCent(), userModel.getCurrentAccount().getIban(), description);
             message = "Geld erfolgreich ausgezahlt!";
-        else
+        } catch (Exception ex) {
+            logger.log(Level.SEVERE, "Failed to transfer cash (credit)!", ex);            
             message = "Geld auszahlen fehlgeschlagen!";
+        }
         amount = "0,00";
         description = null;
         userModel.refresh();
     }
     
     public void transfer() {
-        boolean transfered = false;
         try {
-            transfered = transactionService.transfer(getAmountInCent(), userModel.getCurrentAccount().getIban(), iban, description);
-        } catch (TransactionFailedException  | ParseException ex) {
-            logger.log(Level.SEVERE, "Failed to transfer cash (credit)!", ex);
-        }
-        if(transfered)
+            transactionService.transfer(getAmountInCent(), userModel.getCurrentAccount().getIban(), iban, description);
             message = "Geld erfolgreich überwiesen!";
-        else
+        } catch (Exception ex) {
+            logger.log(Level.SEVERE, "Failed to transfer cash (credit)!", ex);
             message = "Geld Überweisung fehlgeschlagen!";
+        }
         iban = "";
         amount = "0,00";
         description = null;

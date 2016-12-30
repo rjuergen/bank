@@ -6,7 +6,6 @@ package de.jreichl.service.timer;
 
 import de.jreichl.jpa.entity.StandingOrder;
 import de.jreichl.jpa.repository.StandingOrderRepository;
-import de.jreichl.service.exception.TransactionFailedException;
 import de.jreichl.service.interfaces.IStandingOrderService;
 import java.util.Date;
 import java.util.List;
@@ -41,7 +40,7 @@ public class StandingOrderTimer extends BaseTimer {
         for(StandingOrder o : orders) {
             try {
                 standingOrderService.handleStandingOrder(o);                
-            } catch (TransactionFailedException ex) {
+            } catch (Exception ex) {
                 logger.log(Level.SEVERE, "Failed to handle standing order with id=" + o.getId(), ex);
             }            
         }

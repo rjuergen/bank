@@ -8,13 +8,20 @@ import de.jreichl.jpa.entity.Account;
 import de.jreichl.jpa.entity.AccountTransaction;
 import de.jreichl.jpa.entity.Bank;
 import de.jreichl.jpa.entity.Credit;
+import de.jreichl.jpa.entity.Customer;
+import de.jreichl.jpa.entity.StandingOrder;
+import de.jreichl.jpa.entity.type.IntervalUnit;
 import de.jreichl.jpa.entity.type.TransactionType;
 import de.jreichl.jpa.repository.BankRepository;
 import de.jreichl.jpa.repository.CreditRepository;
+import de.jreichl.service.exception.TransactionFailedException;
 import de.jreichl.service.interfaces.ICreditService;
+import de.jreichl.service.interfaces.ICustomerService;
+import de.jreichl.service.interfaces.IStandingOrderService;
+import de.jreichl.service.interfaces.ITransactionService;
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.Calendar;
-import java.util.List;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
@@ -25,24 +32,26 @@ import javax.transaction.Transactional;
  */
 @RequestScoped
 public class CreditService extends BaseService implements ICreditService {
-    
+        
     @Inject
     private BankRepository bankRepo;
     
     @Inject
     private CreditRepository creditRepo;
     
+    @Inject
+    private IStandingOrderService standingOrderService;
+    
+    @Inject
+    private ICustomerService customerService;
+    
+    @Inject
+    private ITransactionService transactionService;
+    
     @Transactional
     @Override
-    public void updateInterestsToPay(Credit credit) {        
-        Bank bank = bankRepo.getBank();
-        List<AccountTransaction> transactions = credit.getTransactions();
-        long remaining = credit.getCredit();
-        for(AccountTransaction at : transactions) {            
-            if(bank.getCreditAccount().equals(at.getAccount()) && at.getType().equals(TransactionType.CREDIT))
-                remaining -= at.getAmount();
-        }
-        remaining += credit.getInterestToPay();
+    public void updateInterestsToPay(Credit credit) {
+        long remaining = getRemainingPayback(credit);
         if(remaining < 1) {
             credit.setPaybackComplete(true);            
         } else {
@@ -58,15 +67,63 @@ public class CreditService extends BaseService implements ICreditService {
         
         creditRepo.persist(credit);
     }
-
+    
     @Override
-    public Credit takeCredit(Account account, long amountInCent, java.util.Date creationDate) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public long getRemainingPayback(Credit credit) {
+        Bank bank = bankRepo.getBank();
+        long remaining = credit.getCredit();
+        for(AccountTransaction at : credit.getTransactions()) {            
+            if(bank.getCreditAccount().equals(at.getAccount()) && at.getType().equals(TransactionType.CREDIT))
+                remaining -= at.getAmount();
+        }
+        remaining += credit.getInterestToPay();
+        return remaining;
     }
 
+    @Transactional
     @Override
-    public Credit payback(Account fromAccount, Credit credit, long amountInCent) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Credit takeCredit(Account account, long amountInCent, int interestRateInPerTenThousand, java.util.Date creationDate) throws TransactionFailedException {
+        Credit c = new Credit();
+        c.setAccount(account);
+        c.setCreationDate(new Timestamp(creationDate.getTime()));
+        c.setCredit(amountInCent);
+        c.setInterestRate(interestRateInPerTenThousand);
+                
+        Customer customer = account.getOwner();
+        customer.addCredit(c);               
+        
+        creditRepo.persist(c);
+        customerService.persistCustomer(customer);
+        
+        // transfer credit to account
+        transactionService.transferCredit(c);
+        
+        return c;
+    }
+
+    @Transactional
+    @Override
+    public Credit payback(Credit credit, long amountInCent) throws TransactionFailedException {        
+        transactionService.transferPayback(credit, amountInCent);
+        return creditRepo.findById(credit.getId());
+    }
+
+    @Transactional
+    @Override
+    public StandingOrder updatePaybackStandingOrder(Account fromAccount, Credit credit, long monthlyAmountInCent) {
+        Bank bank = bankRepo.getBank();
+        credit = creditRepo.merge(credit);
+        if(credit.getStandingOrder() != null) {
+            credit.setStandingOrder(null);
+            standingOrderService.deleteStandingOrder(credit.getStandingOrder());
+        }
+        String description = String.format("Monthly standing order for credit with ID=%s (date of creation: %s)",
+                credit.getId().toString(), credit.getCreationDate().toString());
+        StandingOrder order = standingOrderService.createStandingOrder(credit.getAccount().getIban(),
+                bank.getCreditAccount().getIban(), monthlyAmountInCent, new java.util.Date(), 1, IntervalUnit.MONTHLY, description);
+        credit.setStandingOrder(order);
+        creditRepo.persist(credit);
+        return order;
     }
     
 }

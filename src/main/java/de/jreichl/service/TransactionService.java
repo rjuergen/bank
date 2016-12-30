@@ -4,22 +4,29 @@
  */
 package de.jreichl.service;
 
+import de.jreichl.common.Pair;
 import de.jreichl.jpa.entity.Account;
 import de.jreichl.jpa.entity.AccountTransaction;
+import de.jreichl.jpa.entity.Bank;
+import de.jreichl.jpa.entity.Credit;
 import de.jreichl.jpa.entity.StandingOrder;
 import de.jreichl.jpa.entity.type.TransactionType;
 import de.jreichl.jpa.repository.AccountRepository;
 import de.jreichl.jpa.repository.AccountTransactionRepository;
+import de.jreichl.jpa.repository.BankRepository;
+import de.jreichl.jpa.repository.CreditRepository;
 import de.jreichl.jpa.repository.StandingOrderRepository;
 import de.jreichl.service.exception.TransactionFailedException;
 import de.jreichl.service.interfaces.ITransactionService;
 import java.sql.Timestamp;
+import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.logging.Level;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.persistence.NoResultException;
 import javax.transaction.Transactional;
+import javax.transaction.Transactional.TxType;
 
 /**
  * Service to transfer money to different accounts
@@ -27,6 +34,8 @@ import javax.transaction.Transactional;
  */
 @RequestScoped
 public class TransactionService extends BaseService implements ITransactionService {   
+    
+    private static final DecimalFormat df = new DecimalFormat("###,##0.00");
     
     @Inject
     private AccountTransactionRepository accountTransactionRepo;
@@ -37,6 +46,12 @@ public class TransactionService extends BaseService implements ITransactionServi
     @Inject
     private StandingOrderRepository standingOrderRepo;
     
+    @Inject
+    private CreditRepository creditRepo;
+    
+    @Inject
+    private BankRepository bankRepo;
+    
     /**
      * method to transfer amount in cent from one account(fromIBAN) to another(toIBAN)
      * @param amountInCent amount in cent
@@ -46,7 +61,7 @@ public class TransactionService extends BaseService implements ITransactionServi
      * @return true if account transactions were successfully
      * @throws TransactionFailedException 
      */
-    @Transactional    
+    @Transactional(value = TxType.REQUIRED, rollbackOn = { TransactionFailedException.class })   
     @Override
     public boolean transfer(long amountInCent, String fromIBAN, String toIBAN, String description) throws TransactionFailedException {        
         // get current/transaction date
@@ -69,8 +84,9 @@ public class TransactionService extends BaseService implements ITransactionServi
                 throw new TransactionFailedException(nrex, String.format("Transaction failed! %s is not a valid IBAN", toIBAN), fromIBAN, toIBAN, currentDate, amountInCent);
             }
 
-            return transfer(amountInCent, fromAccount, toAccount, description);
-            
+            Pair<AccountTransaction, AccountTransaction> result = transfer(amountInCent, fromAccount, toAccount, description);
+            return result.getA() != null && result.getB() != null;
+                    
         } catch(TransactionFailedException ex) {
             throw ex;
         } catch(Exception ex) {
@@ -78,18 +94,24 @@ public class TransactionService extends BaseService implements ITransactionServi
         }
     }
     
-    @Transactional
+    @Transactional(value = TxType.REQUIRED, rollbackOn = { TransactionFailedException.class })
     @Override
-    public boolean transferStandingOrder(StandingOrder order, Timestamp newLastTransactionDate) throws TransactionFailedException {
+    public boolean transferStandingOrder(StandingOrder order, Timestamp newLastTransactionDate) throws TransactionFailedException {        
         order = standingOrderRepo.merge(order);
-        transfer(order.getAmount(), order.getFromAccount(), order.getToAccount(), order.getDescription());                        
+        Pair<AccountTransaction, AccountTransaction> result = transfer(order.getAmount(), order.getFromAccount(), order.getToAccount(), order.getDescription());  
+        if(order.getForCredit()!=null) {
+            Credit credit = creditRepo.merge(order.getForCredit());
+            credit.addTransaction(result.getA());
+            credit.addTransaction(result.getB());
+            creditRepo.persist(credit);
+        }
         order.setLastTransaction(newLastTransactionDate);
         standingOrderRepo.persist(order);
         logger.log(Level.INFO, String.format(" # %s standing order(id=%d) successfull handled!", order.getIntervalUnit().name() ,order.getId()) );
         return true;
     }    
 
-    @Transactional
+    @Transactional(value = TxType.REQUIRED, rollbackOn = { TransactionFailedException.class })
     @Override
     public boolean transferCashCredit(long amountInCent, String toIBAN, String description) throws TransactionFailedException {
         // get current/transaction date
@@ -105,7 +127,8 @@ public class TransactionService extends BaseService implements ITransactionServi
                 throw new TransactionFailedException(nrex, String.format("Transaction failed! %s is not a valid IBAN", toIBAN), null, toIBAN, currentDate, amountInCent);
             }
 
-            return transfer(amountInCent, null, toAccount, description);
+            Pair<AccountTransaction, AccountTransaction> result = transfer(amountInCent, null, toAccount, description);
+            return result.getB() != null;
             
         } catch(TransactionFailedException ex) {
             throw ex;
@@ -114,7 +137,7 @@ public class TransactionService extends BaseService implements ITransactionServi
         }
     }
 
-    @Transactional
+    @Transactional(value = TxType.REQUIRED, rollbackOn = { TransactionFailedException.class })
     @Override
     public boolean transferCashDebit(long amountInCent, String fromIBAN, String description) throws TransactionFailedException {
         // get current/transaction date
@@ -130,7 +153,8 @@ public class TransactionService extends BaseService implements ITransactionServi
                 throw new TransactionFailedException(nrex, String.format("Transaction failed! %s is not a valid IBAN", fromIBAN), fromIBAN, null, currentDate, amountInCent);
             }
 
-            return transfer(amountInCent, fromAccount, null, description);
+            Pair<AccountTransaction, AccountTransaction> result = transfer(amountInCent, fromAccount, null, description);
+            return result.getA() != null;
             
         } catch(TransactionFailedException ex) {
             throw ex;
@@ -139,15 +163,21 @@ public class TransactionService extends BaseService implements ITransactionServi
         }
     }
     
-    @Transactional
-    private boolean transfer(long amountInCent, Account fromAccount, Account toAccount, String description) throws TransactionFailedException {
+    @Transactional(value = TxType.REQUIRED, rollbackOn = { TransactionFailedException.class })
+    private Pair<AccountTransaction, AccountTransaction> transfer(long amountInCent, Account fromAccount, Account toAccount, String description) throws TransactionFailedException {
         Date currentDate = new Date();
-        
+        AccountTransaction t1 = null;
+        AccountTransaction t2 = null;
         try {
         
             if(fromAccount != null) {
                 fromAccount = accountRepo.merge(fromAccount);
-                AccountTransaction t1 = new AccountTransaction(fromAccount, TransactionType.DEBIT, amountInCent, new java.sql.Timestamp(currentDate.getTime()));        
+                long balance = fromAccount.getBalance();
+                if(balance - amountInCent < 0) {
+                    String msg = String.format("Transaktion abgebrochen! Nicht genügend Geld auf dem Konto mit der IBAN %s vorhanden.", fromAccount.getIban());                    
+                    throw new TransactionFailedException(null, msg,  fromAccount.getIban(), toAccount.getIban(), currentDate, amountInCent);
+                }
+                t1 = new AccountTransaction(fromAccount, TransactionType.DEBIT, amountInCent, new java.sql.Timestamp(currentDate.getTime()));        
                 t1.setDescription(description);    
                 fromAccount.addTransaction(t1);
                 accountTransactionRepo.persist(t1);
@@ -156,19 +186,47 @@ public class TransactionService extends BaseService implements ITransactionServi
             
             if(toAccount != null) {
                 toAccount = accountRepo.merge(toAccount);
-                AccountTransaction t2 = new AccountTransaction(toAccount, TransactionType.CREDIT, amountInCent, new java.sql.Timestamp(currentDate.getTime()));
+                t2 = new AccountTransaction(toAccount, TransactionType.CREDIT, amountInCent, new java.sql.Timestamp(currentDate.getTime()));
                 t2.setDescription(description);
                 toAccount.addTransaction(t2);
                 accountTransactionRepo.persist(t2);
                 accountRepo.persist(toAccount);
             }
             
+        } catch(TransactionFailedException ex) {
+            throw ex;
         } catch(Exception ex) {
             throw new TransactionFailedException(ex, "Transaction failed!", fromAccount!=null ? fromAccount.getIban() : null,
                     toAccount!=null ? toAccount.getIban() : null, currentDate, amountInCent);
         }
-        
-        return true;
+        return new Pair<>(t1, t2);
+    }
+
+    @Transactional(value = TxType.REQUIRED, rollbackOn = { TransactionFailedException.class })
+    @Override
+    public boolean transferCredit(Credit credit) throws TransactionFailedException {
+        credit = creditRepo.merge(credit);
+        Bank bank = bankRepo.getBank();
+        String description = String.format("New credit about %s with ID=%s (date of creation: %s)",
+                credit.getCreditFormatted(), credit.getId().toString(), credit.getCreationDate().toString());
+        Pair<AccountTransaction, AccountTransaction> result = transfer(credit.getCredit(), bank.getCreditAccount(), credit.getAccount(), description);         
+        credit.addTransaction(result.getB());
+        creditRepo.persist(credit);
+        return result.getA() != null && result.getB() != null;
+    }
+    
+    @Transactional(value = TxType.REQUIRED, rollbackOn = { TransactionFailedException.class })
+    @Override
+    public boolean transferPayback(Credit credit, long amountInCent) throws TransactionFailedException {
+        credit = creditRepo.merge(credit);
+        Bank bank = bankRepo.getBank();        
+        String amountFormatted = df.format((double)amountInCent / 100) + " €";        
+        String description = String.format("Credit payback about %s. Credit-ID=%s (date of creation: %s)",
+                amountFormatted, credit.getId().toString(), credit.getCreationDate().toString());
+        Pair<AccountTransaction, AccountTransaction> result = transfer(amountInCent, credit.getAccount(), bank.getCreditAccount(), description);         
+        credit.addTransaction(result.getA());
+        creditRepo.persist(credit);
+        return result.getA() != null && result.getB() != null;
     }
         
 }

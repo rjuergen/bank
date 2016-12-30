@@ -78,6 +78,15 @@ public abstract class Customer extends SingleEntity implements Serializable {
     }    
         
     public abstract String getName();
+
+    public void addCredit(Credit c) {
+        credits.add(c);
+        c.setCustomer(this);
+    }
    
+    public void addCreditworthiness(Creditworthiness c) {
+        creditworthinesses.add(c);
+        c.setCustomer(this);
+    }
   
 }

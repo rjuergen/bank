@@ -10,6 +10,7 @@ import java.sql.Timestamp;
 import java.text.DecimalFormat;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 /**
  *
@@ -45,6 +46,12 @@ public class StandingOrder extends SingleEntity implements Serializable {
     
     private String description;
     
+    /**
+     * if not null it is a standing order for credit payback
+     */
+    @OneToOne    
+    private Credit forCredit;
+    
     public StandingOrder() {
         
     }
@@ -57,6 +64,14 @@ public class StandingOrder extends SingleEntity implements Serializable {
         this.description = description;
         this.startDate = startDate;
     }
+
+    public Credit getForCredit() {
+        return forCredit;
+    }
+
+    public void setForCredit(Credit forCredit) {
+        this.forCredit = forCredit;
+    }    
     
     public String getDescription() {
         return description;
