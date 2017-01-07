@@ -2,28 +2,32 @@
  * License: Free to use. It's just a small project.
  * Feel free and use everything you want  * 
  */
-package de.jreichl.service;
+package de.jreichl.service.test;
 
 import de.jreichl.common.DateTimeUtil;
 import de.jreichl.jpa.entity.Creditworthiness;
 import de.jreichl.jpa.entity.Customer;
 import de.jreichl.jpa.repository.CreditworthinessRepository;
+import de.jreichl.service.BaseService;
 import de.jreichl.service.interfaces.ICreditworthinessService;
 import de.jreichl.service.interfaces.ICustomerService;
+import java.util.Random;
 import java.util.logging.Level;
 import javax.enterprise.context.RequestScoped;
+import javax.enterprise.inject.Alternative;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 import net.poschinger.retailerposchinger.service.contractor.CreditWorthiness;
-
-
 
 /**
  *
  * @author Jürgen Reichl
  */
+@Alternative
 @RequestScoped
-public class CreditworthinessService extends BaseService implements ICreditworthinessService {
+public class CreditworthinessTestService extends BaseService implements ICreditworthinessService {
+
+    private static final Random random = new Random(System.currentTimeMillis());
     
     @Inject
     private CreditworthinessRepository creditworthinessRepo;
@@ -33,7 +37,8 @@ public class CreditworthinessService extends BaseService implements ICreditworth
     
     @Transactional
     @Override
-    public Creditworthiness requestCreditworthiness(Customer customer) {        
+    public Creditworthiness requestCreditworthiness(Customer customer) {    
+        logger.log(Level.INFO, "runngin test version of requestCreditworthiness.");
         customer = customerService.findCustomer(customer);
         for (Creditworthiness c : customer.getCreditworthinesses()) {
             if(DateTimeUtil.isToday(c.getCreationDate())) {      
@@ -48,36 +53,24 @@ public class CreditworthinessService extends BaseService implements ICreditworth
         CreditWorthiness extCreditWorthiness = requestCreditworthinessFromRetailerPoschinger(customer);
         
         if(extCreditWorthiness!=null)
-            logger.log(Level.INFO, "Received CreditWorthiness from RetailerPoschinger: "+extCreditWorthiness.name());
+            logger.log(Level.INFO, "Received CreditWorthiness from RetailerPoschinger: {0}", extCreditWorthiness.name());
         else
             logger.log(Level.WARNING, "No CreditWorthiness from RetailerPoschinger received!");
         // TODO add logic
         
-        Creditworthiness c = creditworthinessRepo.create(customer, 100000);        
+        Creditworthiness c = creditworthinessRepo.create(customer, 500000);        
         
         
         
         return c;        
-    }    
-    
+    }
+
     @Override
     public CreditWorthiness requestCreditworthinessFromRetailerPoschinger(Customer customer) {
-        /*
-        try{
-            CreditworthinessServiceService poschingerService = new CreditworthinessServiceService();
-            net.poschinger.retailerposchinger.service.contractor.CreditworthinessService port = poschingerService.getCreditworthinessServicePort();
-            CreditWorthiness c = port.getCreditWorthiness(customer.getFirstName(), customer.getLastName(), 
-                    customer.getAddress().getStreet()+" "+customer.getAddress().getHouseNr(), 
-                    customer.getAddress().getZip(), customer.getAddress().getCountry());
-            if(c != null) {
-                logger.log(Level.INFO, "Received CreditWorthiness from poschinger = "+c.name());
-                return c;
-            }
-        } catch(Exception ex) {
-            logger.log(Level.SEVERE, "Failed to get CreditworthinessServicePort", ex);
-        }        
-        */
-        return null;
-    }
-    
+        logger.log(Level.INFO, "runngin test version of requestCreditworthinessFromRetailerPoschinger.");
+        // return a random value
+        CreditWorthiness[] values = CreditWorthiness.values();
+        return values[random.nextInt(values.length)];        
+    }    
+
 }

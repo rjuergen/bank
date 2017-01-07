@@ -132,4 +132,14 @@ public class StandingOrderModel extends BaseService implements Serializable {
         this.message = message;
     }
     
+    void clear() {
+        iban = null;
+        amount = "0,00";
+        startDate = null;
+        interval = 1;
+        unit = IntervalUnit.MONTHLY;
+        description = null;
+        message = null;
+    }
+    
 }

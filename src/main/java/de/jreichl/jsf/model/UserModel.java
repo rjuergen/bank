@@ -37,6 +37,13 @@ public class UserModel extends BaseService implements Serializable {
     @Inject
     private IAccountService accountService;
     
+    @Inject
+    private CreditModel creditModel;
+    @Inject
+    private StandingOrderModel standingOrderModel;
+    @Inject
+    private TransactionModel transactionModel;
+    
     public boolean hasActiveUser() {
         return currentAccount != null;
     }
@@ -58,6 +65,11 @@ public class UserModel extends BaseService implements Serializable {
     
     public void logout() {
         currentAccount = null;
+        homeTitel = "";   
+        message = null;
+        creditModel.clear();
+        standingOrderModel.clear();
+        transactionModel.clear();
     }
 
     public String getAccountNumber() {
@@ -70,9 +82,7 @@ public class UserModel extends BaseService implements Serializable {
 
     public String getMessage() {
         return message;
-    }
-
-    
+    }    
     
     public String getPasswort() {
         return passwort;

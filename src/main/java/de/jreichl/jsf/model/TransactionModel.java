@@ -108,6 +108,13 @@ public class TransactionModel extends BaseService implements Serializable {
         amount = "0,00";
         description = null;
         userModel.refresh();
+    }    
+    
+    void clear() {
+        iban = null;
+        amount = "0,00";
+        description = null;
+        message = null;
     }
     
 }

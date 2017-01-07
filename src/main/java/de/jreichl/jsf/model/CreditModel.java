@@ -56,7 +56,7 @@ public class CreditModel extends BaseService implements Serializable {
     @Inject
     private ICreditworthinessService creditworthinessService;
     
-    public List<Credit> getCredits() {
+    public List<Credit> getCredits() {        
         if(credits == null) {
             credits = new ArrayList<>();
             for(Credit c : userModel.getCurrentUser().getCredits()) {
@@ -73,6 +73,7 @@ public class CreditModel extends BaseService implements Serializable {
     }
     
     public void requestCreditworthiness() {
+        logger.log(Level.INFO, "CreditworthinessService: "+creditworthinessService.getClass().getName());
         if(creditworthiness == null)
             creditworthiness = creditworthinessService.requestCreditworthiness(userModel.getCurrentUser());
     }
@@ -179,6 +180,16 @@ public class CreditModel extends BaseService implements Serializable {
         if (c.equals(selectedCredit))
             return " > ";
         return "";
+    }
+    
+    void clear() {
+        message = null;
+        credits = null;
+        creditworthiness = null;
+        creditAmount = "0,00";
+        selectedCredit = null;
+        paybackAmount = "0,00";
+        monthlyPaybackAmount = "0,00";
     }
         
 }
