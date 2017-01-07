@@ -37,7 +37,7 @@ public class CreditService extends BaseService implements ICreditService {
     private BankRepository bankRepo;
     
     @Inject
-    private CreditRepository creditRepo;
+    private CreditRepository creditRepo;    
     
     @Inject
     private IStandingOrderService standingOrderService;
@@ -70,10 +70,9 @@ public class CreditService extends BaseService implements ICreditService {
     
     @Override
     public long getRemainingPayback(Credit credit) {
-        Bank bank = bankRepo.getBank();
         long remaining = credit.getCredit();
         for(AccountTransaction at : credit.getTransactions()) {            
-            if(bank.getCreditAccount().equals(at.getAccount()) && at.getType().equals(TransactionType.CREDIT))
+            if(at.getType().equals(TransactionType.DEBIT))
                 remaining -= at.getAmount();
         }
         remaining += credit.getInterestToPay();
@@ -82,7 +81,7 @@ public class CreditService extends BaseService implements ICreditService {
 
     @Transactional
     @Override
-    public Credit takeCredit(Account account, long amountInCent, int interestRateInPerTenThousand, java.util.Date creationDate) throws TransactionFailedException {
+    public Credit takeCredit(Account account, long amountInCent, int interestRateInPerTenThousand, java.util.Date creationDate) throws TransactionFailedException {        
         Credit c = new Credit();
         c.setAccount(account);
         c.setCreationDate(new Timestamp(creationDate.getTime()));
@@ -90,7 +89,7 @@ public class CreditService extends BaseService implements ICreditService {
         c.setInterestRate(interestRateInPerTenThousand);
                 
         Customer customer = customerService.findCustomer(account.getOwner());
-        customer.addCredit(c);               
+        customer.addCredit(c);                              
         
         creditRepo.persist(c);
         customerService.persistCustomer(customer);
@@ -105,7 +104,7 @@ public class CreditService extends BaseService implements ICreditService {
     @Override
     public Credit payback(Credit credit, long amountInCent) throws TransactionFailedException {        
         transactionService.transferPayback(credit, amountInCent);
-        return creditRepo.findById(credit.getId());
+        return credit;
     }
 
     @Transactional

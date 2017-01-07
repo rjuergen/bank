@@ -33,7 +33,7 @@ public class CreditModel extends BaseService implements Serializable {
     /**
      * interest rate (Zinssatz) in ‱ (per ten thousand | 123‱ = 1.23% = 0.0123)
      */
-    private int interestRate = 215;
+    private final int interestRate = 215;
     
     private static final DecimalFormat df = new DecimalFormat("###,##0.00");
     private String message;    
@@ -67,7 +67,7 @@ public class CreditModel extends BaseService implements Serializable {
         return credits;
     }    
     
-    public String getPaybackAmount(Credit c) {
+    public String getRemainingPayback(Credit c) {
         long payback = creditService.getRemainingPayback(c);        
         return df.format((double)payback / 100) + " €";
     }
@@ -119,19 +119,33 @@ public class CreditModel extends BaseService implements Serializable {
     }
     
     public void takeCredit() {
+        message = null;
         try {
-            Credit c = creditService.takeCredit(userModel.getCurrentAccount(), getAmountInCent(creditAmount), interestRate, new Date());
-            credits.add(c);
-        } catch (Exception ex) {
-            logger.log(Level.SEVERE, "Failed to transfer credit to account", ex);
-            message = "Kredit überweisen fehlgeschlagen!";
+            long amount = getAmountInCent(creditAmount);
+        
+            if(amount > creditworthiness.getPossibleCredit()) {
+                message = "Kredit nicht freigegeben! Kredit ist zu hoch.";
+                return;
+            }
+            try {
+                Credit c = creditService.takeCredit(userModel.getCurrentAccount(), getAmountInCent(creditAmount), interestRate, new Date());
+                userModel.refresh();
+                credits = null;                
+            } catch (Exception ex) {
+                logger.log(Level.SEVERE, "Failed to transfer credit to account", ex);
+                message = "Kredit überweisen fehlgeschlagen!";
+            }
+        } catch (ParseException ex) {
+            logger.log(Level.SEVERE, "Failed to cast credit!", ex);
+            message = "Falsches Format des Kreditbetrags.";
         }
     }
     
     public void paybackCredit() {
         try {
-            Credit c = creditService.payback(selectedCredit, getAmountInCent(paybackAmount));
-            credits.set(credits.indexOf(c), c);
+            Credit c = creditService.payback(selectedCredit, getAmountInCent(paybackAmount));   
+            userModel.refresh();
+            credits = null;           
         } catch (Exception ex) {
             logger.log(Level.SEVERE, "Failed to transfer credit payback to account", ex);
             message = "Kreditrückzahlung fehlgeschlagen!";
@@ -143,6 +157,7 @@ public class CreditModel extends BaseService implements Serializable {
             StandingOrder order = creditService.updatePaybackStandingOrder(userModel.getCurrentAccount(), selectedCredit, getAmountInCent(monthlyPaybackAmount));
             if(order != null)
                 message = "Monatlicher Dauerauftrag für Kreditszurückzahlung erfolgreich erstellt.";
+            userModel.refresh();
         } catch (ParseException ex) {
             logger.log(Level.SEVERE, "Failed to cast monthly payback to long!", ex);
             message = "Falsches Format des monatlichen Betrags! Dauerauftrag für Kredit konnte nicht erstellt werden.";
@@ -160,4 +175,10 @@ public class CreditModel extends BaseService implements Serializable {
         paybackAmount = "0,00";        
     }
     
+    public String getSelectedSign(Credit c) {
+        if (c.equals(selectedCredit))
+            return " > ";
+        return "";
+    }
+        
 }

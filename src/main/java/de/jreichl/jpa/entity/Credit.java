@@ -16,6 +16,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 /**
  *
@@ -41,7 +43,8 @@ public class Credit extends SingleEntity implements Serializable {
      */
     private long credit;    
     
-    @OneToMany
+    @OneToMany()
+    @LazyCollection(LazyCollectionOption.FALSE)
     private List<AccountTransaction> transactions = new ArrayList<>();
     
     /**
@@ -131,6 +134,10 @@ public class Credit extends SingleEntity implements Serializable {
         this.interestRate = interestRate;
     }
 
+    public String getInterestRateFormatted() {
+        return df.format((double)interestRate / 100) + " %";
+    }
+    
     public List<AccountTransaction> getTransactions() {
         return Collections.unmodifiableList(transactions);
     }

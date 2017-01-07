@@ -11,24 +11,28 @@
         <ui:composition template="./../../WEB-INF/BankReichlExternalTemplate.xhtml">
 
             <ui:define name="content">
-                <b:panelGrid columns="3" smallScreen="9">
+                <b:panelGrid columns="4" smallScreen="12">
                     <b:column>
-                        <h3>Kredith&ouml;he anfragen</h3>
+                        <h4>Kredith&ouml;he anfragen</h4>
                         <b:commandButton action="#{creditModel.requestCreditworthiness()}" value="M&ouml;glichen Kredit anfragen" style="width:250px;height:40px"/>      
                         <h:outputText value="M&ouml;glicher Kredit:"/>
+                        <br/>
                         <h:outputText value="#{creditModel.creditworthiness.possibleCreditFormatted} mit einem Zinssatz von #{creditModel.interestRate}" rendered="#{creditModel.creditworthiness != null}"/>
                         
-                        <h3>Kredit aufnehmen</h3>
-                        <h:outputText value="Betrag:"/>
-                        <b:inputText value="#{creditModel.creditAmount}">
-                            <f:facet name="prepend">
-                                <h:outputText value="€" />
-                            </f:facet>
-                        </b:inputText>
-                        <b:commandButton action="#{creditModel.takeCredit()}" value="Kredit aufnehmen" style="width:250px;height:40px"/>
+                        <h:form rendered="#{creditModel.creditworthiness != null}">
+                            <h4>Kredit aufnehmen</h4>
+                            <h:outputText value="Betrag:"/>
+                            <b:inputText value="#{creditModel.creditAmount}">
+                                <f:facet name="prepend">
+                                    <h:outputText value="€" />
+                                </f:facet>
+                            </b:inputText>
+                            <b:commandButton action="#{creditModel.takeCredit()}" value="Kredit aufnehmen" style="width:250px;height:40px"/>
+                        </h:form>
                     </b:column>
+                    <b:column></b:column>
                     <b:column rendered="#{creditModel.selectedCredit != null}">
-                        <h3>Kredit zurückzahlen</h3>
+                        <h4>Kredit zurückzahlen</h4>
                         <h:outputText value="Betrag:"/>
                         <b:inputText value="#{creditModel.paybackAmount}">
                             <f:facet name="prepend">
@@ -38,7 +42,7 @@
                         <b:commandButton action="#{creditModel.paybackCredit()}" value="Kredit zur&uuml;ckzahlen" style="width:250px;height:40px"/>
                     </b:column>
                     <b:column rendered="#{creditModel.selectedCredit != null}">
-                        <h3>Kredit per Dauerauftrag monatlich zurückzahlen</h3>
+                        <h4>Kredit per Dauerauftrag monatlich zurückzahlen</h4>
                         <h:outputText value="Betrag pro Monat:"/>
                         <b:inputText value="#{creditModel.monthlyPaybackAmount}">
                             <f:facet name="prepend">
@@ -53,7 +57,11 @@
                 
                 <b:panelGrid columns="1">
                     <br/><br/>
-                    <b:dataTable var="c" value="#{creditModel.credits}">
+                    <b:dataTable var="c" value="#{creditModel.credits}" >
+                        <b:dataTableColumn style="width:50px">
+                            <f:facet name="header"> # </f:facet>                            
+                            <h:outputText value="#{creditModel.getSelectedSign(c)}" style="font-weight:bold;font-size:20px"/>
+                        </b:dataTableColumn>
                         <b:dataTableColumn>
                             <f:facet name="header">Datum</f:facet>                            
                             <h:outputText value="#{c.creationDate}"/>
@@ -64,11 +72,11 @@
                         </b:dataTableColumn>
                         <b:dataTableColumn>
                             <f:facet name="header">Zinssatz</f:facet>
-                            <h:outputText value="#{c.interestRate}"/>
+                            <h:outputText value="#{c.interestRateFormatted}"/>
                         </b:dataTableColumn>                    
                         <b:dataTableColumn>
                             <f:facet name="header">Zurückzuzahlender Betrag</f:facet>                            
-                            <h:outputText value="#{creditModel.getPaybackAmount(c)}"/>
+                            <h:outputText value="#{creditModel.getRemainingPayback(c)}"/>
                         </b:dataTableColumn>     
                         <b:dataTableColumn>
                             <f:facet name="header">Aktionen</f:facet>

@@ -14,6 +14,7 @@ import java.util.Calendar;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
+import net.poschinger.retailerposchinger.service.contractor.CreditWorthiness;
 
 
 
@@ -47,9 +48,13 @@ public class CreditworthinessService extends BaseService implements ICreditworth
          
         // no creditworthiness for today.. request a new one
         
-        Creditworthiness c = createCreditworthiness(customer, 100000);        
+        CreditWorthiness extCreditWorthiness = requestCreditworthinessFromRetailerPoschinger(customer);
         
         // TODO add logic
+        
+        Creditworthiness c = createCreditworthiness(customer, 100000);        
+        
+        
         
         return c;        
     }
@@ -61,7 +66,7 @@ public class CreditworthinessService extends BaseService implements ICreditworth
     }
     
     @Override
-    public Creditworthiness requestCreditworthinessFromRetailerPoschinger(Customer customer) {
+    public CreditWorthiness requestCreditworthinessFromRetailerPoschinger(Customer customer) {
         /*
         try{
             CreditworthinessServiceService poschingerService = new CreditworthinessServiceService();

@@ -10,9 +10,12 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.OneToMany;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 /**
  *
@@ -27,13 +30,15 @@ public abstract class Customer extends SingleEntity implements Serializable {
     @Embedded
     protected Address address;
 
-    @OneToMany(mappedBy = "owner")
+    @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER)
     private List<Account> accounts = new ArrayList<>();
 
     @OneToMany(mappedBy = "customer")
+    @LazyCollection(LazyCollectionOption.FALSE)
     private List<Credit> credits = new ArrayList<>();
         
     @OneToMany(mappedBy = "customer")
+    @LazyCollection(LazyCollectionOption.FALSE)
     private List<Creditworthiness> creditworthinesses = new ArrayList<>();
     
     public Customer() {
