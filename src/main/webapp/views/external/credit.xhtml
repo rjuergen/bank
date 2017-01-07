@@ -17,7 +17,7 @@
                         <b:commandButton action="#{creditModel.requestCreditworthiness()}" value="M&ouml;glichen Kredit anfragen" style="width:250px;height:40px"/>      
                         <h:outputText value="M&ouml;glicher Kredit:"/>
                         <br/>
-                        <h:outputText value="#{creditModel.creditworthiness.possibleCreditFormatted} mit einem Zinssatz von #{creditModel.interestRate}" rendered="#{creditModel.creditworthiness != null}"/>
+                        <h:outputText value="#{creditModel.possibleAmount} mit einem Zinssatz von #{creditModel.interestRate}" rendered="#{creditModel.creditworthiness != null}"/>
                         
                         <h:form rendered="#{creditModel.creditworthiness != null}">
                             <h4>Kredit aufnehmen</h4>

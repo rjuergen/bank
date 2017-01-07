@@ -4,6 +4,7 @@
  */
 package de.jreichl.jsf.model;
 
+import de.jreichl.common.DateTimeUtil;
 import de.jreichl.jpa.entity.Credit;
 import de.jreichl.jpa.entity.Creditworthiness;
 import de.jreichl.jpa.entity.StandingOrder;
@@ -40,6 +41,7 @@ public class CreditModel extends BaseService implements Serializable {
     
     private List<Credit> credits;
     private Creditworthiness creditworthiness;
+    private long possibleAmount;
     
     private String creditAmount = "0,00";
     
@@ -72,10 +74,22 @@ public class CreditModel extends BaseService implements Serializable {
         return df.format((double)payback / 100) + " €";
     }
     
-    public void requestCreditworthiness() {
-        logger.log(Level.INFO, "CreditworthinessService: "+creditworthinessService.getClass().getName());
-        if(creditworthiness == null)
-            creditworthiness = creditworthinessService.requestCreditworthiness(userModel.getCurrentUser());
+    public void requestCreditworthiness() {        
+        if(creditworthiness == null) {
+            creditworthiness = creditworthinessService.requestCreditworthiness(userModel.getCurrentUser());            
+        }
+        refreshPossibleAmount();
+    }
+    
+    private void refreshPossibleAmount() {
+        if(creditworthiness != null) {
+            possibleAmount = creditworthiness.getPossibleCredit();
+            for(Credit c : credits) {
+                if(DateTimeUtil.isToday(c.getCreationDate()))
+                    possibleAmount -= c.getCredit();
+            }
+        } else
+            possibleAmount = 0;
     }
 
     public String getMessage() {
@@ -122,9 +136,8 @@ public class CreditModel extends BaseService implements Serializable {
     public void takeCredit() {
         message = null;
         try {
-            long amount = getAmountInCent(creditAmount);
-        
-            if(amount > creditworthiness.getPossibleCredit()) {
+            long amount = getAmountInCent(creditAmount);            
+            if(amount > possibleAmount) {
                 message = "Kredit nicht freigegeben! Kredit ist zu hoch.";
                 return;
             }
@@ -140,7 +153,12 @@ public class CreditModel extends BaseService implements Serializable {
             logger.log(Level.SEVERE, "Failed to cast credit!", ex);
             message = "Falsches Format des Kreditbetrags.";
         }
+        refreshPossibleAmount();
     }
+
+    public String getPossibleAmount() {
+        return df.format((double)possibleAmount / 100) + " €";
+    }        
     
     public void paybackCredit() {
         try {
