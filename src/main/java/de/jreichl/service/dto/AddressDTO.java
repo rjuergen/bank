@@ -14,35 +14,13 @@ public class AddressDTO implements Serializable {
     private static final long serialVersionUID = 1L;
     
     
-    private String street;
-    
-    private String houseNr;
-    
-    private String city;
-    
-    private String zip;
-    
-    private String county;
-    
+    private String street;    
+    private String houseNr;    
+    private String city;    
+    private String zip;    
+    private String county;    
     private String country;
 
-    public AddressDTO(String street, String houseNr, String zip, String city, String county, String country) {
-        this(street, houseNr, zip, city);
-        this.county = county;
-        this.country = country;
-    }
-    
-    public AddressDTO(String street, String houseNr, String zip, String city) {
-        this.street = street;
-        this.houseNr = houseNr;
-        this.zip = zip;
-        this.city = city;
-    }
-    
-    public AddressDTO() {
-        
-    }
-    
     public String getStreet() {
         return street;
     }
@@ -90,6 +68,8 @@ public class AddressDTO implements Serializable {
     public void setCountry(String country) {
         this.country = country;
     }
+    
+  
     
     
     

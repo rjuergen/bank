@@ -20,7 +20,7 @@ public class PrivateCustomerDTO implements Serializable {
     private String lastName;
     private Gender gender;
     private Date dateOfBirth;
-    private AddressDTO address;
+    private AddressDTO address = new AddressDTO();
 
     public boolean isNew() {
         return id==null;

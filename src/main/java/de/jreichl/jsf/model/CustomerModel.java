@@ -46,7 +46,6 @@ public class CustomerModel extends BaseService implements Serializable {
     
     private PrivateCustomerDTO privateCustomer = new PrivateCustomerDTO();     
     private CompanyCustomerDTO companyCustomer = new CompanyCustomerDTO();
-    private AddressDTO address = new AddressDTO();
         
     public Set<Customer> getCustomers() {
         if(customers == null) {
@@ -57,6 +56,7 @@ public class CustomerModel extends BaseService implements Serializable {
     
     public void editCustomer(Customer c) {
         clear();
+        AddressDTO address;
         if(c instanceof PrivateCustomer) {
             activeTab = 0;
             PrivateCustomer pc = (PrivateCustomer)c;
@@ -65,13 +65,14 @@ public class CustomerModel extends BaseService implements Serializable {
             privateCustomer.setGender(pc.getGender());
             privateCustomer.setId(pc.getId());
             privateCustomer.setLastName(pc.getLastName());
-            
-        } else if(c instanceof CompanyCustomer) {
+            address = privateCustomer.getAddress();
+        } else {
             activeTab = 1;
             CompanyCustomer cc = (CompanyCustomer)c;
             companyCustomer.setDateOfCreation(cc.getDateOfCreation());
             companyCustomer.setId(cc.getId());
             companyCustomer.setName(cc.getName());
+            address = companyCustomer.getAddress();
         }   
         address.setCity(c.getAddress().getCity());
         address.setCountry(c.getAddress().getCountry());
@@ -88,11 +89,9 @@ public class CustomerModel extends BaseService implements Serializable {
     
     public void save() {        
         Customer newOne = null;
-        if(activeTab == 0) {            
-            privateCustomer.setAddress(address);
+        if(activeTab == 0) {
             newOne = customerService.updatePrivateCustomer(privateCustomer);
         } else if(companyCustomer != null) {
-            companyCustomer.setAddress(address);
             newOne = customerService.updateCompanyCustomer(companyCustomer);
         }               
         customers.add(newOne);
@@ -102,7 +101,6 @@ public class CustomerModel extends BaseService implements Serializable {
     public void clear() {
         privateCustomer = new PrivateCustomerDTO();    
         companyCustomer = new CompanyCustomerDTO();
-        address = new AddressDTO();
     }
     
     public PrivateCustomerDTO getPrivateCustomer() {
@@ -120,14 +118,6 @@ public class CustomerModel extends BaseService implements Serializable {
     public void setCompanyCustomer(CompanyCustomerDTO companyCustomer) {
         this.companyCustomer = companyCustomer;
     }
-
-    public AddressDTO getAddress() {
-        return address;
-    }
-
-    public void setAddress(AddressDTO address) {
-        this.address = address;
-    }    
 
     public int getActiveTab() {
         return activeTab;

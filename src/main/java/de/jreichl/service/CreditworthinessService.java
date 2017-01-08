@@ -7,6 +7,7 @@ package de.jreichl.service;
 import de.jreichl.common.DateTimeUtil;
 import de.jreichl.jpa.entity.Creditworthiness;
 import de.jreichl.jpa.entity.Customer;
+import de.jreichl.jpa.entity.PrivateCustomer;
 import de.jreichl.jpa.repository.CreditworthinessRepository;
 import de.jreichl.service.interfaces.ICreditworthinessService;
 import de.jreichl.service.interfaces.ICustomerService;
@@ -15,6 +16,7 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 import net.poschinger.retailerposchinger.service.contractor.CreditWorthiness;
+import net.poschinger.retailerposchinger.service.contractor.CreditworthinessServiceService;
 
 
 
@@ -62,13 +64,15 @@ public class CreditworthinessService extends BaseService implements ICreditworth
     
     @Override
     public CreditWorthiness requestCreditworthinessFromRetailerPoschinger(Customer customer) {
-        /*
+        if(!(customer instanceof PrivateCustomer))
+            return CreditWorthiness.NODATA;
+        PrivateCustomer pc = (PrivateCustomer) customer;
         try{
             CreditworthinessServiceService poschingerService = new CreditworthinessServiceService();
             net.poschinger.retailerposchinger.service.contractor.CreditworthinessService port = poschingerService.getCreditworthinessServicePort();
-            CreditWorthiness c = port.getCreditWorthiness(customer.getFirstName(), customer.getLastName(), 
-                    customer.getAddress().getStreet()+" "+customer.getAddress().getHouseNr(), 
-                    customer.getAddress().getZip(), customer.getAddress().getCountry());
+            CreditWorthiness c = port.getCreditWorthiness(pc.getFirstName(), pc.getLastName(), 
+                    pc.getAddress().getStreet()+" "+pc.getAddress().getHouseNr(), 
+                    pc.getAddress().getZip(), pc.getAddress().getCountry());
             if(c != null) {
                 logger.log(Level.INFO, "Received CreditWorthiness from poschinger = "+c.name());
                 return c;
@@ -76,8 +80,8 @@ public class CreditworthinessService extends BaseService implements ICreditworth
         } catch(Exception ex) {
             logger.log(Level.SEVERE, "Failed to get CreditworthinessServicePort", ex);
         }        
-        */
-        return null;
+        
+        return CreditWorthiness.NODATA;
     }
     
 }

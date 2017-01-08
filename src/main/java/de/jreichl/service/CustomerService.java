@@ -37,7 +37,7 @@ public class CustomerService extends BaseService implements ICustomerService {
     @Override
     public PrivateCustomer updatePrivateCustomer(PrivateCustomerDTO dto) {
         PrivateCustomer c;
-        if(dto.isNew())
+        if(dto.isNew()) 
             c = new PrivateCustomer();
         else
             c = privateCustomerRepo.findById(dto.getId());
@@ -45,7 +45,7 @@ public class CustomerService extends BaseService implements ICustomerService {
         c.setFirstName(dto.getFirstName());
         c.setLastName(dto.getLastName());
         c.setGender(dto.getGender());        
-        c.setDateOfBirth(new java.sql.Date(dto.getDateOfBirth().getTime()));
+        c.setDateOfBirth(new java.sql.Date(dto.getDateOfBirth().getTime()));             
         
         Address a = createAddress(dto.getAddress());
         c.setAddress(a);
@@ -74,7 +74,7 @@ public class CustomerService extends BaseService implements ICustomerService {
         
         return c;
     }    
-    
+        
     @Transactional
     private Address createAddress(AddressDTO dto) {
         Address a = new Address();

@@ -17,7 +17,8 @@ public class CompanyCustomerDTO implements Serializable {
     private Long id = null;
     private String name;
     private Date dateOfCreation;               
-    private AddressDTO address;
+    private AddressDTO address = new AddressDTO();
+    
     
     public boolean isNew() {
         return id==null;
@@ -29,9 +30,7 @@ public class CompanyCustomerDTO implements Serializable {
 
     public void setAddress(AddressDTO address) {
         this.address = address;
-    }
-    
-    
+    }    
     
     public Long getId() {
         return id;

@@ -30,7 +30,7 @@ public class TransactionWS implements ITransactionWS {
             result = transactionService.transfer(amountInCent, fromIBAN, toIBAN, description);
         } catch (TransactionFailedException ex) { 
             throw ex;
-        } catch (Exception ex) {
+        } catch (Exception ex) {            
             throw new TransactionFailedException(ex, "Unexpected Error! Transaction failed. Check if it's the right IBAN and there is enough money on your account.", fromIBAN, toIBAN, new Date(), amountInCent);
         }
         return result;
