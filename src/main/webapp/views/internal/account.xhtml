@@ -56,7 +56,11 @@
                         <b:dataTableColumn>
                             <f:facet name="header">Erstellungsdatum</f:facet>                            
                             <h:outputText value="#{a.dateOfCreation} "/>
-                        </b:dataTableColumn>                           
+                        </b:dataTableColumn>
+                        <b:dataTableColumn>
+                            <f:facet name="header">Kontostand</f:facet>                            
+                            <h:outputText value="#{a.balanceFormatted} "/>
+                        </b:dataTableColumn>    
                     </b:dataTable>
                 </b:panelGrid>
                                    

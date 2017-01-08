@@ -15,7 +15,7 @@
     <h:body>
 
         <div id="top">
-            <ui:insert name="top">Management-Tool der Bank Reichl (eigentlich nur für Angestellte erreichbar)<br/></ui:insert>            
+            <ui:insert name="top">Management-Tool der #{bankModel.bank.name} (eigentlich nur für Angestellte erreichbar)<br/></ui:insert>            
             
             <h:panelGrid columns="1">
                 <h:form>
@@ -39,7 +39,7 @@
         </div>
 
         <div id="bottom">
-            <ui:insert name="bottom">&copy; Bank Reichl 2016</ui:insert>
+            <ui:insert name="bottom">&copy; Bank Reichl (#{bankModel.bank.address.displayString}) 2017 | BIC: #{bankModel.bank.bic} | Bankleitzahl: #{bankModel.bank.bankCode}</ui:insert>
         </div>
 
     </h:body>

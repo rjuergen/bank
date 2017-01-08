@@ -15,7 +15,7 @@
     <h:body>
 
         <div id="top">
-            <ui:insert name="top">Willkommen bei der Bank Reichl<br/></ui:insert>            
+            <ui:insert name="top">Willkommen bei der #{bankModel.bank.name}!<br/></ui:insert>            
             <h:panelGrid columns="4">
                 <h:form>
                     <h:commandLink value="Home" action="ext_home"/>
@@ -66,7 +66,7 @@
             </div>
         </div>
         <div id="bottom">
-            <ui:insert name="bottom">&copy; Bank Reichl 2016</ui:insert>
+            <ui:insert name="bottom">&copy; Bank Reichl (#{bankModel.bank.address.displayString}) 2017 | BIC: #{bankModel.bank.bic} | Bankleitzahl: #{bankModel.bank.bankCode}</ui:insert>
         </div>
 
     </h:body>
