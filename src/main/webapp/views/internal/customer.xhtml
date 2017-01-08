@@ -12,74 +12,76 @@
 
             <ui:define name="content">               
                 
-                <h:form>
-                    <b:tabView activeIndex="#{customerModel.activeTab}" tabPosition="left">                        
-                        <b:tab title="Privatkunde">
-                            <b:panelGrid columns="2" smallScreen="6">
-                                <b:column>
-                                    <b:inputText value="#{customerModel.privateCustomer.firstName}" placeholder="Vorname"/>
-                                    <b:inputText value="#{customerModel.privateCustomer.lastName}" placeholder="Nachname"/>
-                                    <b:datepicker mode="toggle-icon" firstDay="1" value="#{customerModel.privateCustomer.dateOfBirth}" placeholder="Geburtstag"/>
+                
+                <b:tabView activeIndex="#{customerModel.activeTab}" tabPosition="left">                        
+                    <b:tab title="Privatkunde">
+                        <b:panelGrid columns="2" smallScreen="6">
+                            <b:column>
+                                <b:inputText value="#{customerModel.privateCustomer.firstName}" placeholder="Vorname"/>
+                                <b:inputText value="#{customerModel.privateCustomer.lastName}" placeholder="Nachname"/>
+                                <b:datepicker mode="toggle-icon" firstDay="1" showButtonPanel="true" changeMonth="true" changeYear="true"
+                                              value="#{customerModel.privateCustomer.dateOfBirth}" placeholder="Geburtstag"/>
 
-                                    <b:selectOneMenu value="#{customerModel.privateCustomer.gender}" id="gender">
-                                        <f:selectItems value="#{enumValuesProvider.genderValues}"
-                                                       var="gender"
-                                                       itemValue="#{gender}"
-                                                       itemLabel="#{gender.getName()}" />
-                                    </b:selectOneMenu>
-                                </b:column>
-                                
-                                <b:column>
-                                    <b:inputText value="#{customerModel.address.street}" placeholder="Stra&szlig;e"/>
-                                    <b:inputText value="#{customerModel.address.houseNr}" placeholder="Hausnummer"/>
-                                    <b:inputText value="#{customerModel.address.zip}" placeholder="Postleitzahl"/>
-                                    <b:inputText value="#{customerModel.address.city}" placeholder="Ort"/>
-                                    <b:inputText value="#{customerModel.address.county}" placeholder="Landkreis"/>
-                                    <b:inputText value="#{customerModel.address.country}" placeholder="Land"/>
-                                </b:column>
-                            </b:panelGrid>
-                        </b:tab>
-                        <b:tab title="Firmenkunde">
-                            <b:panelGrid columns="2" smallScreen="6">
-                                <b:column>
-                                    <b:inputText value="#{customerModel.companyCustomer.name}" placeholder="Name"/>
-                                    <b:datepicker mode="toggle-icon" firstDay="1" value="#{customerModel.companyCustomer.dateOfCreation}" placeholder="Firmengründung"/> 
-                                </b:column>
+                                <b:selectOneMenu value="#{customerModel.privateCustomer.gender}" id="gender">
+                                    <f:selectItems value="#{enumValuesProvider.genderValues}"
+                                                   var="gender"
+                                                   itemValue="#{gender}"
+                                                   itemLabel="#{gender.getName()}" />
+                                </b:selectOneMenu>
+                            </b:column>
 
-                                <b:column>
-                                    <b:inputText value="#{customerModel.address.street}" placeholder="Stra&szlig;e"/>
-                                    <b:inputText value="#{customerModel.address.houseNr}" placeholder="Hausnummer"/>
-                                    <b:inputText value="#{customerModel.address.zip}" placeholder="Postleitzahl"/>
-                                    <b:inputText value="#{customerModel.address.city}" placeholder="Ort"/>
-                                    <b:inputText value="#{customerModel.address.county}" placeholder="Landkreis"/>
-                                    <b:inputText value="#{customerModel.address.country}" placeholder="Land"/>
-                                </b:column>
-                            </b:panelGrid>
-                        </b:tab>                        
-                    </b:tabView>
-                    <b:commandButton action="#{customerModel.save()}" value="Speichern"  style="width:200px;height:40px"/>
-                    <b:commandButton action="#{customerModel.clear()}" value="Abbrechen"  style="width:200px;height:40px"/>
-                </h:form>                
+                            <b:column>
+                                <b:inputText value="#{customerModel.address.street}" placeholder="Stra&szlig;e"/>
+                                <b:inputText value="#{customerModel.address.houseNr}" placeholder="Hausnummer"/>
+                                <b:inputText value="#{customerModel.address.zip}" placeholder="Postleitzahl"/>
+                                <b:inputText value="#{customerModel.address.city}" placeholder="Ort"/>
+                                <b:inputText value="#{customerModel.address.county}" placeholder="Landkreis"/>
+                                <b:inputText value="#{customerModel.address.country}" placeholder="Land"/>
+                            </b:column>
+                        </b:panelGrid>
+                    </b:tab>
+                    <b:tab title="Firmenkunde">
+                        <b:panelGrid columns="2" smallScreen="6">
+                            <b:column>
+                                <b:inputText value="#{customerModel.companyCustomer.name}" placeholder="Name"/>
+                                <b:datepicker mode="toggle-icon" firstDay="1" showButtonPanel="true" changeMonth="true" changeYear="true"
+                                              value="#{customerModel.companyCustomer.dateOfCreation}" placeholder="Firmengründung"/> 
+                            </b:column>
+
+                            <b:column>
+                                <b:inputText value="#{customerModel.address.street}" placeholder="Stra&szlig;e"/>
+                                <b:inputText value="#{customerModel.address.houseNr}" placeholder="Hausnummer"/>
+                                <b:inputText value="#{customerModel.address.zip}" placeholder="Postleitzahl"/>
+                                <b:inputText value="#{customerModel.address.city}" placeholder="Ort"/>
+                                <b:inputText value="#{customerModel.address.county}" placeholder="Landkreis"/>
+                                <b:inputText value="#{customerModel.address.country}" placeholder="Land"/>
+                            </b:column>
+                        </b:panelGrid>
+                    </b:tab>                        
+                </b:tabView>
+                <b:commandButton action="#{customerModel.save()}" value="Speichern"  style="width:200px;height:40px"/>
+                <b:commandButton action="#{customerModel.clear()}" value="Abbrechen"  style="width:200px;height:40px"/>
+                              
                 
                 <br/><br/>
                 
-                <h:form>
-                    <b:dataTable var="c" value="#{customerModel.customers}">
-                        <b:dataTableColumn>
-                            <f:facet name="header">Name</f:facet>
-                            <h:outputText value="#{c.getName()} "/>
-                        </b:dataTableColumn>
-                        <b:dataTableColumn>
-                            <f:facet name="header">Adresse</f:facet>                            
-                            <h:outputText value="#{c.address.displayString} "/>
-                        </b:dataTableColumn>
-                        <b:dataTableColumn>
-                            <f:facet name="header">Aktionen</f:facet>
-                            <b:commandButton value="Konten verwalten" action="#{customerModel.editAccounts(c)}"/>
-                            <b:commandButton value="Bearbeiten" action="#{customerModel.editCustomer(c)}"/>
-                        </b:dataTableColumn>                            
-                    </b:dataTable>
-                </h:form>                    
+                
+                <b:dataTable var="c" value="#{customerModel.customers}">
+                    <b:dataTableColumn>
+                        <f:facet name="header">Name</f:facet>
+                        <h:outputText value="#{c.getName()} "/>
+                    </b:dataTableColumn>
+                    <b:dataTableColumn>
+                        <f:facet name="header">Adresse</f:facet>                            
+                        <h:outputText value="#{c.address.displayString} "/>
+                    </b:dataTableColumn>
+                    <b:dataTableColumn>
+                        <f:facet name="header">Aktionen</f:facet>
+                        <b:commandButton value="Konten verwalten" action="#{customerModel.editAccounts(c)}"/>
+                        <b:commandButton value="Bearbeiten" action="#{customerModel.editCustomer(c)}"/>
+                    </b:dataTableColumn>                            
+                </b:dataTable>
+                                   
                 
             </ui:define>
 

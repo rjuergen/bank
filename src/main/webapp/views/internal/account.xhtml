@@ -13,56 +13,55 @@
             <ui:define name="content">
                 <h2>Konten von #{accountModel.customer.name}</h2>
                 
-                <h:form>
-                    <b:panelGrid columns="1" smallScreen="3">
-                        <b:column>
-                            <h:outputLabel value="Kontoverwalter:"/>
-                            <b:selectOneMenu>                                
-                                <f:selectItem value="#{accountModel.account.accountManager}" rendered="#{accountModel.account.accountManager != null}"/>
-                                <f:selectItems value="#{accountModel.employees}"
-                                               var="e"
-                                               itemValue="#{e}"
-                                               itemLabel="#{e.lastName} #{e.firstName}" />
-                            </b:selectOneMenu>
-                            <h:outputLabel value="Tantyp:"/>
-                            <b:selectOneMenu value="#{accountModel.account.tanType}">
-                                <f:selectItems value="#{enumValuesProvider.tanTypeValues}"
-                                               var="t"
-                                               itemValue="#{t}"
-                                               itemLabel="#{t.name}" />
-                            </b:selectOneMenu>
-                            <b:inputSecret value="#{accountModel.account.password}" placeholder="Passwort"/>
-                            <b:commandButton action="#{accountModel.save()}" value="Speichern"  style="width:200px;height:40px"/>
-                            <b:commandButton action="#{accountModel.clear()}" value="Abbrechen"  style="width:200px;height:40px"/>
-                        </b:column>
-                    </b:panelGrid>
-                </h:form>
+                
+                <b:panelGrid columns="1" smallScreen="3">
+                    <b:column>
+                        <h:outputLabel value="Kontoverwalter:"/>
+                        <b:selectOneMenu>                                
+                            <f:selectItem value="#{accountModel.account.accountManager}" rendered="#{accountModel.account.accountManager != null}"/>
+                            <f:selectItems value="#{accountModel.employees}"
+                                           var="e"
+                                           itemValue="#{e}"
+                                           itemLabel="#{e.lastName} #{e.firstName}" />
+                        </b:selectOneMenu>
+                        <h:outputLabel value="Tantyp:"/>
+                        <b:selectOneMenu value="#{accountModel.account.tanType}">
+                            <f:selectItems value="#{enumValuesProvider.tanTypeValues}"
+                                           var="t"
+                                           itemValue="#{t}"
+                                           itemLabel="#{t.name}" />
+                        </b:selectOneMenu>
+                        <b:inputSecret value="#{accountModel.account.password}" placeholder="Passwort"/>
+                        <b:commandButton action="#{accountModel.save()}" value="Neues Konto erstellen"  style="width:200px;height:40px"/>
+                    </b:column>
+                </b:panelGrid>
+                
                 
                 <br/><br/>
                 
-                <h:form>
-                    <b:panelGrid columns="1">
-                        <br/><br/>
-                        <b:dataTable var="a" value="#{accountModel.customer.accounts}">
-                            <b:dataTableColumn>
-                                <f:facet name="header">Kontonummer</f:facet>
-                                <h:outputText value="#{a.accountNumber} "/>
-                            </b:dataTableColumn>
-                            <b:dataTableColumn>
-                                <f:facet name="header">IBAN</f:facet>                            
-                                <h:outputText value="#{a.iban} "/>
-                            </b:dataTableColumn>
-                            <b:dataTableColumn>
-                                <f:facet name="header">Kontoverwalter</f:facet>                            
-                                <h:outputText value="#{a.accountManager.lastName} #{a.accountManager.firstName}"/>
-                            </b:dataTableColumn>
-                            <b:dataTableColumn>
-                                <f:facet name="header">Erstellungsdatum</f:facet>                            
-                                <h:outputText value="#{a.dateOfCreation} "/>
-                            </b:dataTableColumn>                           
-                        </b:dataTable>
-                    </b:panelGrid>
-                </h:form>                    
+                
+                <b:panelGrid columns="1">
+                    <br/><br/>
+                    <b:dataTable var="a" value="#{accountModel.customer.accounts}">
+                        <b:dataTableColumn>
+                            <f:facet name="header">Kontonummer</f:facet>
+                            <h:outputText value="#{a.accountNumber} "/>
+                        </b:dataTableColumn>
+                        <b:dataTableColumn>
+                            <f:facet name="header">IBAN</f:facet>                            
+                            <h:outputText value="#{a.iban} "/>
+                        </b:dataTableColumn>
+                        <b:dataTableColumn>
+                            <f:facet name="header">Kontoverwalter</f:facet>                            
+                            <h:outputText value="#{a.accountManager.lastName} #{a.accountManager.firstName}"/>
+                        </b:dataTableColumn>
+                        <b:dataTableColumn>
+                            <f:facet name="header">Erstellungsdatum</f:facet>                            
+                            <h:outputText value="#{a.dateOfCreation} "/>
+                        </b:dataTableColumn>                           
+                    </b:dataTable>
+                </b:panelGrid>
+                                   
             </ui:define>
 
         </ui:composition>
