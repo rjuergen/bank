@@ -6,7 +6,7 @@ package de.jreichl.service.interfaces;
 
 import de.jreichl.jpa.entity.Creditworthiness;
 import de.jreichl.jpa.entity.Customer;
-import net.poschinger.retailerposchinger.service.contractor.CreditWorthiness;
+import net.poschinger.retailerposchinger.service.contractor.webservice.CreditWorthiness;
 
 /**
  *

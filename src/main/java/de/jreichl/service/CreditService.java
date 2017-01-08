@@ -5,13 +5,11 @@
 package de.jreichl.service;
 
 import de.jreichl.jpa.entity.Account;
-import de.jreichl.jpa.entity.AccountTransaction;
 import de.jreichl.jpa.entity.Bank;
 import de.jreichl.jpa.entity.Credit;
 import de.jreichl.jpa.entity.Customer;
 import de.jreichl.jpa.entity.StandingOrder;
 import de.jreichl.jpa.entity.type.IntervalUnit;
-import de.jreichl.jpa.entity.type.TransactionType;
 import de.jreichl.jpa.repository.BankRepository;
 import de.jreichl.jpa.repository.CreditRepository;
 import de.jreichl.service.exception.TransactionFailedException;
@@ -51,7 +49,7 @@ public class CreditService extends BaseService implements ICreditService {
     @Transactional
     @Override
     public void updateInterestsToPay(Credit credit) {
-        long remaining = getRemainingPayback(credit);
+        long remaining = credit.getRemainingPayback();
         if(remaining < 1) {
             credit.setPaybackComplete(true);            
         } else {
@@ -68,16 +66,6 @@ public class CreditService extends BaseService implements ICreditService {
         creditRepo.persist(credit);
     }
     
-    @Override
-    public long getRemainingPayback(Credit credit) {
-        long remaining = credit.getCredit();
-        for(AccountTransaction at : credit.getTransactions()) {            
-            if(at.getType().equals(TransactionType.DEBIT))
-                remaining -= at.getAmount();
-        }
-        remaining += credit.getInterestToPay();
-        return remaining;
-    }
 
     @Transactional
     @Override

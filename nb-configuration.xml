@@ -18,5 +18,6 @@ Any value defined here will override the pom.xml file value but is only applicab
         <netbeans.hint.licensePath>${project.basedir}/licenseheader.txt</netbeans.hint.licensePath>
         <org-netbeans-modules-projectapi.jsf_2e_language>Facelets</org-netbeans-modules-projectapi.jsf_2e_language>
         <org-netbeans-modules-maven-jaxws._5f_C_5f_CreditworthinessServiceService>http://172.16.34.116:8080/RetailerPoschinger/CreditworthinessServiceService?wsdl</org-netbeans-modules-maven-jaxws._5f_C_5f_CreditworthinessServiceService>
+        <org-netbeans-modules-maven-jaxws._5f_C_5f_CreditworthinessService>http://im-lamport:8080/RetailerPoschinger/CreditworthinessService?wsdl</org-netbeans-modules-maven-jaxws._5f_C_5f_CreditworthinessService>
     </properties>
 </project-shared-configuration>

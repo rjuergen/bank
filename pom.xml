@@ -166,16 +166,16 @@
                         </goals>
                         <configuration>
                             <wsdlFiles>
-                                <wsdlFile>172.16.34.116_8080/RetailerPoschinger/CreditworthinessServiceService.wsdl</wsdlFile>
+                                <wsdlFile>im-lamport_8080/RetailerPoschinger/CreditworthinessService.wsdl</wsdlFile>
                             </wsdlFiles>
                             <packageName></packageName>
                             <vmArgs>
                                 <vmArg>-Djavax.xml.accessExternalSchema=all</vmArg>
                             </vmArgs>
-                            <wsdlLocation>http://172.16.34.116:8080/RetailerPoschinger/CreditworthinessServiceService?wsdl</wsdlLocation>
-                            <staleFile>${project.build.directory}/jaxws/stale/CreditworthinessServiceService.stale</staleFile>
+                            <wsdlLocation>http://im-lamport:8080/RetailerPoschinger/CreditworthinessService?wsdl</wsdlLocation>
+                            <staleFile>${project.build.directory}/jaxws/stale/CreditworthinessService.stale</staleFile>
                         </configuration>
-                        <id>wsimport-generate-CreditworthinessServiceService</id>
+                        <id>wsimport-generate-CreditworthinessService</id>
                         <phase>generate-sources</phase>
                     </execution>
                 </executions>

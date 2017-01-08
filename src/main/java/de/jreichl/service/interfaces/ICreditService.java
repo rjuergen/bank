@@ -24,5 +24,4 @@ public interface ICreditService {
     
     public void updateInterestsToPay(Credit credit);
     
-    public long getRemainingPayback(Credit credit);
 }

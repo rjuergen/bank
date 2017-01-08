@@ -9,14 +9,16 @@ import de.jreichl.jpa.entity.Creditworthiness;
 import de.jreichl.jpa.entity.Customer;
 import de.jreichl.jpa.entity.PrivateCustomer;
 import de.jreichl.jpa.repository.CreditworthinessRepository;
+import de.jreichl.service.biz.CreditworthinessCalulator;
 import de.jreichl.service.interfaces.ICreditworthinessService;
 import de.jreichl.service.interfaces.ICustomerService;
 import java.util.logging.Level;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
-import net.poschinger.retailerposchinger.service.contractor.CreditWorthiness;
-import net.poschinger.retailerposchinger.service.contractor.CreditworthinessServiceService;
+import net.poschinger.retailerposchinger.service.contractor.webservice.CreditWorthiness;
+import net.poschinger.retailerposchinger.service.contractor.webservice.CreditworthinessServiceService;
+
 
 
 
@@ -47,17 +49,11 @@ public class CreditworthinessService extends BaseService implements ICreditworth
          
         // no creditworthiness for today.. request a new one
         
-        CreditWorthiness extCreditWorthiness = requestCreditworthinessFromRetailerPoschinger(customer);
+        net.poschinger.retailerposchinger.service.contractor.webservice.CreditWorthiness extCreditWorthiness = requestCreditworthinessFromRetailerPoschinger(customer);             
         
-        if(extCreditWorthiness!=null)
-            logger.log(Level.INFO, "Received CreditWorthiness from RetailerPoschinger: "+extCreditWorthiness.name());
-        else
-            logger.log(Level.WARNING, "No CreditWorthiness from RetailerPoschinger received!");
-        // TODO add logic
+        long possibleCredit = CreditworthinessCalulator.calculate(extCreditWorthiness, customer);
         
-        Creditworthiness c = creditworthinessRepo.create(customer, 100000);        
-        
-        
+        Creditworthiness c = creditworthinessRepo.create(customer, possibleCredit); 
         
         return c;        
     }    
@@ -69,12 +65,10 @@ public class CreditworthinessService extends BaseService implements ICreditworth
         PrivateCustomer pc = (PrivateCustomer) customer;
         try{
             CreditworthinessServiceService poschingerService = new CreditworthinessServiceService();
-            net.poschinger.retailerposchinger.service.contractor.CreditworthinessService port = poschingerService.getCreditworthinessServicePort();
-            CreditWorthiness c = port.getCreditWorthiness(pc.getFirstName(), pc.getLastName(), 
-                    pc.getAddress().getStreet()+" "+pc.getAddress().getHouseNr(), 
-                    pc.getAddress().getZip(), pc.getAddress().getCountry());
+            net.poschinger.retailerposchinger.service.contractor.webservice.CreditworthinessService port = poschingerService.getCreditworthinessServicePort();            
+            CreditWorthiness c = port.getCreditWorthiness(pc.getFirstName(), pc.getLastName(), null, null, null);
             if(c != null) {
-                logger.log(Level.INFO, "Received CreditWorthiness from poschinger = "+c.name());
+                logger.log(Level.INFO, "Received CreditWorthiness from poschinger: "+c.name());
                 return c;
             }
         } catch(Exception ex) {

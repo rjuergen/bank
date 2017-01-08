@@ -83,6 +83,7 @@ public class CustomerModel extends BaseService implements Serializable {
     }
     
     public String editAccounts(Customer c) {
+        c = customerService.findCustomer(c);
         accountModel.setCustomer(c);        
         return "int_account";
     }    
@@ -93,7 +94,9 @@ public class CustomerModel extends BaseService implements Serializable {
             newOne = customerService.updatePrivateCustomer(privateCustomer);
         } else if(companyCustomer != null) {
             newOne = customerService.updateCompanyCustomer(companyCustomer);
-        }               
+        }          
+        if(customers.contains(newOne))
+            customers.remove(newOne);
         customers.add(newOne);
         clear();
     }    

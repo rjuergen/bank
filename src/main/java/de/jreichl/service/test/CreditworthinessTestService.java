@@ -9,6 +9,7 @@ import de.jreichl.jpa.entity.Creditworthiness;
 import de.jreichl.jpa.entity.Customer;
 import de.jreichl.jpa.repository.CreditworthinessRepository;
 import de.jreichl.service.BaseService;
+import de.jreichl.service.biz.CreditworthinessCalulator;
 import de.jreichl.service.interfaces.ICreditworthinessService;
 import de.jreichl.service.interfaces.ICustomerService;
 import java.util.Random;
@@ -17,7 +18,7 @@ import javax.enterprise.context.RequestScoped;
 import javax.enterprise.inject.Alternative;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
-import net.poschinger.retailerposchinger.service.contractor.CreditWorthiness;
+import net.poschinger.retailerposchinger.service.contractor.webservice.CreditWorthiness;
 
 /**
  *
@@ -56,9 +57,10 @@ public class CreditworthinessTestService extends BaseService implements ICreditw
             logger.log(Level.INFO, "Received CreditWorthiness from RetailerPoschinger: {0}", extCreditWorthiness.name());
         else
             logger.log(Level.WARNING, "No CreditWorthiness from RetailerPoschinger received!");
-        // TODO add logic
         
-        Creditworthiness c = creditworthinessRepo.create(customer, 500000);        
+        long possibleCredit = CreditworthinessCalulator.calculate(extCreditWorthiness, customer);
+        
+        Creditworthiness c = creditworthinessRepo.create(customer, possibleCredit);        
         
         
         

@@ -59,7 +59,7 @@ public class CreditModel extends BaseService implements Serializable {
     private ICreditworthinessService creditworthinessService;
     
     public List<Credit> getCredits() {        
-        if(credits == null) {
+        if(credits == null && userModel.hasActiveUser()) {
             credits = new ArrayList<>();
             for(Credit c : userModel.getCurrentUser().getCredits()) {
                 if(c.getAccount().equals(userModel.getCurrentAccount()))
@@ -70,7 +70,7 @@ public class CreditModel extends BaseService implements Serializable {
     }    
     
     public String getRemainingPayback(Credit c) {
-        long payback = creditService.getRemainingPayback(c);        
+        long payback = c.getRemainingPayback();        
         return df.format((double)payback / 100) + " €";
     }
     

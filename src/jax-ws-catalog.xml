@@ -2,4 +2,5 @@
 <catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" prefer="system">
     <system systemId="http://172.16.34.116:8080/RetailerPoschinger/CreditworthinessServiceService?wsdl" uri="wsdl/172.16.34.116_8080/RetailerPoschinger/CreditworthinessServiceService.wsdl"/>
     <system systemId="http://172.16.34.116:8080/RetailerPoschinger/CreditworthinessServiceService?xsd=1" uri="wsdl/172.16.34.116_8080/RetailerPoschinger/CreditworthinessServiceService.xsd_1.xsd"/>
+    <system systemId="http://im-lamport:8080/RetailerPoschinger/CreditworthinessService?wsdl" uri="wsdl/im-lamport_8080/RetailerPoschinger/CreditworthinessService.wsdl"/>
 </catalog>

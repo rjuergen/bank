@@ -4,6 +4,7 @@
  */
 package de.jreichl.jpa.entity;
 
+import de.jreichl.jpa.entity.type.TransactionType;
 import java.io.Serializable;
 import java.sql.Date;
 import java.sql.Timestamp;
@@ -73,6 +74,16 @@ public class Credit extends SingleEntity implements Serializable {
     public Credit() {
         
     }    
+    
+    public long getRemainingPayback() {
+        long remaining = credit;
+        for(AccountTransaction at : getTransactions()) {            
+            if(at.getType().equals(TransactionType.DEBIT))
+                remaining -= at.getAmount();
+        }
+        remaining += getInterestToPay();
+        return remaining;
+    }
 
     public StandingOrder getStandingOrder() {
         return standingOrder;
