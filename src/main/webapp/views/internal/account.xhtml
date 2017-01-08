@@ -17,12 +17,10 @@
                 <b:panelGrid columns="1" smallScreen="3">
                     <b:column>
                         <h:outputLabel value="Kontoverwalter:"/>
-                        <b:selectOneMenu>                                
+                        <b:selectOneMenu>               
+                            <f:converter converterId="de.jreichl.jsf.converter.EmployeeConverter"/>
                             <f:selectItem value="#{accountModel.account.accountManager}" rendered="#{accountModel.account.accountManager != null}"/>
-                            <f:selectItems value="#{accountModel.employees}"
-                                           var="e"
-                                           itemValue="#{e}"
-                                           itemLabel="#{e.lastName} #{e.firstName}" />
+                            <f:selectItems value="#{accountModel.employees}" />
                         </b:selectOneMenu>
                         <h:outputLabel value="Tantyp:"/>
                         <b:selectOneMenu value="#{accountModel.account.tanType}">

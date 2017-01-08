@@ -86,5 +86,10 @@ public class Employee extends SingleEntity implements Serializable {
     public void setGender(Gender gender) {
         this.gender = gender;
     }
+
+    @Override
+    public String toString() {
+        return lastName + " " + firstName;
+    }   
   
 }

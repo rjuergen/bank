@@ -6,6 +6,7 @@ package de.jreichl.service.web;
 
 import de.jreichl.service.exception.TransactionFailedException;
 import de.jreichl.service.interfaces.ITransactionService;
+import java.util.Date;
 import javax.inject.Inject;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
@@ -24,7 +25,15 @@ public class TransactionWS implements ITransactionWS {
     @Override
     @WebMethod
     public boolean transfer(@WebParam(name="amountInCent") long amountInCent, @WebParam(name="fromIBAN") String fromIBAN, @WebParam(name="toIBAN") String toIBAN,@WebParam(name="description") String description) throws TransactionFailedException {
-        return transactionService.transfer(amountInCent, fromIBAN, toIBAN, description);
+        boolean result = false;
+        try{
+            result = transactionService.transfer(amountInCent, fromIBAN, toIBAN, description);
+        } catch (TransactionFailedException ex) { 
+            throw ex;
+        } catch (Exception ex) {
+            throw new TransactionFailedException(ex, "Unexpected Error! Transaction failed. Check if it's the right IBAN and there is enough money on your account.", fromIBAN, toIBAN, new Date(), amountInCent);
+        }
+        return result;
     }
     
 }

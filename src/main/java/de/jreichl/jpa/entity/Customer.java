@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.OneToMany;
@@ -30,7 +29,8 @@ public abstract class Customer extends SingleEntity implements Serializable {
     @Embedded
     protected Address address;
 
-    @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "owner")
+    @LazyCollection(LazyCollectionOption.FALSE)
     private List<Account> accounts = new ArrayList<>();
 
     @OneToMany(mappedBy = "customer")

@@ -15,7 +15,6 @@ import java.util.Comparator;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -57,7 +56,8 @@ public class Account extends SingleEntity implements Serializable {
     
     private String passwordSalt;
     
-    @OneToMany(mappedBy = "account", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "account")
+    @LazyCollection(LazyCollectionOption.FALSE)
     private List<AccountTransaction> transactions = new ArrayList<>();
     
 
