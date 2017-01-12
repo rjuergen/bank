@@ -4,9 +4,9 @@
  */
 package de.jreichl.jpa.entity;
 
+import de.jreichl.common.AmountUtil;
 import java.io.Serializable;
 import java.sql.Date;
-import java.text.DecimalFormat;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
@@ -19,9 +19,7 @@ import javax.persistence.NamedQuery;
 @NamedQuery(name="Creditworthiness.Customer",query="SELECT c FROM Creditworthiness c WHERE c.customer = :customer")
 public class Creditworthiness extends SingleEntity implements Serializable {
     private static final long serialVersionUID = 1L;
-    
-    private static final DecimalFormat df = new DecimalFormat("###,##0.00");
-   
+       
     private Date creationDate;
     
     @ManyToOne
@@ -62,7 +60,7 @@ public class Creditworthiness extends SingleEntity implements Serializable {
     }
             
     public String getPossibleCreditFormatted() {
-        return df.format((double)possibleCredit / 100) + " €";
+        return AmountUtil.getFormattedAmount(possibleCredit) + " €";
     }
     
 }

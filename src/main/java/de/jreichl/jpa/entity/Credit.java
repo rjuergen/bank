@@ -4,11 +4,11 @@
  */
 package de.jreichl.jpa.entity;
 
+import de.jreichl.common.AmountUtil;
 import de.jreichl.jpa.entity.type.TransactionType;
 import java.io.Serializable;
 import java.sql.Date;
 import java.sql.Timestamp;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -28,9 +28,7 @@ import org.hibernate.annotations.LazyCollectionOption;
 @NamedQuery(name="Credit.unpaid",query="SELECT c FROM Credit c WHERE c.paybackComplete = false")
 public class Credit extends SingleEntity implements Serializable {
     private static final long serialVersionUID = 1L;
-    
-    private static final DecimalFormat df = new DecimalFormat("###,##0.00");
-        
+            
     private Timestamp creationDate;
     
     @ManyToOne
@@ -134,7 +132,7 @@ public class Credit extends SingleEntity implements Serializable {
     }
 
     public String getCreditFormatted() {
-        return df.format((double)credit / 100) + " €";
+        return AmountUtil.getFormattedAmount(credit) + " €";
     }
     
     public int getInterestRate() {
@@ -146,7 +144,7 @@ public class Credit extends SingleEntity implements Serializable {
     }
 
     public String getInterestRateFormatted() {
-        return df.format((double)interestRate / 100) + " %";
+        return AmountUtil.getFormattedAmount(interestRate) + " €";
     }
     
     public List<AccountTransaction> getTransactions() {

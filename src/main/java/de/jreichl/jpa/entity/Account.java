@@ -4,11 +4,11 @@
  */
 package de.jreichl.jpa.entity;
 
+import de.jreichl.common.AmountUtil;
 import de.jreichl.jpa.entity.type.TanType;
 import de.jreichl.jpa.entity.type.TransactionType;
 import java.io.Serializable;
 import java.sql.Date;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -33,8 +33,7 @@ import org.hibernate.annotations.LazyCollectionOption;
 })
 public class Account extends SingleEntity implements Serializable {
     private static final long serialVersionUID = 1L;    
-    
-    private static final DecimalFormat df = new DecimalFormat("+ ###,##0.00");
+       
 
     @Column(unique=true)
     private String accountNumber;
@@ -160,7 +159,7 @@ public class Account extends SingleEntity implements Serializable {
         transactions.sort(new Comparator<AccountTransaction>() {
             @Override
             public int compare(AccountTransaction o1, AccountTransaction o2) {
-                return o1.getTransactionDate().compareTo(o2.getTransactionDate());
+                return o2.getTransactionDate().compareTo(o1.getTransactionDate());
             }
         });
         return Collections.unmodifiableList(transactions);
@@ -178,7 +177,8 @@ public class Account extends SingleEntity implements Serializable {
     }
     
     public String getBalanceFormatted() {
-        return df.format((double)getBalance() / 100) + " €";
+        
+        return "+ " + AmountUtil.getFormattedAmount(getBalance()) + " €";
     }
 
     public void addTransaction(AccountTransaction t) {

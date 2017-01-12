@@ -4,6 +4,7 @@
  */
 package de.jreichl.service;
 
+import de.jreichl.common.AmountUtil;
 import de.jreichl.common.Pair;
 import de.jreichl.jpa.entity.Account;
 import de.jreichl.jpa.entity.AccountTransaction;
@@ -19,7 +20,6 @@ import de.jreichl.jpa.repository.StandingOrderRepository;
 import de.jreichl.service.exception.TransactionFailedException;
 import de.jreichl.service.interfaces.ITransactionService;
 import java.sql.Timestamp;
-import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.logging.Level;
 import javax.enterprise.context.RequestScoped;
@@ -34,8 +34,7 @@ import javax.transaction.Transactional.TxType;
  */
 @RequestScoped
 public class TransactionService extends BaseService implements ITransactionService {   
-    
-    private static final DecimalFormat df = new DecimalFormat("###,##0.00");
+       
     
     @Inject
     private AccountTransactionRepository accountTransactionRepo;
@@ -220,7 +219,7 @@ public class TransactionService extends BaseService implements ITransactionServi
     public boolean transferPayback(Credit credit, long amountInCent) throws TransactionFailedException {
         credit = creditRepo.merge(credit);
         Bank bank = bankRepo.getBank();        
-        String amountFormatted = df.format((double)amountInCent / 100) + " €";        
+        String amountFormatted = AmountUtil.getFormattedAmount(amountInCent);        
         String description = String.format("Credit payback about %s. Credit-ID=%s (date of creation: %s)",
                 amountFormatted, credit.getId().toString(), credit.getCreationDate().toString());
         Pair<AccountTransaction, AccountTransaction> result = transfer(amountInCent, credit.getAccount(), bank.getCreditAccount(), description);         

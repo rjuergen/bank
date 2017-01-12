@@ -34,7 +34,7 @@ public class CreditworthinessService extends BaseService implements ICreditworth
     
     @Inject
     private ICustomerService customerService;
-    
+        
     @Transactional
     @Override
     public Creditworthiness requestCreditworthiness(Customer customer) {        
@@ -46,7 +46,7 @@ public class CreditworthinessService extends BaseService implements ICreditworth
                 return c;
             }
         }
-         
+        
         // no creditworthiness for today.. request a new one
         
         net.poschinger.retailerposchinger.service.contractor.webservice.CreditWorthiness extCreditWorthiness = requestCreditworthinessFromRetailerPoschinger(customer);             
@@ -63,7 +63,7 @@ public class CreditworthinessService extends BaseService implements ICreditworth
         if(!(customer instanceof PrivateCustomer))
             return CreditWorthiness.NODATA;
         PrivateCustomer pc = (PrivateCustomer) customer;
-        try{
+        try{            
             CreditworthinessServiceService poschingerService = new CreditworthinessServiceService();
             net.poschinger.retailerposchinger.service.contractor.webservice.CreditworthinessService port = poschingerService.getCreditworthinessServicePort();            
             CreditWorthiness c = port.getCreditWorthiness(pc.getFirstName(), pc.getLastName(), null, null, null);
@@ -73,7 +73,7 @@ public class CreditworthinessService extends BaseService implements ICreditworth
             }
         } catch(Exception ex) {
             logger.log(Level.SEVERE, "Failed to get CreditworthinessServicePort", ex);
-        }        
+        }       
         
         return CreditWorthiness.NODATA;
     }

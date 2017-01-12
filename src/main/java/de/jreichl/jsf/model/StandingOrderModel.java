@@ -4,12 +4,12 @@
  */
 package de.jreichl.jsf.model;
 
+import de.jreichl.common.AmountUtil;
 import de.jreichl.jpa.entity.StandingOrder;
 import de.jreichl.jpa.entity.type.IntervalUnit;
 import de.jreichl.service.BaseService;
 import de.jreichl.service.interfaces.IStandingOrderService;
 import java.io.Serializable;
-import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.logging.Level;
@@ -25,9 +25,7 @@ import javax.inject.Named;
 @SessionScoped
 public class StandingOrderModel extends BaseService implements Serializable {
     private static final long serialVersionUID = 1L;
-    
-    private static final DecimalFormat df = new DecimalFormat("###,##0.00");
-    
+        
     private String iban;
     private String amount = "0,00";
     private Date startDate;
@@ -72,7 +70,7 @@ public class StandingOrderModel extends BaseService implements Serializable {
     }
     
     private long getAmountInCent() throws ParseException {
-        long amountInCent = (long)(df.parse(amount).doubleValue()*100);
+        long amountInCent = AmountUtil.parseFormattedAmount(amount);
         return amountInCent;
     }
 

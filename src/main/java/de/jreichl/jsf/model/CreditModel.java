@@ -4,6 +4,7 @@
  */
 package de.jreichl.jsf.model;
 
+import de.jreichl.common.AmountUtil;
 import de.jreichl.common.DateTimeUtil;
 import de.jreichl.jpa.entity.Credit;
 import de.jreichl.jpa.entity.Creditworthiness;
@@ -12,7 +13,6 @@ import de.jreichl.service.BaseService;
 import de.jreichl.service.interfaces.ICreditService;
 import de.jreichl.service.interfaces.ICreditworthinessService;
 import java.io.Serializable;
-import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -36,18 +36,17 @@ public class CreditModel extends BaseService implements Serializable {
      */
     private final int interestRate = 215;
     
-    private static final DecimalFormat df = new DecimalFormat("###,##0.00");
     private String message;    
     
     private List<Credit> credits;
     private Creditworthiness creditworthiness;
     private long possibleAmount;
     
-    private String creditAmount = "0,00";
+    private String creditAmount = AmountUtil.getFormattedAmount(0);
     
     private Credit selectedCredit;
-    private String paybackAmount = "0,00";
-    private String monthlyPaybackAmount = "0,00";
+    private String paybackAmount = AmountUtil.getFormattedAmount(0);
+    private String monthlyPaybackAmount = AmountUtil.getFormattedAmount(0);
     
     @Inject 
     private UserModel userModel;
@@ -71,7 +70,7 @@ public class CreditModel extends BaseService implements Serializable {
     
     public String getRemainingPayback(Credit c) {
         long payback = c.getRemainingPayback();        
-        return df.format((double)payback / 100) + " €";
+        return AmountUtil.getFormattedAmount(payback) + " €";
     }
     
     public void requestCreditworthiness() {        
@@ -101,7 +100,7 @@ public class CreditModel extends BaseService implements Serializable {
     }
     
     public String getInterestRate() {
-        return df.format((double)interestRate / 100) + " %";
+        return AmountUtil.getFormattedAmount(interestRate);
     }
 
     public String getCreditAmount() {
@@ -129,7 +128,7 @@ public class CreditModel extends BaseService implements Serializable {
     }
     
     private long getAmountInCent(String amount) throws ParseException {
-        long amountInCent = (long)(df.parse(amount).doubleValue()*100);
+        long amountInCent = AmountUtil.parseFormattedAmount(amount);
         return amountInCent;
     }
     
@@ -157,7 +156,7 @@ public class CreditModel extends BaseService implements Serializable {
     }
 
     public String getPossibleAmount() {
-        return df.format((double)possibleAmount / 100) + " €";
+        return AmountUtil.getFormattedAmount(possibleAmount) + " €";
     }        
     
     public void paybackCredit() {
@@ -190,8 +189,8 @@ public class CreditModel extends BaseService implements Serializable {
     public void select(Credit c) {
         selectedCredit = c;
         if(c.getStandingOrder() != null)
-            monthlyPaybackAmount = df.format((double)c.getStandingOrder().getAmount() / 100);
-        paybackAmount = "0,00";        
+            monthlyPaybackAmount = AmountUtil.getFormattedAmount(c.getStandingOrder().getAmount());
+        paybackAmount = AmountUtil.getFormattedAmount(0);       
     }
     
     public String getSelectedSign(Credit c) {
@@ -204,10 +203,10 @@ public class CreditModel extends BaseService implements Serializable {
         message = null;
         credits = null;
         creditworthiness = null;
-        creditAmount = "0,00";
+        creditAmount = AmountUtil.getFormattedAmount(0);
         selectedCredit = null;
-        paybackAmount = "0,00";
-        monthlyPaybackAmount = "0,00";
+        paybackAmount = AmountUtil.getFormattedAmount(0);
+        monthlyPaybackAmount = AmountUtil.getFormattedAmount(0);
     }
         
 }

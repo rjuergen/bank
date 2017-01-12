@@ -4,10 +4,10 @@
  */
 package de.jreichl.jsf.model;
 
+import de.jreichl.common.AmountUtil;
 import de.jreichl.service.BaseService;
 import de.jreichl.service.interfaces.ITransactionService;
 import java.io.Serializable;
-import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.util.logging.Level;
 import javax.enterprise.context.SessionScoped;
@@ -22,11 +22,10 @@ import javax.inject.Named;
 @SessionScoped
 public class TransactionModel extends BaseService implements Serializable {
     private static final long serialVersionUID = 1L;
-    
-    private static final DecimalFormat df = new DecimalFormat("###,##0.00");
+       
     
     private String iban;
-    private String amount = "0,00";
+    private String amount = AmountUtil.getFormattedAmount(0);
     private String description;    
     
     private String message;
@@ -66,7 +65,7 @@ public class TransactionModel extends BaseService implements Serializable {
     }
     
     private long getAmountInCent() throws ParseException {
-        long amountInCent = (long)(df.parse(amount).doubleValue()*100);
+        long amountInCent = AmountUtil.parseFormattedAmount(amount);
         return amountInCent;
     }
     
@@ -78,7 +77,7 @@ public class TransactionModel extends BaseService implements Serializable {
             logger.log(Level.SEVERE, "Failed to transfer cash (credit)!", ex);
             message = "Geld einzahlen fehlgeschlagen!";            
         }
-        amount = "0,00";
+        amount = AmountUtil.getFormattedAmount(0);
         description = null;
         userModel.refresh();
     }
@@ -91,7 +90,7 @@ public class TransactionModel extends BaseService implements Serializable {
             logger.log(Level.SEVERE, "Failed to transfer cash (credit)!", ex);            
             message = "Geld auszahlen fehlgeschlagen!";
         }
-        amount = "0,00";
+        amount = AmountUtil.getFormattedAmount(0);
         description = null;
         userModel.refresh();
     }
@@ -105,14 +104,14 @@ public class TransactionModel extends BaseService implements Serializable {
             message = "Geld Überweisung fehlgeschlagen!";
         }
         iban = "";
-        amount = "0,00";
+        amount = AmountUtil.getFormattedAmount(0);
         description = null;
         userModel.refresh();
     }    
     
     void clear() {
         iban = null;
-        amount = "0,00";
+        amount = AmountUtil.getFormattedAmount(0);
         description = null;
         message = null;
     }
