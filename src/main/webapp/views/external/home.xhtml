@@ -32,10 +32,11 @@
                     <b:dataTableColumn>
                         <f:facet name="header">Betrag</f:facet>                            
                         <h:outputText value="#{t.type.sign} #{t.amountFormatted}" style="color:#{t.type.color}"/>
-                    </b:dataTableColumn>                            
+                    </b:dataTableColumn>                     
                     <b:dataTableColumn>
                         <f:facet name="header">Beschreibung</f:facet>                            
-                        <h:outputText value="#{t.description} "/>
+                        <h:outputText value="#{accountModel.getAssociatedIban(t)}#{t.description} "/>
+                        
                     </b:dataTableColumn>                           
                 </b:dataTable>
             </ui:define>            

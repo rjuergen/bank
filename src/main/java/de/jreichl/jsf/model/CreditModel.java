@@ -83,7 +83,7 @@ public class CreditModel extends BaseService implements Serializable {
     private void refreshPossibleAmount() {
         if(creditworthiness != null) {
             possibleAmount = creditworthiness.getPossibleCredit();
-            for(Credit c : credits) {
+            for(Credit c : getCredits()) {
                 if(DateTimeUtil.isToday(c.getCreationDate()))
                     possibleAmount -= c.getCredit();
             }

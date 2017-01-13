@@ -101,11 +101,9 @@ public class TransactionService extends BaseService implements ITransactionServi
         if(order.getForCredit()!=null) {
             Credit credit = creditRepo.merge(order.getForCredit());
             credit.addTransaction(result.getA());
-            credit.addTransaction(result.getB());
-            creditRepo.persist(credit);
+            credit.addTransaction(result.getB());            
         }
-        order.setLastTransaction(newLastTransactionDate);
-        standingOrderRepo.persist(order);
+        order.setLastTransaction(newLastTransactionDate);        
         logger.log(Level.INFO, String.format(" # %s standing order(id=%d) successfull handled!", order.getIntervalUnit().name() ,order.getId()) );
         return true;
     }    
@@ -178,19 +176,26 @@ public class TransactionService extends BaseService implements ITransactionServi
                 }
                 t1 = new AccountTransaction(fromAccount, TransactionType.DEBIT, amountInCent, new java.sql.Timestamp(currentDate.getTime()));        
                 t1.setDescription(description);    
-                fromAccount.addTransaction(t1);
-                accountTransactionRepo.persist(t1);
-                accountRepo.persist(fromAccount);
+                fromAccount.addTransaction(t1);              
             }
             
             if(toAccount != null) {
                 toAccount = accountRepo.merge(toAccount);
                 t2 = new AccountTransaction(toAccount, TransactionType.CREDIT, amountInCent, new java.sql.Timestamp(currentDate.getTime()));
                 t2.setDescription(description);
-                toAccount.addTransaction(t2);
-                accountTransactionRepo.persist(t2);
-                accountRepo.persist(toAccount);
+                toAccount.addTransaction(t2);              
             }
+            
+            if(t1 != null && t2 != null && toAccount != null && fromAccount != null) {
+                t1.setAssociatedIban(toAccount.getIban());
+                t2.setAssociatedIban(fromAccount.getIban());
+            }
+            
+            if(t1 !=null)
+                accountTransactionRepo.persist(t1);
+            
+            if(t2 !=null)
+                accountTransactionRepo.persist(t2);
             
         } catch(TransactionFailedException ex) {
             throw ex;
@@ -209,8 +214,7 @@ public class TransactionService extends BaseService implements ITransactionServi
         String description = String.format("New credit about %s with ID=%s (date of creation: %s)",
                 credit.getCreditFormatted(), credit.getId().toString(), credit.getCreationDate().toString());
         Pair<AccountTransaction, AccountTransaction> result = transfer(credit.getCredit(), bank.getCreditAccount(), credit.getAccount(), description);         
-        credit.addTransaction(result.getB());
-        creditRepo.persist(credit);
+        credit.addTransaction(result.getB());        
         return result.getA() != null && result.getB() != null;
     }
     
@@ -224,8 +228,36 @@ public class TransactionService extends BaseService implements ITransactionServi
                 amountFormatted, credit.getId().toString(), credit.getCreationDate().toString());
         Pair<AccountTransaction, AccountTransaction> result = transfer(amountInCent, credit.getAccount(), bank.getCreditAccount(), description);         
         credit.addTransaction(result.getA());
-        creditRepo.persist(credit);
         return result.getA() != null && result.getB() != null;
+    }
+    
+    @Override
+    public void checkInput(long amountInCent, String fromIBAN, String toIBAN) throws TransactionFailedException {
+        try {
+            // check IBAN 
+            Account fromAccount = accountRepo.findByIBAN(fromIBAN);
+            
+            // check balance 
+            long balance = fromAccount.getBalance();
+            if(balance - amountInCent < 0) {
+                String msg = String.format("Transaction failed! Not enough money on account with IBAN %s.", fromAccount.getIban());                    
+                throw new TransactionFailedException(null, msg, fromIBAN, toIBAN, new Date(), amountInCent);
+            }
+                        
+            try {
+                // check IBAN 
+                accountRepo.findByIBAN(toIBAN);                
+            } catch (NoResultException ex) {
+                throw new TransactionFailedException(ex, String.format("Transaction failed! %s is not a valid IBAN", toIBAN), fromIBAN, toIBAN, new Date(), amountInCent);
+            }
+            
+        } catch (NoResultException ex) {
+            throw new TransactionFailedException(ex, String.format("Transaction failed! %s is not a valid IBAN", fromIBAN), fromIBAN, toIBAN, new Date(), amountInCent);
+        } catch (TransactionFailedException ex) { 
+            throw ex;
+        } catch (Exception ex) {
+            throw new TransactionFailedException(ex, "Unexpected Error! Transaction failed. Check if it's the right IBAN and there is enough money on your account.", fromIBAN, toIBAN, new Date(), amountInCent);
+        }
     }
         
 }

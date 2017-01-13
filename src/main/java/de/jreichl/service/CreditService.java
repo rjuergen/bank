@@ -49,6 +49,7 @@ public class CreditService extends BaseService implements ICreditService {
     @Transactional
     @Override
     public void updateInterestsToPay(Credit credit) {
+        credit = creditRepo.merge(credit);
         long remaining = credit.getRemainingPayback();
         if(remaining < 1) {
             credit.setPaybackComplete(true);            
@@ -61,9 +62,7 @@ public class CreditService extends BaseService implements ICreditService {
             cal.setTime(credit.getInterestAddedDate());  
             cal.add(Calendar.MONTH, 1 );
             credit.setInterestAddedDate(new Date(cal.getTimeInMillis()));
-        }
-        
-        creditRepo.persist(credit);
+        }        
     }
     
 
@@ -80,7 +79,6 @@ public class CreditService extends BaseService implements ICreditService {
         customer.addCredit(c);                              
         
         creditRepo.persist(c);
-        customerService.persistCustomer(customer);
         
         // transfer credit to account
         transactionService.transferCredit(c);
@@ -100,16 +98,15 @@ public class CreditService extends BaseService implements ICreditService {
     public StandingOrder updatePaybackStandingOrder(Account fromAccount, Credit credit, long monthlyAmountInCent) {
         Bank bank = bankRepo.getBank();
         credit = creditRepo.merge(credit);
-        if(credit.getStandingOrder() != null) {
-            credit.setStandingOrder(null);
+        if(credit.getStandingOrder() != null) {            
             standingOrderService.deleteStandingOrder(credit.getStandingOrder());
+            credit.setStandingOrder(null);
         }
         String description = String.format("Monthly standing order for credit with ID=%s (date of creation: %s)",
                 credit.getId().toString(), credit.getCreationDate().toString());
         StandingOrder order = standingOrderService.createStandingOrder(credit.getAccount().getIban(),
                 bank.getCreditAccount().getIban(), monthlyAmountInCent, new java.util.Date(), 1, IntervalUnit.MONTHLY, description);
-        credit.setStandingOrder(order);
-        creditRepo.persist(credit);
+        credit.setStandingOrder(order);        
         return order;
     }
     

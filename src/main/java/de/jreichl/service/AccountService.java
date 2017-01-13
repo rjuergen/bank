@@ -112,7 +112,6 @@ public class AccountService extends BaseService implements IAccountService {
         owner.addAccount(a);
                 
         accountRepo.persist(a);
-        customerService.persistCustomer(owner);
                 
         return a;
     }
@@ -156,6 +155,11 @@ public class AccountService extends BaseService implements IAccountService {
     @Override
     public Account findAccount(long id) {
         return accountRepo.findById(id);
+    }
+
+    @Override
+    public Account findAccount(String iban) throws NoResultException {
+        return accountRepo.findByIBAN(iban);
     }
     
 }

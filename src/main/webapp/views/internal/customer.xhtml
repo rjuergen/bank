@@ -72,6 +72,10 @@
                         <h:outputText value="#{c.getName()} "/>
                     </b:dataTableColumn>
                     <b:dataTableColumn>
+                        <f:facet name="header">Kundentyp</f:facet>                            
+                        <h:outputText value="#{customerModel.getCustomerType(c)} "/>
+                    </b:dataTableColumn>
+                    <b:dataTableColumn>
                         <f:facet name="header">Adresse</f:facet>                            
                         <h:outputText value="#{c.address.displayString} "/>
                     </b:dataTableColumn>

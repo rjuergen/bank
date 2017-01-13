@@ -30,12 +30,12 @@ public class StandingOrderTimer extends BaseTimer {
     
     
     /**
-     * runs every 10 minutes
+     * runs every 20 minutes
      * @param timer 
      */ 
-    @Schedule(minute="*/10",hour="*", persistent=false)
+    @Schedule(minute="*/20",hour="*", persistent=false)
     public void handleStandingOrders(final Timer timer) {
-        logger.log(Level.INFO, String.format("%s - Running handleStandingOrders..", new Date().toString()));
+        logger.log(Level.FINE, String.format("%s - Running handleStandingOrders..", new Date().toString()));
         List<StandingOrder> orders = standingOrderRepo.findAll();        
         for(StandingOrder o : orders) {
             try {

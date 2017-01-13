@@ -114,6 +114,6 @@ public class UserModel extends BaseService implements Serializable {
     
     void refresh() {
         currentAccount = accountService.findAccount(currentAccount.getId());
-    }
+    }   
         
 }

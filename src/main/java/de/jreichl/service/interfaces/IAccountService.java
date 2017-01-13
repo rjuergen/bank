@@ -29,4 +29,6 @@ public interface IAccountService {
 
     public Account findAccount(long id);
     
+    public Account findAccount(String iban);
+    
 }

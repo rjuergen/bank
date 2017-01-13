@@ -50,7 +50,8 @@ public class CustomerService extends BaseService implements ICustomerService {
         Address a = createAddress(dto.getAddress());
         c.setAddress(a);
         
-        privateCustomerRepo.persist(c);
+        if(dto.isNew())
+            privateCustomerRepo.persist(c);
         
         return c;
     }
@@ -70,7 +71,8 @@ public class CustomerService extends BaseService implements ICustomerService {
         Address a = createAddress(dto.getAddress());
         c.setAddress(a);
         
-        companyCustomerRepo.persist(c);
+        if(dto.isNew())
+            companyCustomerRepo.persist(c);
         
         return c;
     }    
@@ -93,15 +95,6 @@ public class CustomerService extends BaseService implements ICustomerService {
         customer.addAll(privateCustomerRepo.findAll());
         customer.addAll(companyCustomerRepo.findAll());        
         return customer;
-    }
-
-    @Transactional
-    @Override
-    public void persistCustomer(Customer c) {
-        if(c instanceof PrivateCustomer)
-            privateCustomerRepo.persist((PrivateCustomer)c);
-        else if (c instanceof CompanyCustomer)
-            companyCustomerRepo.persist((CompanyCustomer)c);
     }
 
     @Override

@@ -26,4 +26,6 @@ public interface ITransactionService {
     public boolean transferCredit(Credit credit) throws TransactionFailedException;
     
     public boolean transferPayback(Credit credit, long amountInCent) throws TransactionFailedException;
+    
+    public void checkInput(long amountInCent, String fromIBAN, String toIBAN) throws TransactionFailedException;
 }

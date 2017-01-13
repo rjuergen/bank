@@ -186,7 +186,8 @@ public class Account extends SingleEntity implements Serializable {
     }
 
     public void removeStandingOrder(StandingOrder toDelete) {
-        standingOrders.remove(toDelete);
+        if(standingOrders.contains(toDelete))
+            standingOrders.remove(toDelete);
     }
     
 }

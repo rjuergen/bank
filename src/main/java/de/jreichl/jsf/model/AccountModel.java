@@ -5,9 +5,11 @@
 package de.jreichl.jsf.model;
 
 import de.jreichl.jpa.entity.Account;
+import de.jreichl.jpa.entity.AccountTransaction;
 import de.jreichl.jpa.entity.Customer;
 import de.jreichl.jpa.entity.Employee;
 import de.jreichl.jpa.entity.type.TanType;
+import de.jreichl.jpa.entity.type.TransactionType;
 import de.jreichl.service.BaseService;
 import de.jreichl.service.interfaces.IAccountService;
 import de.jreichl.service.interfaces.ICustomerService;
@@ -93,6 +95,20 @@ public class AccountModel extends BaseService implements Serializable {
         if(employees==null)
             employees = accountService.getAccountManager();
         return employees;
+    }
+    
+    public String getAssociatedIban(AccountTransaction at) {
+        StringBuilder sb = new StringBuilder();
+        if(at.getAssociatedIban() != null) {
+            sb.append("[");
+            if(TransactionType.CREDIT.equals(at.getType())) {
+                sb.append("von: ");
+            } else {
+                sb.append("nach: ");
+            }
+            sb.append(at.getAssociatedIban()).append("]\n");
+        }
+        return sb.toString();
     }
 
 }

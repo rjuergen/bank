@@ -73,11 +73,10 @@ public class StandingOrderService extends BaseService implements IStandingOrderS
     @Transactional
     @Override
     public boolean deleteStandingOrder(StandingOrder toDelete) {
-        toDelete = standingOrderRepo.merge(toDelete);
+        toDelete = standingOrderRepo.findById(toDelete.getId());
         Account parent = accountRepo.merge(toDelete.getFromAccount());        
         parent.removeStandingOrder(toDelete);
-        standingOrderRepo.remove(toDelete);  
-        accountRepo.persist(parent);
+        standingOrderRepo.remove(toDelete);          
         return true;
     }
 

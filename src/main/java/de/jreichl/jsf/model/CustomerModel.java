@@ -130,5 +130,11 @@ public class CustomerModel extends BaseService implements Serializable {
         this.activeTab = activeTab;
     }
     
+    public String getCustomerType(Customer c) {
+        if(c instanceof PrivateCustomer)
+            return "Privatkunde";
+        else
+            return "Firmenkunde";
+    }
     
 }

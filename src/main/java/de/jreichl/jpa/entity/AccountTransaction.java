@@ -35,6 +35,11 @@ public class AccountTransaction extends SingleEntity implements Serializable {
     private long amount;
     
     private String description;
+    
+    /**
+     * if this transaction has a connection to another account it's the associatedIban.
+     */
+    private String associatedIban;
 
     public AccountTransaction(Account account, TransactionType type, long amount, Timestamp transactionDate) {
         this.account = account;
@@ -82,5 +87,12 @@ public class AccountTransaction extends SingleEntity implements Serializable {
     public String getAmountFormatted() {
         return AmountUtil.getFormattedAmount(amount) + " €";
     }
-    
+
+    public String getAssociatedIban() {
+        return associatedIban;
+    }
+
+    public void setAssociatedIban(String associatedIban) {
+        this.associatedIban = associatedIban;
+    }     
 }

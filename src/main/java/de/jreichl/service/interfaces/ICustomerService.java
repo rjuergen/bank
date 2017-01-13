@@ -23,8 +23,6 @@ public interface ICustomerService {
     
     public List<Customer> getCustomers();
 
-    public void persistCustomer(Customer c);
-
     public Customer findCustomer(Customer customer);
     
 }
