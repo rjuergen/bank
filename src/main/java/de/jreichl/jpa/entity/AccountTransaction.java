@@ -10,6 +10,7 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 /**
  *
@@ -35,11 +36,12 @@ public class AccountTransaction extends SingleEntity implements Serializable {
     private long amount;
     
     private String description;
-    
+        
     /**
-     * if this transaction has a connection to another account it's the associatedIban.
+     * if this transaction has a connection to another transaction it's the associatedTransaction.
      */
-    private String associatedIban;
+    @OneToOne
+    private AccountTransaction associatedTransaction;
 
     public AccountTransaction(Account account, TransactionType type, long amount, Timestamp transactionDate) {
         this.account = account;
@@ -88,11 +90,12 @@ public class AccountTransaction extends SingleEntity implements Serializable {
         return AmountUtil.getFormattedAmount(amount) + " €";
     }
 
-    public String getAssociatedIban() {
-        return associatedIban;
+    public AccountTransaction getAssociatedTransaction() {
+        return associatedTransaction;
     }
 
-    public void setAssociatedIban(String associatedIban) {
-        this.associatedIban = associatedIban;
-    }     
+    public void setAssociatedTransaction(AccountTransaction associatedTransaction) {
+        this.associatedTransaction = associatedTransaction;
+    }
+
 }

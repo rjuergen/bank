@@ -186,9 +186,9 @@ public class TransactionService extends BaseService implements ITransactionServi
                 toAccount.addTransaction(t2);              
             }
             
-            if(t1 != null && t2 != null && toAccount != null && fromAccount != null) {
-                t1.setAssociatedIban(toAccount.getIban());
-                t2.setAssociatedIban(fromAccount.getIban());
+            if(t1 != null && t2 != null) {
+                t1.setAssociatedTransaction(t2);
+                t2.setAssociatedTransaction(t1);
             }
             
             if(t1 !=null)

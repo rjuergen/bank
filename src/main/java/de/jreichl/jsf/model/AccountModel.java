@@ -9,12 +9,12 @@ import de.jreichl.jpa.entity.AccountTransaction;
 import de.jreichl.jpa.entity.Customer;
 import de.jreichl.jpa.entity.Employee;
 import de.jreichl.jpa.entity.type.TanType;
-import de.jreichl.jpa.entity.type.TransactionType;
 import de.jreichl.service.BaseService;
 import de.jreichl.service.interfaces.IAccountService;
 import de.jreichl.service.interfaces.ICustomerService;
 import java.io.Serializable;
 import java.util.List;
+import java.util.logging.Level;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -58,6 +58,9 @@ public class AccountModel extends BaseService implements Serializable {
     @Inject
     private ICustomerService customerService;
     
+    @Inject
+    private BankModel bankModel;
+    
     private Customer customer = null;
    
     private List<Employee> employees;
@@ -97,16 +100,19 @@ public class AccountModel extends BaseService implements Serializable {
         return employees;
     }
     
-    public String getAssociatedIban(AccountTransaction at) {
+    public String getAssociatedAccount(AccountTransaction at) {
         StringBuilder sb = new StringBuilder();
-        if(at.getAssociatedIban() != null) {
-            sb.append("[");
-            if(TransactionType.CREDIT.equals(at.getType())) {
-                sb.append("von: ");
-            } else {
-                sb.append("nach: ");
+        try{
+            if(at.getAssociatedTransaction() != null) {      
+                Account a = at.getAssociatedTransaction().getAccount();
+                if(a.getOwner() != null)
+                    sb.append(a.getOwner().getName());
+                else
+                    sb.append(bankModel.getBank().getName());
+                sb.append(" [").append(a.getIban()).append("]\n");
             }
-            sb.append(at.getAssociatedIban()).append("]\n");
+        } catch(Exception ex) {
+            logger.log(Level.WARNING, "Failed to get AssociatedTransaction");
         }
         return sb.toString();
     }

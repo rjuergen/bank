@@ -48,7 +48,7 @@ public class UserModel extends BaseService implements Serializable {
         return currentAccount != null;
     }
     
-    public void login() {
+    public String login() {
         try {
             currentAccount = accountService.login(accountNumber, passwort);
             homeTitel = "Transaktionen von " + getCurrentUser().getName();
@@ -61,6 +61,7 @@ public class UserModel extends BaseService implements Serializable {
             logger.log(Level.SEVERE, ex.getMessage(), ex);
             message = ex.getMessage();
         }
+        return "ext_home";
     }
     
     public void logout() {
